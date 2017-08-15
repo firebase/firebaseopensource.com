@@ -5,7 +5,7 @@
   "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
   "private": true,
   "scripts": {
-    "fmt": "prettier --write src/**/**.ts",
+    "fmt": "prettier --write src/**/**.ts test/**/**.ts test/**/**.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true"
@@ -21,6 +21,7 @@
     "@types/chai": "^4.0.3",
     "@types/core-js": "^0.9.42",
     "@types/mocha": "^2.2.41",
+    "@types/node": "^8.0.22",
     "@types/vue": "^2.0.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.0.0",

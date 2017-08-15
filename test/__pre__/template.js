@@ -1,10 +1,9 @@
-const path = require('path');
-const fs = require('fs');
-const compile = require('vue-template-loader/lib/modules/template-compiler')
+const path = require("path");
+const fs = require("fs");
+const compile = require("vue-template-loader/lib/modules/template-compiler");
 
 module.exports = {
   process(src, filename, config, options) {
-    console.log('FILENAME', filename)
     const template = fs.readFileSync(filename);
     const render = compile(template.toString());
 
@@ -21,6 +20,6 @@ module.exports = function withRender (_exports) {
   options.render = render;
   return _exports;
 }
-`
-  },
+`;
+  }
 };

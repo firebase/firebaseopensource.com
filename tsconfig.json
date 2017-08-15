@@ -2,7 +2,8 @@
     "compilerOptions": {
         "types": [
             "chai",
-            "mocha"
+            "mocha",
+            "node"
         ],
         "allowSyntheticDefaultImports": true,
         "module": "commonjs",

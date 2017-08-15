@@ -1,13 +1,6 @@
 import { isTesting } from "../utils";
 
-export default ((obj: any) => {
-  switch (isTesting()) {
-    case true:
-      return require("./template.html")(obj);
-    case false:
-      return require("./template.html?style=./style.scss")(obj);
-  }
-})({
+export default require("./template.html")({
   name: "app",
   data() {
     return {

@@ -5,7 +5,7 @@
   "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
   "private": true,
   "scripts": {
-    "fmt": "prettier --write src/**/**.ts test/**/**.ts test/**/**.js",
+    "fmt": "prettier --write src/**/**.ts test/**/**.ts test/**/**.js *.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true"
@@ -41,6 +41,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "ts-loader": "^2.3.2",
+    "vtl-auto-style": "file:vtl-auto-style",
     "vue-template-compiler": "^2.4.2",
     "vue-template-compiler-loader": "^1.0.4",
     "vue-template-loader": "^0.3.1",

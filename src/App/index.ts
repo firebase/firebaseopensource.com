@@ -1,10 +1,10 @@
-import { isTesting } from "../utils";
+import Vue from "vue";
+import { Component, Inject, Model, Prop, Watch } from 'vue-property-decorator'
 
-export default require("./template.html")({
-  name: "app",
-  data() {
-    return {
-      msg: "Welcome to Your Vue.js App"
-    };
-  }
-});
+@Component
+export default class App extends Vue {
+  name = "app";
+  msg = "Welcome to Your Vue.js App";
+};
+
+require("./template.html")(App);

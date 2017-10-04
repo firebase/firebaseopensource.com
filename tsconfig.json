@@ -11,6 +11,7 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "experimentalDecorators": true,
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {

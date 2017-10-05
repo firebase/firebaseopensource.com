@@ -6,11 +6,12 @@
   "private": true,
   "scripts": {
     "fmt": "prettier --write src/**/**.ts test/**/**.ts test/**/**.js *.js",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true"
   },
   "dependencies": {
+    "firebase": "^4.5.0",
     "html-loader": "^0.5.1",
     "jest": "^20.0.4",
     "jest-vue-preprocessor": "^1.1.0",

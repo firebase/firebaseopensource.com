@@ -3,6 +3,7 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+.firebaserc
 
 # Editor directories and files
 .idea

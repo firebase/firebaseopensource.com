@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import App from "../src/App";
+import App from "../src/components/App";
 
 describe("App", () => {
   let vm = new App().$mount();

@@ -7,7 +7,7 @@ import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 import FirebaseAppModule = require("firebase/app");
 
 // Include automock for automated mocking
-import "../automock";
+import "../../automock";
 
 type Visit = {
   created_at: Date;

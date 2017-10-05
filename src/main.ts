@@ -1,7 +1,7 @@
 import Vue from "vue";
-import App from "./App";
+import Writer from "./components/Writer";
 
 new Vue({
   el: "#app",
-  render: h => h(App)
+  render: h => h(Writer)
 });

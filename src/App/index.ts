@@ -1,4 +1,4 @@
-// Core VueJS modules
+// VueJS modules
 import * as VueDefault from "vue";
 import VueField from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";

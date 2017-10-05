@@ -18,6 +18,9 @@ type Visit = {
 export default class App extends (VueField || VueDefault) {
   name = "app";
   msg = "Welcome to Your Vue.js App";
+  required = {
+    firebase: FirebaseAppModule
+  };
   visits: Visit[] = [];
 
   async mounted() {
@@ -26,7 +29,7 @@ export default class App extends (VueField || VueDefault) {
       System.import("isomorphic-fetch")
     ]);
 
-    const firebase = <typeof FirebaseAppModule>require("firebase/app");
+    this.required.firebase = <typeof FirebaseAppModule>require("firebase/app");
     require("firebase/firestore");
     require("isomorphic-fetch");
 
@@ -34,9 +37,9 @@ export default class App extends (VueField || VueDefault) {
       response.json()
     );
 
-    firebase.initializeApp(config);
+    this.required.firebase.initializeApp(config);
 
-    firebase
+    this.required.firebase
       .firestore()
       .collection("visits")
       .onSnapshot(snapshot => {
@@ -46,6 +49,13 @@ export default class App extends (VueField || VueDefault) {
           }
         });
       });
+  }
+
+  add_visit() {
+    this.required.firebase
+      .firestore()
+      .collection("visits")
+      .add({ created_at: new Date() });
   }
 }
 

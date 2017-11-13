@@ -3,7 +3,7 @@ import { expect } from "chai";
 import App from "../src/components/App";
 
 describe("App", () => {
-  let vm = new App().$mount();
+  let vm = new App();
 
   it("should have a specific msg", () => {
     expect(vm.msg).to.equal("Welcome to Your Vue.js App");

@@ -1,7 +1,9 @@
 declare module "*.html" {
-  import Vue = require("vue");
+  import Vue, { Component, ComponentOptions } from "vue";
   interface WithRender {
-    <V extends Vue>(options: Vue.ComponentOptions<V>): Vue.ComponentOptions<V>;
+    <V extends Component>(options: ComponentOptions<Vue>): ComponentOptions<
+      Vue
+    >;
     <V extends typeof Vue>(component: V): V;
   }
   const withRender: WithRender;

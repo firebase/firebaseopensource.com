@@ -1,6 +1,5 @@
 // VueJS modules
-import * as VueDefault from "vue";
-import VueField from "vue";
+import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 
 // Typings for modules imported dynamically
@@ -15,7 +14,7 @@ type Visit = {
 };
 
 @Component
-export default class App extends (VueField || VueDefault) {
+export default class App extends Vue {
   name = "app";
   msg = "Welcome to Your Vue.js App";
   required = {

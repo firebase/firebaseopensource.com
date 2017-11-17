@@ -6,7 +6,8 @@ const project = require("./project");
 const ids = [
   "samtstern::BotTest",
   "firebase::firebaseui-android",
-  "firebase::angularfire"
+  "firebase::angularfire",
+  "firebase::functions-samples"
 ];
 
 ids.forEach(id => {

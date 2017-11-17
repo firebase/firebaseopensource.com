@@ -135,9 +135,9 @@ Project.prototype.getRenderedContentBaseUrl = function(id) {
 
   // Get the URL to the root folder
   const pathPrefix = idObj.path ? idObj.path + "/" : "";
-  const url = `https://github.com/${idObj.owner}/${
-    idObj.repo
-  }/tree/master/${pathPrefix}`;
+  const url = `https://github.com/${idObj.owner}/${idObj.repo}/tree/master/${
+    pathPrefix
+  }`;
 
   return url;
 };
@@ -221,14 +221,15 @@ Project.prototype.sanitizeHtml = function(id, config, html) {
   // Resolve all relative links to github
   $("a").each((_, el) => {
     const href = el.attribs["href"];
-    const hrefUrl = url.parse(href);
 
-    // Relative link has a pathname but not a host
-    if (!hrefUrl.host && hrefUrl.pathname) {
-      const newHref = urljoin(baseUrl, href);
-      el.attribs["href"] = newHref;
+    if (href) {
+      const hrefUrl = url.parse(href);
 
-      console.log(`relative a tag in ${id}: ${href} --> ${newHref}`);
+      // Relative link has a pathname but not a host
+      if (!hrefUrl.host && hrefUrl.pathname) {
+        const newHref = urljoin(baseUrl, href);
+        el.attribs["href"] = newHref;
+      }
     }
   });
 

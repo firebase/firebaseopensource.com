@@ -8,10 +8,20 @@ import FirebaseAppModule = require("firebase/app");
 // Include automock for automated mocking
 import "../../automock";
 
-type Visit = {
-  created_at: Date;
-  confirmed_at: Date;
+type Section = {
+  content: String;
+  name: String;
+  id: String;
+  ref: String;
 };
+
+type Config = {
+  name?: String;
+  content?: String;
+  type?: "library";
+}
+
+declare const hljs: any;
 
 @Component
 export default class App extends Vue {
@@ -20,7 +30,8 @@ export default class App extends Vue {
   required = {
     firebase: FirebaseAppModule
   };
-  visits: Visit[] = [];
+  sections: Section[] = [];
+  config: Config = {};
 
   async mounted() {
     await Promise.all([
@@ -38,15 +49,34 @@ export default class App extends Vue {
 
     this.required.firebase.initializeApp(config);
 
+    const blocked_sections = [
+      "table of contents"
+    ];
+
+    const id = this.$route.params.id;
+
     this.required.firebase
       .firestore()
-      .collection("visits")
+      .collection("content")
+      .doc(id)
       .onSnapshot(snapshot => {
-        snapshot.docChanges.forEach(change => {
-          if (change.type == "added") {
-            this.visits.push(change.doc.data() as Visit);
-          }
+        const sections = snapshot.data().sections as Section[];
+
+        sections.forEach((section) => {
+          if (blocked_sections.indexOf(section.name.toLowerCase()) != -1)
+            return;
+          section.id = this.as_id(section.name);
+          section.ref = "#" + section.id;
+          this.sections.push(section);
         });
+      });
+
+    this.required.firebase
+      .firestore()
+      .collection("configs")
+      .doc(id)
+      .onSnapshot(snapshot => {
+        this.config = snapshot.data() as Config;
       });
   }
 
@@ -56,6 +86,16 @@ export default class App extends Vue {
       .collection("visits")
       .add({ created_at: new Date() });
   }
+
+  as_id(text: String) {
+    return text.toLowerCase().replace(' ', '_');
+  }
+
+  updated() {
+    document.querySelectorAll('pre code').forEach(function(el) {
+      hljs.highlightBlock(el);
+    });
+  }  
 }
 
 require("./template.html")(App);

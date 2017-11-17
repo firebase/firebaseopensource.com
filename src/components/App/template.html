@@ -1,11 +1,52 @@
-  <div id="app">
-    <img src="../../assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Visits</h2>
-    <ul>
-      <li v-for="visit in visits">
-        Someone visited at {{visit.created_at}}
-      </li>
-    </ul>
-    <button @click="add_visit()">Add Visit</button>
+<div id="app">
+  <header>
+    <div class="title link">{{config.name}}</div>
+    <div class="content">
+      <div class="link" id="docs">
+        <div class="text">Docs</div>
+        <div class="dropdown" id="docs-dropdown">
+          <a v-for="section in sections" :href="section.ref">{{section.name}}</a>
+        </div>
+      </div>
+      <div class="link">
+        <a href="https://github.com">Github</a>
+      </div>
+    </div>
+  </header>
+  <div class="section">
+    <div class="content">
+      <div class="material-icons icon">
+        <img src="../../assets/logo-small.png" height="80" />
+      </div>
+      <h1>
+        {{config.name}}
+      </h1>
+      <p v-if="config.description">
+        {{config.description}}
+      </p>
+      <div class="badges">
+        <div class="badge">
+          <div class="key">
+            <i class="material-icons">star</i>
+            Star
+          </div>
+          <div class="value">2,242</div>
+        </div>
+
+        <div class="badge">
+          <div class="key">
+            <i class="material-icons">access_time</i>
+            Updated
+          </div>
+          <div class="value">10 days ago</div>
+        </div>
+      </div>
+    </div>
   </div>
+  <div v-for="section in sections" class="section" :id="section.id" >
+    <div class="content">
+      <h1>{{section.name}}</h1>
+      <div v-html="section.content"></div>
+    </div>    
+  </div>
+</div>

@@ -2,9 +2,7 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 h1, h2 {
@@ -20,6 +18,122 @@ li {
   margin: 0 10px;
 }
 
-a {
-  color: #42b983;
+header {
+  width: 100%;
+  padding: 10px 30px 0px 30px;
+  background-color: #ccc;
+  overflow: auto;
+  margin-bottom: 10px;
+
+  .link {
+    float: left;
+    padding-right: 20px;
+  }
+
+  a {
+    color: #444;
+  }
+}
+
+.section {
+  border-bottom: 1px solid #ccc;
+  padding: 30px 50px;
+  opacity: 0.8;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+}
+
+#docs {
+  height: 38px;
+  //overflow: hidden;
+  cursor: pointer;
+
+  &:hover {
+    overflow: inherit;
+
+    .dropdown {
+      top: 40px;
+    }
+  }
+}
+
+.dropdown {
+  background-color: white;
+  padding: 5px 0px;
+  float: left;
+  border-radius: 3px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+  top: -1000px;
+  position: absolute;
+
+  a {
+    clear: both;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+  
+    &:hover {
+      background-color: #eee;
+      cursor: pointer;
+    }
+  }
+}
+
+.badges {
+  overflow: auto;
+  margin-top: 30px;
+  .badge {
+    border-radius: 3px;
+    overflow: hidden;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 0.9em;
+    float: left;
+    padding-right: 20px;
+
+    * {
+      height: 30px;
+    }
+    .key {
+      background-color: #ddd;
+      float: left;
+      padding-top: 3px;
+      padding-right: 10px;
+
+      .material-icons {
+        font-size: 18px;
+        position: relative;
+        top: 2px;
+        width: 18px;
+        margin-left: 8px;
+      }
+    }
+    .value {
+      background-color: #eee;
+      float: left;
+      padding: 3px 10px 0px 10px;
+    }
+  }
+}
+
+.icon {
+  //font-size: 100px;
+  background-color: #eee;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  padding-top: 10px;
+  border-radius: 100%;
+  margin-bottom: 20px;
 }

@@ -53,7 +53,7 @@ Project.prototype.recursiveStoreProject = function(id) {
     // Recurse on each subproject
     if (config.subprojects) {
       config.subprojects.forEach(sub => {
-        const slug = sub.replace("/", "::");
+        const slug = that.pathToSlug(sub);
         const storePromise = that.recursiveStoreProject(`${id}::${slug}`);
 
         promises.push(storePromise);
@@ -63,6 +63,13 @@ Project.prototype.recursiveStoreProject = function(id) {
     // Wait for all to complete
     return Promise.all(promises);
   });
+};
+
+/**
+ * Convert a path with slashes to a slug.
+ */
+Project.prototype.pathToSlug = function(path) {
+  return path.replace("/", "::");
 };
 
 /**
@@ -146,7 +153,7 @@ Project.prototype.getRenderedContentBaseUrl = function(id) {
  * Get the URL to the config for a particular project ID.
  */
 Project.prototype.getConfigUrl = function(id) {
-  return this.getRawContentBaseUrl(id) + ".opensource/project.json";
+  return urljoin(this.getRawContentBaseUrl(id), ".opensource/project.json");
 };
 
 /**
@@ -155,7 +162,14 @@ Project.prototype.getConfigUrl = function(id) {
 Project.prototype.getContentUrl = function(id, config) {
   // Path to content, relative to the project
   const contentPath = config.content;
-  return this.getRawContentBaseUrl(id) + contentPath;
+  return urljoin(this.getRawContentBaseUrl(id), contentPath);
+};
+
+/**
+ * Get the URL for the raw content for a page.
+ */
+Project.prototype.getPageUrl = function(id, page) {
+  return urljoin(this.getRawContentBaseUrl(id), page);
 };
 
 /**
@@ -175,12 +189,34 @@ Project.prototype.storeProjectConfig = function(id, config) {
  * Fetch a project's content and put it into Firestore.
  */
 Project.prototype.storeProjectContent = function(id, config) {
-  return this.getProjectContent(id, config).then(sections => {
-    return db
-      .collection("content")
-      .doc(id)
-      .set(sections);
-  });
+  var that = this;
+  const contentRef = db.collection("content").doc(id);
+  return this.getProjectContent(id, config)
+    .then(sections => {
+      // Set main content
+      return contentRef.set(sections);
+    })
+    .then(() => {
+      // Set all pages in subcollection
+      return that.getProjectPagesContent(id, config).then(content => {
+        if (!content || !content.pages) {
+          return;
+        }
+
+        const batch = db.batch();
+
+        content.pages.forEach(page => {
+          const slug = that.pathToSlug(page.name);
+          const ref = contentRef.collection("pages").doc(slug);
+
+          batch.set(ref, {
+            content: page.content
+          });
+        });
+
+        return batch.commit();
+      });
+    });
 };
 
 /**
@@ -203,7 +239,51 @@ Project.prototype.getProjectContent = function(id, config) {
 };
 
 /**
- * TODO: Implement
+ * Get the content for all pages of a project.
+ * 
+ * TODO: Store this in a sanitized, structured format.
+ */
+Project.prototype.getProjectPagesContent = function(id, config) {
+  if (!config.pages) {
+    console.log(`Project ${id} has no extra pages.`);
+    return Promise.resolve({});
+  }
+
+  console.log(`Getting page content for project ${id}`);
+
+  promises = [];
+  pages = [];
+
+  // Loop through pages, get content for each
+  const that = this;
+  config.pages.forEach(page => {
+    const pageUrl = that.getPageUrl(id, page);
+    console.log(`Rendering page: ${pageUrl}`);
+
+    const pagePromise = request(pageUrl, GH_CONTENT_OPTIONS)
+      .then(data => {
+        return marked(data);
+      })
+      .then(html => {
+        // TODO: Sanitize
+        pages.push({
+          name: page,
+          content: html
+        });
+      });
+
+    promises.push(pagePromise);
+  });
+
+  return Promise.all(promises).then(() => {
+    return {
+      pages
+    };
+  });
+};
+
+/**
+ * Sanitize the content Html.
  */
 Project.prototype.sanitizeHtml = function(id, config, html) {
   // Links
@@ -212,7 +292,6 @@ Project.prototype.sanitizeHtml = function(id, config, html) {
   //
   // Images
   // * (TODO) Images and other things should be made into githubusercontent links
-
   const baseUrl = this.getRenderedContentBaseUrl(id);
 
   const $ = cheerio.load(html);

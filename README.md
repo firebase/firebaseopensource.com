@@ -1,6 +1,8 @@
 # firebaseopensource.com
 
-## TODO List
+A landing page for open source Firebase projects.
+
+## TODO
 
   * Finish HTML sanitizaion
   * Meta-site

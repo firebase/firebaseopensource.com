@@ -1,6 +1,6 @@
-# ts-bp-vu
+# firebase.opensource
 
-> A Typescript + Vue + Webpack Boilerplate
+> A landing page for open source Firebase projects.
 
 ## Build Setup
 

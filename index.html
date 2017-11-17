@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>firebase.opensource</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet">
+    <link rel="stylesheet"
+    href="//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700|Material+Icons">
     <link rel="icon" href="dist/logo-small.png" />
     <link rel="stylesheet"
     href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -17,6 +17,10 @@
       body {
         margin: 0px;
         line-height: 170%;
+        font-family: "Roboto";
+
+        background: #fcfcfc url(/dist/background-top.svg) no-repeat;
+        background-size: 100%;
       }
       *, *:before, *:after {
         box-sizing: inherit;
@@ -29,18 +33,42 @@
 
       pre {
         padding: 5px 10px;
-        background-color: #eee;
+        background-color: #F0F0F0;
+        font-family: "Roboto Mono";
       }
 
       a {
         text-decoration: none;
-        color: #004bff;
+        color: #039be5;
       }
 
       ul li {
-        list-style: none;
+        /* list-style: none;
         position: relative;
-        left: -20px;
+        left: -20px; */
+      }
+
+      table {
+        width: 100%;
+        text-align: left;
+        background-color: #F8F9FA;
+      }
+
+      td {
+        border-width: 0px;
+        padding: 0px 10px;
+      }
+
+      th {
+        background-color: #78909c;
+        padding: 10px;
+        font-weight: bold;
+        color: white;
+      }
+
+      tr {
+        background-color: #F8F9FA;
+        border-bottom: 1px solid #CFD8DC;
       }
     </style>
   </head>

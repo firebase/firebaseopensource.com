@@ -1,9 +1,14 @@
 <div id="app">
+  <img src="../../assets/background-top.svg" hidden/>
   <header>
-    <div class="title link">{{config.name}}</div>
     <div class="content">
+      <div class="title link">{{config.name}}</div>
       <div class="link" id="docs">
-        <div class="text">Docs</div>
+        <div class="text">
+          <span class="label">Docs</span>
+          <!-- <span class="label-icon">▼</span> -->
+          <!-- <i class="material-icons">keyboard_arrow_down</i> -->
+        </div>
         <div class="dropdown" id="docs-dropdown">
           <a v-for="section in sections" :href="section.ref">{{section.name}}</a>
         </div>
@@ -15,9 +20,9 @@
   </header>
   <div class="section">
     <div class="content">
-      <div class="material-icons icon">
+      <!-- <div class="material-icons icon">
         <img src="../../assets/logo-small.png" height="80" />
-      </div>
+      </div> -->
       <h1>
         {{config.name}}
       </h1>

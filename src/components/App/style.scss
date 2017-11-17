@@ -1,5 +1,4 @@
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -21,29 +20,47 @@ li {
 header {
   width: 100%;
   padding: 10px 30px 0px 30px;
-  background-color: #ccc;
+  background-color: #2185CC;
+  color: white;
   overflow: auto;
   margin-bottom: 10px;
+  box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.8);
+
+  .content {
+    width: 912px;
+    margin: 0 auto;
+  }
 
   .link {
+    float: right;
+    padding-left: 20px;
+  }
+
+  .link.title {
     float: left;
-    padding-right: 20px;
   }
 
   a {
-    color: #444;
+    color: inherit;
   }
 }
 
 .section {
-  border-bottom: 1px solid #ccc;
-  padding: 30px 50px;
-  opacity: 0.8;
-}
+  .content {
+      border-radius: 2px;
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
+      padding: 30px 50px;
 
-.content {
-  max-width: 800px;
-  margin: 0 auto;
+    
+      max-width: 912px;
+      margin: 30px auto 0px auto;
+      color: black;
+      background-color: white;
+    }
+
+    &:last-child {
+      padding-bottom: 100px;
+    }
 }
 
 pre {
@@ -136,4 +153,15 @@ pre {
   padding-top: 10px;
   border-radius: 100%;
   margin-bottom: 20px;
+}
+
+img[hidden] {
+  display: none;
+
+}
+
+
+.label-icon {
+  opacity: 0.4;
+  margin-left: 7px;
 }

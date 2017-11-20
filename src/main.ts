@@ -4,7 +4,16 @@ import App from "./components/App";
 
 Vue.use(VueRouter);
 
-const routes = [{ path: "/:id", component: App }];
+const routes = [
+  {
+    path: "/projects/:organization/:repository",
+    component: App
+  },
+  {
+    path: "/projects/:organization/:repository/:page(.+)",
+    component: App
+  }
+];
 
 const router = new VueRouter({
   mode: "history",

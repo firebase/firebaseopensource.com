@@ -5,13 +5,15 @@
   "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
   "private": true,
   "scripts": {
-    "fmt": "prettier --write src/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
+    "fmt": "prettier --write src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --hot",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true",
-    "deploy": "npm run build && firebase --project=default deploy"
+    "deploy": "npm run build && firebase --project=default deploy",
+    "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "firebase": "^4.5.0",
     "firebase-tools": "^3.15.2",
     "html-loader": "^0.5.1",

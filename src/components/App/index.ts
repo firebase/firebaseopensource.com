@@ -1,6 +1,6 @@
-// VueJS modules
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
+import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
 // Typings for modules imported dynamically
 import FirebaseAppModule = require("firebase/app");
@@ -15,10 +15,30 @@ type Section = {
   ref: String;
 };
 
-type Config = {
-  name?: String;
-  content?: String;
-  type?: "library";
+export interface TrueMap {
+  [s: string]: true;
+}
+
+export interface Subprojects {
+  auth: boolean;
+  database: boolean;
+  firestore: boolean;
+  storage: boolean;
+}
+
+export interface Config {
+  content?: string;
+  last_updated?: Date;
+  last_updated_from_now?: string;
+  name?: string;
+  pages?: TrueMap;
+  parent?: string;
+  platforms?: TrueMap;
+  related?: TrueMap;
+  stars?: number;
+  subprojects?: Subprojects;
+  tags?: TrueMap;
+  type?: string;
 }
 
 declare const hljs: any;
@@ -26,12 +46,13 @@ declare const hljs: any;
 @Component
 export default class App extends Vue {
   name = "app";
-  msg = "Welcome to Your Vue.js App";
   required = {
     firebase: FirebaseAppModule
   };
   sections: Section[] = [];
+  header: Section = { content: "", name: "", id: "", ref: "" };
   config: Config = {};
+  is_subpage = false;
 
   async mounted() {
     await Promise.all([
@@ -49,53 +70,69 @@ export default class App extends Vue {
 
     this.required.firebase.initializeApp(config);
 
-    const blocked_sections = [
-      "table of contents"
-    ];
+    const blocked_sections = ["table of contents"];
 
-    const id = this.$route.params.id;
+    const id = [
+      this.$route.params.organization,
+      this.$route.params.repository
+    ].join("::");
 
-    this.required.firebase
+    const repoDoc = this.required.firebase
       .firestore()
       .collection("content")
-      .doc(id)
-      .onSnapshot(snapshot => {
-        const sections = snapshot.data().sections as Section[];
+      .doc(id);
 
-        sections.forEach((section) => {
-          if (blocked_sections.indexOf(section.name.toLowerCase()) != -1)
-            return;
-          section.id = this.as_id(section.name);
-          section.ref = "#" + section.id;
-          this.sections.push(section);
-        });
-      });
+    const page = this.$route.params.page;
 
-    this.required.firebase
+    let dataDoc;
+    if (page) {
+      let page_id = page.split("/").join("::");
+
+      if (!page_id.endsWith(".md")) {
+        page_id += ".md";
+      }
+
+      dataDoc = repoDoc.collection("pages").doc(page_id);
+      this.is_subpage = true;
+    } else {
+      dataDoc = repoDoc;
+    }
+
+    const snapshot = await dataDoc.get();
+
+    const data = snapshot.data();
+
+    this.header = data.header as Section;
+    const sections = snapshot.data().sections as Section[];
+
+    sections.forEach(section => {
+      if (blocked_sections.indexOf(section.name.toLowerCase()) != -1) return;
+      section.id = this.as_id(section.name);
+      section.ref = "#" + section.id;
+      this.sections.push(section);
+    });
+
+    const configSnapshot = await this.required.firebase
       .firestore()
       .collection("configs")
       .doc(id)
-      .onSnapshot(snapshot => {
-        this.config = snapshot.data() as Config;
-      });
-  }
+      .get();
 
-  add_visit() {
-    this.required.firebase
-      .firestore()
-      .collection("visits")
-      .add({ created_at: new Date() });
+    this.config = configSnapshot.data() as Config;
+    this.config.last_updated_from_now = distanceInWordsToNow(
+      this.config.last_updated
+    );
   }
 
   as_id(text: String) {
-    return text.toLowerCase().replace(' ', '_');
+    return text.toLowerCase().replace(" ", "_");
   }
 
   updated() {
-    document.querySelectorAll('pre code').forEach(function(el) {
+    document.querySelectorAll("pre code").forEach(function(el) {
       hljs.highlightBlock(el);
     });
-  }  
+  }
 }
 
 require("./template.html")(App);

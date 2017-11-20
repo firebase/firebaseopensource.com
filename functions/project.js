@@ -221,9 +221,7 @@ Project.prototype.storeProjectContent = function(id, config) {
           const slug = that.pathToSlug(page.name);
           const ref = contentRef.collection("pages").doc(slug);
 
-          batch.set(ref, {
-            content: page.content
-          });
+          batch.set(ref, page.content);
         });
 
         return batch.commit();
@@ -243,7 +241,7 @@ Project.prototype.getProjectContent = function(id, config) {
       return marked(data);
     })
     .then(html => {
-      return that.sanitizeHtml(id, config, html);
+      return that.sanitizeHtml(id, undefined, config, html);
     })
     .then(html => {
       return that.htmlToSections(html);
@@ -278,9 +276,12 @@ Project.prototype.getProjectPagesContent = function(id, config) {
       })
       .then(html => {
         // TODO: Sanitize
+        return that.sanitizeHtml(id, page, config, html);
+      })
+      .then(html => {
         pages.push({
           name: page,
-          content: html
+          content: that.htmlToSections(html)
         });
       });
 
@@ -295,33 +296,60 @@ Project.prototype.getProjectPagesContent = function(id, config) {
 };
 
 /**
+ * Sanitize relative links to be absolute.
+ */
+Project.prototype.sanitizeRelativeLink = function(el, attrName, base) {
+  const val = el.attribs[attrName];
+
+  if (val) {
+    const valUrl = url.parse(val);
+
+    // Relative link has a pathname but not a host
+    if (!valUrl.host && valUrl.pathname) {
+      const newVal = urljoin(base, val);
+      el.attribs[attrName] = newVal;
+    }
+  }
+};
+
+/**
  * Sanitize the content Html.
  */
-Project.prototype.sanitizeHtml = function(id, config, html) {
+Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
   // Links
-  // * (TODO) Links to subprojects content files should go to our page
+  // * (TODO) Links to page content files should go to our page
   // * (DONE) Links to source files should go to github
   //
   // Images
   // * (TODO) Images and other things should be made into githubusercontent links
-  const baseUrl = this.getRenderedContentBaseUrl(id);
+
+  let renderedBaseUrl = this.getRenderedContentBaseUrl(repoId);
+  let rawBaseUrl = this.getRawContentBaseUrl(repoId);
+  if (page) {
+    const lastSlash = page.lastIndexOf("/");
+    const pageDir = page.substring(0, lastSlash);
+    if (lastSlash >= 0) {
+      renderedBaseUrl = urljoin(renderedBaseUrl, pageDir);
+      rawBaseUrl = urljoin(rawBaseUrl, pageDir);
+    }
+  }
 
   const $ = cheerio.load(html);
   const sections = [];
 
   // Resolve all relative links to github
+  var that = this;
   $("a").each((_, el) => {
-    const href = el.attribs["href"];
+    that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+  });
 
-    if (href) {
-      const hrefUrl = url.parse(href);
+  // Resolve all relative images, add class to parent
+  $("img").each((_, el) => {
+    $(el)
+      .parent()
+      .addClass("img-parent");
 
-      // Relative link has a pathname but not a host
-      if (!hrefUrl.host && hrefUrl.pathname) {
-        const newHref = urljoin(baseUrl, href);
-        el.attribs["href"] = newHref;
-      }
-    }
+    that.sanitizeRelativeLink(el, "src", rawBaseUrl);
   });
 
   return $.html();
@@ -335,6 +363,18 @@ Project.prototype.sanitizeHtml = function(id, config, html) {
 Project.prototype.htmlToSections = function(html) {
   const $ = cheerio.load(html);
   const sections = [];
+
+  let $headerChildren = $("div", "<div></div>");
+
+  let $h1 = $("h1").first();
+  $h1.nextUntil("h2").each((_, el) => {
+    $headerChildren = $headerChildren.append(el);
+  });
+
+  const header = {
+    name: $h1.text(),
+    content: $headerChildren.html()
+  };
 
   $("h2").each((_, el) => {
     let $sibchils = $("div", "<div></div>");
@@ -351,7 +391,10 @@ Project.prototype.htmlToSections = function(html) {
     });
   });
 
-  return { sections };
+  return {
+    header,
+    sections
+  };
 };
 
 /**

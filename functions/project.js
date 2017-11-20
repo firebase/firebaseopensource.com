@@ -1,17 +1,20 @@
 const admin = require("firebase-admin");
 const cheerio = require("cheerio");
 const cjson = require("comment-json");
+const config = require("./config");
 const functions = require("firebase-functions");
 const fs = require("fs");
 const github = require("./github");
 const marked = require("marked");
+const path = require("path");
 const request = require("request-promise-native");
 const url = require("url");
 const urljoin = require("url-join");
 
 const GH_CONTENT_OPTIONS = {
   headers: {
-    "Cache-Control": "max-age=0"
+    "Cache-Control": "max-age=0",
+    Authorization: `token ${config.get("github.token")}`
   }
 };
 
@@ -317,48 +320,90 @@ Project.prototype.sanitizeRelativeLink = function(el, attrName, base) {
  */
 Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
   // Links
-  // * (TODO) Links to page content files should go to our page
-  // * (DONE) Links to source files should go to github
+  // * Links to page content files should go to our page
+  // * Links to source files should go to github
   //
   // Images
-  // * (TODO) Images and other things should be made into githubusercontent links
+  // * Images and other things should be made into githubusercontent links
+  // * Remove badges
 
-  let renderedBaseUrl = this.getRenderedContentBaseUrl(repoId);
-  let rawBaseUrl = this.getRawContentBaseUrl(repoId);
+  let pageDir = "";
   if (page) {
     const lastSlash = page.lastIndexOf("/");
-    const pageDir = page.substring(0, lastSlash);
+    pageDir = page.substring(0, lastSlash);
     if (lastSlash >= 0) {
-      renderedBaseUrl = urljoin(renderedBaseUrl, pageDir);
-      rawBaseUrl = urljoin(rawBaseUrl, pageDir);
+      pageDir = page.substring(0, lastSlash);
     }
   }
+
+  const renderedBaseUrl = urljoin(
+    this.getRenderedContentBaseUrl(repoId),
+    pageDir
+  );
+  const rawBaseUrl = urljoin(this.getRawContentBaseUrl(repoId), pageDir);
 
   const $ = cheerio.load(html);
   const sections = [];
 
   // Resolve all relative links to github
-  var that = this;
+  const that = this;
   $("a").each((_, el) => {
-    that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+    const href = el.attribs["href"];
+    if (!href) {
+      return;
+    }
+
+    // Check if the link is to a page within the repo
+    const repoRelative = path.join(pageDir, href);
+    if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
+      console.log(`Preserving relative link ${repoRelative}.`);
+    } else {
+      that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+    }
   });
 
   // Resolve all relative images, add class to parent
   $("img").each((_, el) => {
-    $(el)
-      .parent()
-      .addClass("img-parent");
+    const src = el.attribs["src"];
+    if (!src) {
+      return;
+    }
 
-    that.sanitizeRelativeLink(el, "src", rawBaseUrl);
+    const badgeKeywords = [
+      "travis-ci.org",
+      "shields.io",
+      "coveralls.io",
+      "badge.fury.io",
+      "gitter.im",
+      "circleci.com",
+      "opencollective.com"
+    ];
+
+    let isBadge = false;
+    badgeKeywords.forEach(word => {
+      if (src.indexOf(word) >= 0) {
+        isBadge = true;
+      }
+    });
+
+    if (isBadge) {
+      // Remove badges
+      $(el).remove();
+    } else {
+      // Add the image-parent class to the parent
+      $(el)
+        .parent()
+        .addClass("img-parent");
+
+      that.sanitizeRelativeLink(el, "src", rawBaseUrl);
+    }
   });
 
   return $.html();
 };
 
 /**
- * Turn HTML into a sections object.
- *
- * TODO: sanitize links and images.
+ * Turn HTML into a sections objects.
  */
 Project.prototype.htmlToSections = function(html) {
   const $ = cheerio.load(html);

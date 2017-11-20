@@ -4,9 +4,7 @@ A landing page for open source Firebase projects.
 
 ## TODO
 
-  * Finish HTML sanitizaion
   * Meta-page (and / redirect)
-  * Stars/last updated time
   * Real logos
   * Server-side rendering
   * Home page
@@ -14,3 +12,7 @@ A landing page for open source Firebase projects.
   * Render subpages
   * Related projects section
   * Redirect firebase.github.io
+
+# Functions Config
+
+Must set `github.token` to a Github access token with public repo access.

@@ -1,5 +1,23 @@
+const config = require("./config");
 const request = require("request-promise-native");
 const parselh = require("parse-link-header");
+
+const _GH_OPTIONS_STANDARD = {
+  headers: {
+    "user-agent": "node.js",
+    Authorization: `token ${config.get("github.token")}`
+  },
+  json: true
+};
+
+const _GH_OPTIONS_FULL = {
+  headers: {
+    "user-agent": "node.js",
+    Authorization: `token ${config.get("github.token")}`
+  },
+  json: true,
+  resolveWithFullResponse: true
+};
 
 /** Prototype */
 const Github = function() {};
@@ -18,19 +36,27 @@ Github.prototype.listAllRepos = function(org) {
 };
 
 /**
+ * Get metadata for a github repo.
+ */
+Github.prototype.getRepoMetadata = function(org, repo) {
+  const url = `https://api.github.com/repos/${org}/${repo}`;
+
+  return request(url, _GH_OPTIONS_STANDARD).then(repo => {
+    return {
+      stars: repo.stargazers_count,
+      last_updated: repo.updated_at
+    };
+  });
+};
+
+/**
  * Read all of the pages from a Github API url and return them concatenated.
  */
 Github.prototype.readAllPages = function(url, results) {
   const res = results ? results : [];
 
-  const options = {
-    headers: { "user-agent": "node.js" },
-    json: true,
-    resolveWithFullResponse: true
-  };
-
   var that = this;
-  return request(url, options).then(response => {
+  return request(url, _GH_OPTIONS_FULL).then(response => {
     const data = response.body;
     const headers = response.headers;
 

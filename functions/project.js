@@ -1,16 +1,20 @@
 const admin = require("firebase-admin");
 const cheerio = require("cheerio");
 const cjson = require("comment-json");
+const config = require("./config");
 const functions = require("firebase-functions");
 const fs = require("fs");
+const github = require("./github");
 const marked = require("marked");
+const path = require("path");
 const request = require("request-promise-native");
 const url = require("url");
 const urljoin = require("url-join");
 
 const GH_CONTENT_OPTIONS = {
   headers: {
-    "Cache-Control": "max-age=0"
+    "Cache-Control": "max-age=0",
+    Authorization: `token ${config.get("github.token")}`
   }
 };
 
@@ -77,28 +81,39 @@ Project.prototype.pathToSlug = function(path) {
  */
 Project.prototype.getProjectConfig = function(id) {
   const url = this.getConfigUrl(id);
+  const idParsed = this.parseProjectId(id);
 
-  const that = this;
-  return this.checkConfigExists(id).then(exists => {
-    if (exists) {
-      // Config exists, fetch and parse it
-      return request(url, GH_CONTENT_OPTIONS).then(data => {
-        // Parse and remove comments
-        const contents = data.toString();
-        return cjson.parse(contents, null, true);
-      });
-    } else {
-      // If the project has no config, make one up
-      const idParsed = that.parseProjectId(id);
+  return this.checkConfigExists(id)
+    .then(exists => {
+      if (exists) {
+        // Config exists, fetch and parse it
+        return request(url, GH_CONTENT_OPTIONS).then(data => {
+          // Parse and remove comments
+          const contents = data.toString();
+          return cjson.parse(contents, null, true);
+        });
+      } else {
+        // If the project has no config, make one up
+        console.log(`WARN: Using default config for ${id}`);
+        return {
+          name: idParsed.repo,
+          type: "library",
+          content: "README.md"
+        };
+      }
+    })
+    .then(config => {
+      // Merge the config with repo metadata like stars
+      // and updated time.
+      return github
+        .getRepoMetadata(idParsed.owner, idParsed.repo)
+        .then(meta => {
+          config.stars = meta.stars;
+          config.last_updated = meta.last_updated;
 
-      console.log(`WARN: Using default config for ${id}`);
-      return {
-        name: idParsed.repo,
-        type: "library",
-        content: "README.md"
-      };
-    }
-  });
+          return config;
+        });
+    });
 };
 
 /**
@@ -209,9 +224,7 @@ Project.prototype.storeProjectContent = function(id, config) {
           const slug = that.pathToSlug(page.name);
           const ref = contentRef.collection("pages").doc(slug);
 
-          batch.set(ref, {
-            content: page.content
-          });
+          batch.set(ref, page.content);
         });
 
         return batch.commit();
@@ -231,7 +244,7 @@ Project.prototype.getProjectContent = function(id, config) {
       return marked(data);
     })
     .then(html => {
-      return that.sanitizeHtml(id, config, html);
+      return that.sanitizeHtml(id, undefined, config, html);
     })
     .then(html => {
       return that.htmlToSections(html);
@@ -240,7 +253,7 @@ Project.prototype.getProjectContent = function(id, config) {
 
 /**
  * Get the content for all pages of a project.
- * 
+ *
  * TODO: Store this in a sanitized, structured format.
  */
 Project.prototype.getProjectPagesContent = function(id, config) {
@@ -266,9 +279,12 @@ Project.prototype.getProjectPagesContent = function(id, config) {
       })
       .then(html => {
         // TODO: Sanitize
+        return that.sanitizeHtml(id, page, config, html);
+      })
+      .then(html => {
         pages.push({
           name: page,
-          content: html
+          content: that.htmlToSections(html)
         });
       });
 
@@ -283,32 +299,103 @@ Project.prototype.getProjectPagesContent = function(id, config) {
 };
 
 /**
+ * Sanitize relative links to be absolute.
+ */
+Project.prototype.sanitizeRelativeLink = function(el, attrName, base) {
+  const val = el.attribs[attrName];
+
+  if (val) {
+    const valUrl = url.parse(val);
+
+    // Relative link has a pathname but not a host
+    if (!valUrl.host && valUrl.pathname) {
+      const newVal = urljoin(base, val);
+      el.attribs[attrName] = newVal;
+    }
+  }
+};
+
+/**
  * Sanitize the content Html.
  */
-Project.prototype.sanitizeHtml = function(id, config, html) {
+Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
   // Links
-  // * (TODO) Links to subprojects content files should go to our page
-  // * (DONE) Links to source files should go to github
+  // * Links to page content files should go to our page
+  // * Links to source files should go to github
   //
   // Images
-  // * (TODO) Images and other things should be made into githubusercontent links
-  const baseUrl = this.getRenderedContentBaseUrl(id);
+  // * Images and other things should be made into githubusercontent links
+  // * Remove badges
+
+  let pageDir = "";
+  if (page) {
+    const lastSlash = page.lastIndexOf("/");
+    pageDir = page.substring(0, lastSlash);
+    if (lastSlash >= 0) {
+      pageDir = page.substring(0, lastSlash);
+    }
+  }
+
+  const renderedBaseUrl = urljoin(
+    this.getRenderedContentBaseUrl(repoId),
+    pageDir
+  );
+  const rawBaseUrl = urljoin(this.getRawContentBaseUrl(repoId), pageDir);
 
   const $ = cheerio.load(html);
   const sections = [];
 
   // Resolve all relative links to github
+  const that = this;
   $("a").each((_, el) => {
     const href = el.attribs["href"];
+    if (!href) {
+      return;
+    }
 
-    if (href) {
-      const hrefUrl = url.parse(href);
+    // Check if the link is to a page within the repo
+    const repoRelative = path.join(pageDir, href);
+    if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
+      console.log(`Preserving relative link ${repoRelative}.`);
+    } else {
+      that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+    }
+  });
 
-      // Relative link has a pathname but not a host
-      if (!hrefUrl.host && hrefUrl.pathname) {
-        const newHref = urljoin(baseUrl, href);
-        el.attribs["href"] = newHref;
+  // Resolve all relative images, add class to parent
+  $("img").each((_, el) => {
+    const src = el.attribs["src"];
+    if (!src) {
+      return;
+    }
+
+    const badgeKeywords = [
+      "travis-ci.org",
+      "shields.io",
+      "coveralls.io",
+      "badge.fury.io",
+      "gitter.im",
+      "circleci.com",
+      "opencollective.com"
+    ];
+
+    let isBadge = false;
+    badgeKeywords.forEach(word => {
+      if (src.indexOf(word) >= 0) {
+        isBadge = true;
       }
+    });
+
+    if (isBadge) {
+      // Remove badges
+      $(el).remove();
+    } else {
+      // Add the image-parent class to the parent
+      $(el)
+        .parent()
+        .addClass("img-parent");
+
+      that.sanitizeRelativeLink(el, "src", rawBaseUrl);
     }
   });
 
@@ -316,13 +403,23 @@ Project.prototype.sanitizeHtml = function(id, config, html) {
 };
 
 /**
- * Turn HTML into a sections object.
- *
- * TODO: sanitize links and images.
+ * Turn HTML into a sections objects.
  */
 Project.prototype.htmlToSections = function(html) {
   const $ = cheerio.load(html);
   const sections = [];
+
+  let $headerChildren = $("div", "<div></div>");
+
+  let $h1 = $("h1").first();
+  $h1.nextUntil("h2").each((_, el) => {
+    $headerChildren = $headerChildren.append(el);
+  });
+
+  const header = {
+    name: $h1.text(),
+    content: $headerChildren.html()
+  };
 
   $("h2").each((_, el) => {
     let $sibchils = $("div", "<div></div>");
@@ -339,7 +436,10 @@ Project.prototype.htmlToSections = function(html) {
     });
   });
 
-  return { sections };
+  return {
+    header,
+    sections
+  };
 };
 
 /**
@@ -353,7 +453,7 @@ Project.prototype.arraysToMaps = function(obj) {
 
   for (var key in obj) {
     if (obj.hasOwnProperty(key)) {
-      if (obj[key].constructor === Array) {
+      if (obj[key] && obj[key].constructor === Array) {
         const arr = obj[key];
         const map = {};
 

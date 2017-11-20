@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 const cjson = require("comment-json");
 const functions = require("firebase-functions");
 const fs = require("fs");
+const github = require("./github");
 const marked = require("marked");
 const request = require("request-promise-native");
 const url = require("url");
@@ -77,28 +78,39 @@ Project.prototype.pathToSlug = function(path) {
  */
 Project.prototype.getProjectConfig = function(id) {
   const url = this.getConfigUrl(id);
+  const idParsed = this.parseProjectId(id);
 
-  const that = this;
-  return this.checkConfigExists(id).then(exists => {
-    if (exists) {
-      // Config exists, fetch and parse it
-      return request(url, GH_CONTENT_OPTIONS).then(data => {
-        // Parse and remove comments
-        const contents = data.toString();
-        return cjson.parse(contents, null, true);
-      });
-    } else {
-      // If the project has no config, make one up
-      const idParsed = that.parseProjectId(id);
+  return this.checkConfigExists(id)
+    .then(exists => {
+      if (exists) {
+        // Config exists, fetch and parse it
+        return request(url, GH_CONTENT_OPTIONS).then(data => {
+          // Parse and remove comments
+          const contents = data.toString();
+          return cjson.parse(contents, null, true);
+        });
+      } else {
+        // If the project has no config, make one up
+        console.log(`WARN: Using default config for ${id}`);
+        return {
+          name: idParsed.repo,
+          type: "library",
+          content: "README.md"
+        };
+      }
+    })
+    .then(config => {
+      // Merge the config with repo metadata like stars
+      // and updated time.
+      return github
+        .getRepoMetadata(idParsed.owner, idParsed.repo)
+        .then(meta => {
+          config.stars = meta.stars;
+          config.last_updated = meta.last_updated;
 
-      console.log(`WARN: Using default config for ${id}`);
-      return {
-        name: idParsed.repo,
-        type: "library",
-        content: "README.md"
-      };
-    }
-  });
+          return config;
+        });
+    });
 };
 
 /**
@@ -240,7 +252,7 @@ Project.prototype.getProjectContent = function(id, config) {
 
 /**
  * Get the content for all pages of a project.
- * 
+ *
  * TODO: Store this in a sanitized, structured format.
  */
 Project.prototype.getProjectPagesContent = function(id, config) {
@@ -353,7 +365,7 @@ Project.prototype.arraysToMaps = function(obj) {
 
   for (var key in obj) {
     if (obj.hasOwnProperty(key)) {
-      if (obj[key].constructor === Array) {
+      if (obj[key] && obj[key].constructor === Array) {
         const arr = obj[key];
         const map = {};
 

@@ -103,6 +103,7 @@ export default class App extends Vue {
     const data = snapshot.data();
 
     this.header = data.header as Section;
+    this.page_title = data.header.name;
     const sections = snapshot.data().sections as Section[];
 
     sections.forEach(section => {
@@ -126,6 +127,10 @@ export default class App extends Vue {
 
   as_id(text: String) {
     return text.toLowerCase().replace(" ", "_");
+  }
+
+  set page_title(page_title: string) {
+    document.querySelector("title").innerText = page_title;
   }
 
   updated() {

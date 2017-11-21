@@ -1,17 +1,27 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import App from "./components/App";
+
+import Homepage from "./components/Homepage";
+import Projects from "./components/Projects";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/projects/:organization/:repository",
-    component: App
+    path: "/",
+    component: Homepage
   },
   {
+    path: "/projects/:organization/:repository/",
+    component: Projects
+  },
+  // {
+  //   path: "/projects/:organization/:repository",
+  //   redirect: "/projects/:organization/:repository/"
+  // },
+  {
     path: "/projects/:organization/:repository/:page(.+)",
-    component: App
+    component: Projects
   }
 ];
 

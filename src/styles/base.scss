@@ -1,0 +1,170 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto',sans-serif;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 0 10px;
+}
+
+header {
+  width: 100%;
+  padding: 10px 30px 0px 30px;
+  background-color: #2185CC;
+  color: white;
+  overflow: auto;
+  margin-bottom: 10px;
+  box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0px;
+  z-index: 3;
+
+  .content {
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  .link {
+    float: right;
+    padding-left: 20px;
+  }
+
+  .link.title {
+    float: left;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+.spacer-header {
+  height: 50px;
+}
+
+.grid_2, .grid_3, .grid_4, .grid_6 {
+  float: left;
+  min-height: 10px;
+}
+
+.grid_2 {
+  width: 20%;
+}
+
+.grid_3 {
+  width: 30%;
+}
+
+.grid_third {
+  width: 33.33333%;
+}
+
+.grid_4 {
+  width: 40%;
+}
+
+.grid_6 {
+  width: 60%;
+}
+
+.nav {
+    position: fixed;
+    right: 0px;
+  }
+  
+  .dropdown {
+    padding: 5px 15px;
+    width: 270px;
+    margin-top: 30px;
+    margin-left: 20px;
+    border-left: 3px solid rgba(0, 0, 0, 0.1);
+    
+    a {
+      clear: both;
+      display: block;
+      width: 100%;
+      color: black;
+      text-decoration: none;
+      opacity: 0.8;
+    
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .section {
+    margin: 30px auto 0px auto;
+    width: 100%;
+  
+    &:last-child:nth-child(2) {
+      margin-top: 0px;
+    }
+  
+    &:not(:first-child) {
+      margin-top: 0px;
+    }
+  
+    .content, .breadcrumbs {
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  
+    .content {
+        padding: 30px 50px;
+  
+        color: black;
+        background-color: white;
+        overflow: auto;
+  
+        border-radius: 0px 0px 2px 2px;
+        &:first-child {
+          border-radius: 2px;
+        }
+      }
+  
+      .breadcrumbs {
+        background-color: #eee;
+        padding: 15px 30px 10px 30px;
+        border-bottom: 1px solid #eee;
+        color: #bbb;
+  
+        margin: 0 auto;
+        a {
+          margin: 0px 10px;
+          text-decoration: underline;
+  
+          &:first-child {
+            margin-left: 0px;
+          }
+        }
+      }
+  
+      &:last-child {
+        padding-bottom: 100px;
+      }
+  }
+
+  #docs {
+    height: 38px;
+    //overflow: hidden;
+    cursor: pointer;
+  
+    &:hover {
+      overflow: inherit;
+  
+      .dropdown {
+        top: 40px;
+      }
+    }
+  }

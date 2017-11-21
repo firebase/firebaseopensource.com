@@ -2,6 +2,8 @@ import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
+import {Config} from "../../types/config";
+
 // Typings for modules imported dynamically
 import FirebaseAppModule = require("firebase/app");
 
@@ -15,37 +17,11 @@ type Section = {
   ref: String;
 };
 
-export interface TrueMap {
-  [s: string]: true;
-}
-
-export interface Subprojects {
-  auth: boolean;
-  database: boolean;
-  firestore: boolean;
-  storage: boolean;
-}
-
-export interface Config {
-  content?: string;
-  last_updated?: Date;
-  last_updated_from_now?: string;
-  name?: string;
-  pages?: TrueMap;
-  parent?: string;
-  platforms?: TrueMap;
-  related?: TrueMap;
-  stars?: number;
-  subprojects?: Subprojects;
-  tags?: TrueMap;
-  type?: string;
-}
-
 declare const hljs: any;
 
 @Component
-export default class App extends Vue {
-  name = "app";
+export default class Projects extends Vue {
+  name = "projects";
   required = {
     firebase: FirebaseAppModule
   };
@@ -140,4 +116,4 @@ export default class App extends Vue {
   }
 }
 
-require("./template.html")(App);
+require("./template.html")(Projects);

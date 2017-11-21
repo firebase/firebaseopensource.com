@@ -1,0 +1,40 @@
+<div>
+  <header>
+    <div class="content">
+      <div class="title link">Firebase Opensource</div>
+      <div class="link" id="docs">
+        <div class="text">
+          <!-- <span class="label">Docs</span> -->
+          <!-- <span class="label-icon">▼</span> -->
+          <!-- <i class="material-icons">keyboard_arrow_down</i> -->
+        </div>
+      </div>
+      <div class="link">
+        <a :href="'https://github.com/' + $route.params.organization + '/' + $route.params.repository">Github</a>
+      </div>
+    </div>
+  </header>
+  <div class="spacer-header"></div>
+  <div class="page">
+      <div class="grid_2"></div>
+      <div class="sections grid_6">
+        <div class="section" v-for="category in categories">
+          <div class="content">
+            <h1>{{category.title}}</h1>
+            <div class="projects">
+              <div class="project grid_third" v-for="project in category.projects">
+                  <div class="logo-circle" :style="{backgroundColor: project.color}">{{project.letter}}</div>
+                <h2>{{project.name}}</h2>
+                <p>
+                    Store and sync data between users and devices.
+                </p>
+                <button>LEARN MORE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid_2"></div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+@import "../../styles/base.scss";
+
+h1 {
+  font-weight: 100;
+  font-size: 32px;
+  color: #424242;
+  padding-bottom: 30px;
+}
+
+
+.projects {
+  border-bottom: 1px solid #ECEFF1; 
+  overflow: auto;
+
+  .project {
+    border: 1px solid #ECEFF1;
+    border-width: 1px 0px 0px 0px;
+    float: left;
+    position: relative;
+    padding: 20px;
+  
+    &:nth-child(3n) {
+      border-width: 1px 0px 0px 0px;
+    }
+  
+    .logo-circle {
+      width: 100px;
+      height: 100px;
+      background-color: #eee;
+      border-radius: 100%;
+      text-align: center;
+      line-height: 105px;
+      font-size: 70px;
+      margin-bottom: 30px;
+      color: rgba(255, 255, 255, 1);
+      // opacity: 0.8;
+    }
+
+    h2 {
+      color: #FF8F00;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 0px;
+      padding: 0px;
+      min-height: 20px;
+    }
+  
+    p {
+      color: #757575;
+      font-weight: 400;
+      font-size: 15px;
+    }
+  
+    button {
+      color: #039BE5;
+      background-color: transparent;
+      border-width: 0px;
+      font-weight: bold;
+      border-radius: 2px;
+      padding: 10px;
+  
+      transition: 0.1s linear background-color;
+  
+      &:hover {
+        background-color: #9EDFFF;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.section {
+  margin-bottom: 30px;
+}

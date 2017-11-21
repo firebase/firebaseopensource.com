@@ -458,7 +458,8 @@ Project.prototype.arraysToMaps = function(obj) {
         const map = {};
 
         arr.forEach(item => {
-          map[item] = true;
+          const itemKey = item.toLowerCase();
+          map[itemKey] = true;
         });
 
         newobj[key] = map;

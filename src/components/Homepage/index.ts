@@ -3,13 +3,13 @@ import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 
 import { pickLogoLetter } from "../../utils";
 
-import {Config} from "../../types/config";
+import { Config } from "../../types/config";
 
 type Category = {
   title: string;
   platform: string;
-  projects: Config[]
-} 
+  projects: Config[];
+};
 
 // Typings for modules imported dynamically
 import FirebaseAppModule = require("firebase/app");
@@ -23,7 +23,7 @@ const COLORS = [
   "#009688",
   "#9C27B0",
   "#33AC71"
-]
+];
 
 @Component
 export default class Projects extends Vue {
@@ -66,26 +66,27 @@ export default class Projects extends Vue {
 
     this.required.firebase.initializeApp(config);
 
-    this.categories.forEach((category) => {
-      this.required.firebase.firestore()
-      .collection("configs")
-      .orderBy(`platforms.${category.platform}`)
-      .get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          const config = doc.data() as Config;
-          config.letter = pickLogoLetter(config.name);
-          config.color = COLORS[config.letter.charCodeAt(0) % COLORS.length]; 
-          // config.color = "#";
+    this.categories.forEach(category => {
+      this.required.firebase
+        .firestore()
+        .collection("configs")
+        .orderBy(`platforms.${category.platform}`)
+        .get()
+        .then(snapshot => {
+          snapshot.docs.forEach(doc => {
+            const config = doc.data() as Config;
+            config.letter = pickLogoLetter(config.name);
+            config.color = COLORS[config.letter.charCodeAt(0) % COLORS.length];
+            // config.color = "#";
 
-          // for(let i=0; i<3; i++) {
-          //   config.color += Math.floor(Math.random()*255).toString(16);
-          // }
+            // for(let i=0; i<3; i++) {
+            //   config.color += Math.floor(Math.random()*255).toString(16);
+            // }
 
-          // console.log(config.color);
-          category.projects.push(config);
+            // console.log(config.color);
+            category.projects.push(config);
+          });
         });
-      })
     });
   }
 }

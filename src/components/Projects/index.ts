@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
-import {Config} from "../../types/config";
+import { Config } from "../../types/config";
 
 // Typings for modules imported dynamically
 import FirebaseAppModule = require("firebase/app");

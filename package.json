@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/fs-extra": "^4.0.5",
     "@types/isomorphic-fetch": "^0.0.34",
+    "@types/shelljs": "^0.7.6",
     "date-fns": "^1.29.0",
     "firebase": "^4.5.0",
     "firebase-tools": "^3.15.2",
@@ -25,7 +26,9 @@
     "jest": "^20.0.4",
     "jest-vue-preprocessor": "^1.1.0",
     "rendertron": "^1.1.0",
+    "rxjs": "^5.5.2",
     "sass-loader": "^6.0.6",
+    "spawn-rx": "^2.0.12",
     "ts-node": "^3.3.0",
     "vue": "^2.3.3",
     "vue-router": "^3.0.1"

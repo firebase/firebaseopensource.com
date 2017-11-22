@@ -1,5 +1,10 @@
 import * as fetch from 'isomorphic-fetch';
 import * as fs from 'fs-extra';
+import { Observable } from 'rxjs/Observable';
+import { tap, map, filter, mergeMap, takeUntil } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/Observable/combineLatest';
+import { from } from 'rxjs/Observable/from';
+import { spawnDetached } from 'spawn-rx';
 import * as firebase from 'firebase';
 // import 'firebase/firestore';
 
@@ -17,6 +22,7 @@ const BASE_URL = 'http://localhost:5000';
 const PROJECTS = [
   'firebase::angularfire',
   'firebase::firebaseui-android',
+  'firebase::functions-samples',
 ];
 
 export interface PrerenderOptions {
@@ -30,21 +36,63 @@ async function getProjects(app: firebase.app.App) {
   return snaps.docs.map(d => d.id);
 }
 
-async function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
-  const projects = PROJECTS;
-  const promises = projects.map(async id => {
-    const pieces = id.split('::');
-    const org = pieces[0];
-    const projectId = pieces[1];
-    const path = `${org}/${projectId}`;
-    const res = await fetch(`${RENDERTON_URL}/render/${BASE_URL}/projects/${path}`);
-    const html = await res.text();
-    await fs.mkdirp(`${__dirname}/${org}`)
-    await fs.writeFile(`${__dirname}/${path}.html`, html, 'utf8');
+function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
+  return new Observable(subscriber => {
+    const projects = PROJECTS;
+    const promises = projects.map(async id => {
+      const pieces = id.split('::');
+      const org = pieces[0];
+      const projectId = pieces[1];
+      const path = `${org}/${projectId}`;
+      // TODO(davideast): Switch to Observable HTTP request
+      const res = await fetch(`${RENDERTON_URL}/render/${BASE_URL}/projects/${path}`);
+      const html = await res.text();
+      fs.mkdirpSync(`${__dirname}/${org}`)
+      fs.writeFileSync(`${__dirname}/${path}.html`, html, 'utf8');
+      console.log(`Wrote: ${__dirname}/${path}.html`);
+    });
+    Promise.all(promises).then(_ => subscriber.complete());
   });
-  return Promise.all(promises);
 }
 
-prerender({ localUrl: BASE_URL, rendertronUrl: RENDERTON_URL })
-  .then(_ => { console.log('Done!'); })
-  .catch(console.log);
+/**
+ * Create an child process observable that only emits once a condition
+ * is statified. This condition indicates that the child process has
+ * launched or done enough work to use.
+ * @param cmd 
+ * @param args 
+ * @param matchingCondition 
+ */
+function spawnLaunched(cmd: string, args: string[], matchingCondition: string) {
+  return spawnDetached(cmd, args).pipe(
+    tap(data => console.log(data.toString())),
+    map(data => data.toString().indexOf(matchingCondition) > 0),
+    filter(hasLaunched => hasLaunched)
+  );
+}
+
+console.log('Starting Firebase Hosting and Rendertron servers...');
+const serveCmd = spawnLaunched('firebase', ['serve'], 'Local server: http://localhost:5000');
+const rendertronCmd = spawnLaunched('rendertron', [], 'port 3000');
+const server$ = combineLatest(serveCmd, rendertronCmd).pipe(
+  tap(_ => {
+    console.log('Firebase Hosting and Rendertron are up and running!');
+    console.log('Starting Pre-render...');
+  })
+);
+
+// TODO(davideast): Fix dirty inner sub hack
+// Need to find a way to end the server processes
+// once the pre-render process completes
+const serverSub = server$
+  .subscribe(_ => {
+    const preSub = prerender({ localUrl: BASE_URL, rendertronUrl: RENDERTON_URL })
+      .subscribe(
+        _ => {}, // next
+        _ => {}, // error
+        () => { // completed
+          console.log('Tearing down...');
+          serverSub.unsubscribe();
+          process.exit(0);
+        });
+  });

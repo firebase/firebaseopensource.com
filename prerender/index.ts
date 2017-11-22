@@ -5,6 +5,7 @@ import { tap, map, filter, mergeMap, takeUntil } from 'rxjs/operators';
 import { combineLatest } from 'rxjs/Observable/combineLatest';
 import { from } from 'rxjs/Observable/from';
 import { spawnDetached } from 'spawn-rx';
+import * as chalk from 'chalk';
 import * as firebase from 'firebase';
 // import 'firebase/firestore';
 
@@ -49,7 +50,7 @@ function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
       const html = await res.text();
       fs.mkdirpSync(`${__dirname}/${org}`)
       fs.writeFileSync(`${__dirname}/${path}.html`, html, 'utf8');
-      console.log(`Wrote: ${__dirname}/${path}.html`);
+      chalk.default.greenBright(`Wrote: ${__dirname}/${path}.html`);
     });
     Promise.all(promises).then(_ => subscriber.complete());
   });
@@ -65,19 +66,19 @@ function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
  */
 function spawnLaunched(cmd: string, args: string[], matchingCondition: string) {
   return spawnDetached(cmd, args).pipe(
-    tap(data => console.log(data.toString())),
+    tap(data => console.log(chalk.default.gray(data.toString()))),
     map(data => data.toString().indexOf(matchingCondition) > 0),
     filter(hasLaunched => hasLaunched)
   );
 }
 
-console.log('Starting Firebase Hosting and Rendertron servers...');
+console.log(chalk.default.greenBright('Starting Firebase Hosting and Rendertron servers...'));
 const serveCmd = spawnLaunched('firebase', ['serve'], 'Local server: http://localhost:5000');
 const rendertronCmd = spawnLaunched('rendertron', [], 'port 3000');
 const server$ = combineLatest(serveCmd, rendertronCmd).pipe(
   tap(_ => {
-    console.log('Firebase Hosting and Rendertron are up and running!');
-    console.log('Starting Pre-render...');
+    console.log(chalk.default.greenBright('Firebase Hosting and Rendertron are up and running!'));
+    console.log(chalk.default.greenBright('Starting Pre-render...'));
   })
 );
 
@@ -91,7 +92,7 @@ const serverSub = server$
         _ => {}, // next
         _ => {}, // error
         () => { // completed
-          console.log('Tearing down...');
+          console.log(chalk.default.redBright('Tearing down...'));
           serverSub.unsubscribe();
           process.exit(0);
         });

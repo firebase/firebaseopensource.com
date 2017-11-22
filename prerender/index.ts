@@ -6,6 +6,7 @@ import { combineLatest } from 'rxjs/Observable/combineLatest';
 import { from } from 'rxjs/Observable/from';
 import { spawnDetached } from 'spawn-rx';
 import * as chalk from 'chalk';
+import { minify } from 'html-minifier';
 import * as firebase from 'firebase';
 // import 'firebase/firestore';
 
@@ -45,11 +46,15 @@ function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
       const org = pieces[0];
       const projectId = pieces[1];
       const path = `${org}/${projectId}`;
-      // TODO(davideast): Switch to Observable HTTP request
       const res = await fetch(`${RENDERTON_URL}/render/${BASE_URL}/projects/${path}`);
       const html = await res.text();
+      // Save some bytes by minifying the document
+      const minHtml = minify(html, { 
+        minifyCSS: true,
+        collapseWhitespace: true 
+      });
       fs.mkdirpSync(`${__dirname}/${org}`)
-      fs.writeFileSync(`${__dirname}/${path}.html`, html, 'utf8');
+      fs.writeFileSync(`${__dirname}/${path}.html`, minHtml, 'utf8');
       chalk.default.greenBright(`Wrote: ${__dirname}/${path}.html`);
     });
     Promise.all(promises).then(_ => subscriber.complete());

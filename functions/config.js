@@ -10,7 +10,6 @@ Config.prototype.get = function(key) {
   try {
     return this._getNestedProperty(functions.config(), key);
   } catch (e) {
-    console.warn("Config.get", e);
     const newKey = key.replace(".", "_");
     return process.env[newKey];
   }

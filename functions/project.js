@@ -11,11 +11,18 @@ const request = require("request-promise-native");
 const url = require("url");
 const urljoin = require("url-join");
 
-const GH_CONTENT_OPTIONS = {
-  headers: {
-    "Cache-Control": "max-age=0",
-    Authorization: `token ${config.get("github.token")}`
-  }
+const GH_CONTENT_HEADERS = {
+  "Cache-Control": "max-age=0",
+  Authorization: `token ${config.get("github.token")}`
+};
+
+const GH_CONTENT_GET_OPTIONS = {
+  headers: GH_CONTENT_HEADERS
+};
+
+const GH_CONTENT_HEAD_OPTIONS = {
+  method: 'HEAD',
+  headers: GH_CONTENT_HEADERS
 };
 
 // Initialize the Admin SDK with the right credentials for the environment
@@ -70,10 +77,17 @@ Project.prototype.recursiveStoreProject = function(id) {
 };
 
 /**
+ * Make sure all IDs have the same casing, etc.f
+ */
+Project.prototype.normalizeId = function(id) {
+  return id.toLowerCase();
+};
+
+/**
  * Convert a path with slashes to a slug.
  */
 Project.prototype.pathToSlug = function(path) {
-  return path.replace("/", "::");
+  return this.normalizeId(path.replace("/", "::"));
 };
 
 /**
@@ -87,7 +101,7 @@ Project.prototype.getProjectConfig = function(id) {
     .then(exists => {
       if (exists) {
         // Config exists, fetch and parse it
-        return request(url, GH_CONTENT_OPTIONS).then(data => {
+        return request(url, GH_CONTENT_GET_OPTIONS).then(data => {
           // Parse and remove comments
           const contents = data.toString();
           return cjson.parse(contents, null, true);
@@ -122,8 +136,7 @@ Project.prototype.getProjectConfig = function(id) {
 Project.prototype.checkConfigExists = function(id) {
   const url = this.getConfigUrl(id);
 
-  // TODO: This should be a HEAD request for efficiency
-  return request(url)
+  return request(url, GH_CONTENT_HEAD_OPTIONS)
     .then(() => {
       return true;
     })
@@ -193,10 +206,9 @@ Project.prototype.getPageUrl = function(id, page) {
 Project.prototype.storeProjectConfig = function(id, config) {
   const data = this.arraysToMaps(config);
 
-  // TODO: should we make the ID lowercase before writing?
   const configProm = db
     .collection("configs")
-    .doc(id)
+    .doc(this.normalizeId(id))
     .set(data);
 };
 
@@ -205,7 +217,7 @@ Project.prototype.storeProjectConfig = function(id, config) {
  */
 Project.prototype.storeProjectContent = function(id, config) {
   var that = this;
-  const contentRef = db.collection("content").doc(id);
+  const contentRef = db.collection("content").doc(this.normalizeId(id));
   return this.getProjectContent(id, config)
     .then(sections => {
       // Set main content
@@ -239,7 +251,7 @@ Project.prototype.getProjectContent = function(id, config) {
   const url = this.getContentUrl(id, config);
 
   var that = this;
-  return request(url, GH_CONTENT_OPTIONS)
+  return request(url, GH_CONTENT_GET_OPTIONS)
     .then(data => {
       return marked(data);
     })
@@ -253,8 +265,6 @@ Project.prototype.getProjectContent = function(id, config) {
 
 /**
  * Get the content for all pages of a project.
- *
- * TODO: Store this in a sanitized, structured format.
  */
 Project.prototype.getProjectPagesContent = function(id, config) {
   if (!config.pages) {
@@ -273,12 +283,11 @@ Project.prototype.getProjectPagesContent = function(id, config) {
     const pageUrl = that.getPageUrl(id, page);
     console.log(`Rendering page: ${pageUrl}`);
 
-    const pagePromise = request(pageUrl, GH_CONTENT_OPTIONS)
+    const pagePromise = request(pageUrl, GH_CONTENT_GET_OPTIONS)
       .then(data => {
         return marked(data);
       })
       .then(html => {
-        // TODO: Sanitize
         return that.sanitizeHtml(id, page, config, html);
       })
       .then(html => {

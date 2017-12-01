@@ -6,12 +6,12 @@ A landing page for open source Firebase projects.
 
   * Meta-page (and / redirect)
   * Real logos
-  * Server-side rendering
+  * Favicon
   * Home page
-  * Cron job to fetch projects
-  * Render subpages
+  * Cron job to fetch projects and redo SSR
   * Related projects section
   * Redirect firebase.github.io
+  * Analytics
 
 # Functions Config
 

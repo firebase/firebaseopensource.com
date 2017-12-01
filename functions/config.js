@@ -8,11 +8,21 @@ const Config = function() {};
  */
 Config.prototype.get = function(key) {
   try {
-    return functions.config()[key];
+    return this._getNestedProperty(functions.config(), key);
   } catch (e) {
     const newKey = key.replace(".", "_");
     return process.env[newKey];
   }
+};
+
+Config.prototype._getNestedProperty = function(obj, name) {
+  const pieces = name.split(".");
+  let val = obj;
+  pieces.forEach(piece => {
+    val = val[piece];
+  });
+
+  return val;
 };
 
 /** Exports */

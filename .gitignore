@@ -5,6 +5,9 @@ npm-debug.log
 yarn-error.log
 firebase-debug.log
 
+# Prerendered files
+prerender/**/*.html
+
 # Editor directories and files
 .idea
 *.suo

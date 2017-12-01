@@ -5,7 +5,7 @@
   "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
   "private": true,
   "scripts": {
-    "fmt": "prettier --write src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
+    "fmt": "prettier --write *.css src/**/**/**.scss src/**/**.scss src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --hot",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true",

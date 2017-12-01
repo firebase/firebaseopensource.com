@@ -2,19 +2,17 @@
   <img src="../../assets/background-top.svg" hidden/>
   <header>
     <div class="content">
-      <div class="title link">{{header.name}}</div>
-      <div class="link" id="docs">
-        <div class="text">
-          <!-- <span class="label">Docs</span> -->
-          <!-- <span class="label-icon">▼</span> -->
-          <!-- <i class="material-icons">keyboard_arrow_down</i> -->
-        </div>
+      <div class="title">
+        <img src="../../assets/logo-small.png" />
+        <span>Firebase Opensource</span>
       </div>
+
       <div class="link">
         <a :href="'https://github.com/' + $route.params.organization + '/' + $route.params.repository">Github</a>
       </div>
     </div>
   </header>
+
   <div class="spacer-header"></div>
   <div class="page">
     <div class="grid_2"></div>
@@ -25,9 +23,6 @@
           <a href="">{{config.parent}}</a> > <a href="">{{header.name}}</a>
         </div>
         <div class="content">
-          <div class="material-icons icon" v-if="!is_subpage">
-            <img src="../../assets/logo-small.png" height="80" />
-          </div>
           <h1>
             {{header.name}}
           </h1>

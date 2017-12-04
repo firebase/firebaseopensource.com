@@ -1,5 +1,8 @@
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
+import { Firebaseton } from "../../services/firebaseton";
+
+import HeaderBar from "../HeaderBar";
 
 import { pickLogoLetter } from "../../utils";
 
@@ -10,9 +13,6 @@ type Category = {
   platform: string;
   projects: Config[];
 };
-
-// Typings for modules imported dynamically
-import FirebaseAppModule = require("firebase/app");
 
 const COLORS = [
   "#039BE5",
@@ -25,12 +25,11 @@ const COLORS = [
   "#33AC71"
 ];
 
-@Component
+@Component({
+  components: { HeaderBar }
+})
 export default class Projects extends Vue {
   name = "projects";
-  required = {
-    firebase: FirebaseAppModule
-  };
 
   categories: Category[] = [
     {
@@ -40,35 +39,25 @@ export default class Projects extends Vue {
     },
     {
       title: "Web",
-      platform: "android",
+      platform: "web",
       projects: []
     },
     {
       title: "iOS",
-      platform: "android",
+      platform: "ios",
       projects: []
     }
   ];
 
+  subheader_tabs = ["All", "iOS", "Android", "Web"];
+
   async mounted() {
-    await Promise.all([
-      System.import("firebase"),
-      System.import("isomorphic-fetch")
-    ]);
+    document.querySelector("title").innerText = "Firebase Opensource";
 
-    this.required.firebase = <typeof FirebaseAppModule>require("firebase/app");
-    require("firebase/firestore");
-    require("isomorphic-fetch");
-
-    const config = await fetch("/__/firebase/init.json").then(response =>
-      response.json()
-    );
-
-    this.required.firebase.initializeApp(config);
+    const fbt = await Firebaseton.get();
 
     this.categories.forEach(category => {
-      this.required.firebase
-        .firestore()
+      fbt.fs
         .collection("configs")
         .orderBy(`platforms.${category.platform}`)
         .get()
@@ -77,6 +66,10 @@ export default class Projects extends Vue {
             const config = doc.data() as Config;
             config.letter = pickLogoLetter(config.name);
             config.color = COLORS[config.letter.charCodeAt(0) % COLORS.length];
+
+            const id = doc.id;
+            config.org = id.split("::")[0];
+            config.repo = id.split("::")[1];
             // config.color = "#";
 
             // for(let i=0; i<3; i++) {
@@ -88,6 +81,15 @@ export default class Projects extends Vue {
           });
         });
     });
+  }
+
+  isSectionVisible(section: string) {
+    const header = this.$refs.header as HeaderBar;
+    return (
+      !header ||
+      header.subheader_tab_selection == "All" ||
+      header.subheader_tab_selection == section
+    );
   }
 }
 

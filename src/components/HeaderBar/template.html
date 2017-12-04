@@ -1,0 +1,27 @@
+  <div id="header-bar" :class={spacer}>
+    <div class="header-clone" v-for="header in headers" :class="header">
+      <header>
+          <div class="content">
+            <div class="title">
+              <img src="../../assets/logo-small.png" />
+              <router-link to="/">Firebase Opensource</router-link>
+            </div>
+    
+            <!-- <div class="link">
+              <a :href="'https://github.com/' + $route.params.organization + '/' + $route.params.repository">Github</a>
+            </div> -->
+          </div>
+        </header>
+        <div class="subheader" v-if="enable_subheader">
+          <div class="content">
+            <h2>{{subheader_title}}</h2>
+            <div class="tabs">
+              <div class="tab" v-for="tab in subheader_tabs" :class="{selected: subheader_tab_selection == tab}" @click="setSubheaderTabSelection(tab)">
+                {{tab}}
+              </div>
+            </div>
+            <div class="tab-spacer" v-if="!subheader_tabs"></div>
+          </div>
+        </div>
+    </div>
+  </div>

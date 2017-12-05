@@ -1,11 +1,11 @@
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+import { Firebaseton } from "../../services/firebaseton";
+
+import HeaderBar from "../HeaderBar";
 
 import { Config } from "../../types/config";
-
-// Typings for modules imported dynamically
-import FirebaseAppModule = require("firebase/app");
 
 // Include automock for automated mocking
 import "../../automock";
@@ -19,32 +19,18 @@ type Section = {
 
 declare const hljs: any;
 
-@Component
+@Component({
+  components: { HeaderBar }
+})
 export default class Projects extends Vue {
   name = "projects";
-  required = {
-    firebase: FirebaseAppModule
-  };
   sections: Section[] = [];
   header: Section = { content: "", name: "", id: "", ref: "" };
   config: Config = {};
   is_subpage = false;
 
   async mounted() {
-    await Promise.all([
-      System.import("firebase"),
-      System.import("isomorphic-fetch")
-    ]);
-
-    this.required.firebase = <typeof FirebaseAppModule>require("firebase/app");
-    require("firebase/firestore");
-    require("isomorphic-fetch");
-
-    const config = await fetch("/__/firebase/init.json").then(response =>
-      response.json()
-    );
-
-    this.required.firebase.initializeApp(config);
+    const fbt = await Firebaseton.get();
 
     const blocked_sections = ["table of contents"];
 
@@ -53,10 +39,7 @@ export default class Projects extends Vue {
       this.$route.params.repository
     ].join("::");
 
-    const repoDoc = this.required.firebase
-      .firestore()
-      .collection("content")
-      .doc(id);
+    const repoDoc = fbt.fs.collection("content").doc(id);
 
     const page = this.$route.params.page;
 
@@ -89,8 +72,7 @@ export default class Projects extends Vue {
       this.sections.push(section);
     });
 
-    const configSnapshot = await this.required.firebase
-      .firestore()
+    const configSnapshot = await fbt.fs
       .collection("configs")
       .doc(id)
       .get();
@@ -107,6 +89,10 @@ export default class Projects extends Vue {
 
   set page_title(page_title: string) {
     document.querySelector("title").innerText = page_title;
+  }
+
+  get page_title() {
+    return this.page_title;
   }
 
   updated() {

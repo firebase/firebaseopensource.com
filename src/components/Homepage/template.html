@@ -1,25 +1,11 @@
 <div>
-  <header>
-    <div class="content">
-      <div class="title link">Firebase Opensource</div>
-      <div class="link" id="docs">
-        <div class="text">
-          <!-- <span class="label">Docs</span> -->
-          <!-- <span class="label-icon">▼</span> -->
-          <!-- <i class="material-icons">keyboard_arrow_down</i> -->
-        </div>
-      </div>
-      <div class="link">
-        <a :href="'https://github.com/' + $route.params.organization + '/' + $route.params.repository">Github</a>
-      </div>
-    </div>
-  </header>
-  <div class="spacer-header"></div>
+  <header-bar enable_subheader="true" subheader_title="Platforms" :subheader_tabs="subheader_tabs" ref="header"></header-bar>
+
   <div class="page">
       <div class="grid_2"></div>
       <div class="sections grid_6">
         <div class="section" v-for="category in categories">
-          <div class="content">
+          <div class="content" v-if="isSectionVisible(category.title)">
             <h1>{{category.title}}</h1>
             <div class="projects">
               <div class="project grid_third" v-for="project in category.projects">
@@ -28,7 +14,9 @@
                 <p>
                     Store and sync data between users and devices.
                 </p>
-                <button>LEARN MORE</button>
+                <router-link :to="`/projects/${project.org}/${project.repo}`">
+                  <button>LEARN MORE</button>
+                </router-link>
               </div>
             </div>
           </div>

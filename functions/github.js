@@ -44,6 +44,7 @@ Github.prototype.getRepoMetadata = function(org, repo) {
   return request(url, _GH_OPTIONS_STANDARD).then(repo => {
     return {
       description: repo.description,
+      fork: repo.fork,
       stars: repo.stargazers_count,
       last_updated: repo.updated_at
     };

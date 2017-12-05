@@ -182,6 +182,7 @@ Project.prototype.getProjectConfig = function(id) {
             config.description = meta.description;
           }
 
+          config.fork = meta.fork;
           config.stars = meta.stars;
           config.last_updated = meta.last_updated;
 

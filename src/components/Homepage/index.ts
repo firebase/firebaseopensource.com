@@ -81,6 +81,10 @@ export default class Projects extends Vue {
           });
         });
     });
+
+    (this.$refs.header as HeaderBar).$on("subheader_tab_selection:change", () => {
+      window.scrollTo(0, 0);
+    });
   }
 
   isSectionVisible(section: string) {

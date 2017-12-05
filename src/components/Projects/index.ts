@@ -81,6 +81,12 @@ export default class Projects extends Vue {
     this.config.last_updated_from_now = distanceInWordsToNow(
       this.config.last_updated
     );
+
+    (this.$refs.header as HeaderBar).$on("subheader_tab_selection:change", (subheader_tab_selection:string) => {
+      if (subheader_tab_selection == "Github") {
+        (document as any).location = `https://github.com/${this.$route.params.organization}/${this.$route.params.repository}`
+      }
+    });
   }
 
   as_id(text: String) {

@@ -1,7 +1,6 @@
 <div id="app">
   <img src="../../assets/background-top.svg" hidden/>
-  <header-bar enable_subheader="true" :subheader_title="header.name" :subheader_tabs="['Docs', 'Github']" ></header-bar>
-  <!-- :subheader_tabs="['Info', 'Github', '10,314 Stars', 'Last Updated 10 days ago']" -->
+  <header-bar enable_subheader="true" ref="header" :subheader_tabs="['Docs', 'Github']" ></header-bar>
 
   <div class="page">
     <div class="grid_2"></div>
@@ -12,11 +11,11 @@
           <a href="">{{config.parent}}</a> > <a href="">{{header.name}}</a>
         </div> -->
         <div class="content">
-          <!-- <h1>
+           <h1>
             {{header.name}}
           </h1>
           <p v-html="header.content">
-          </p> -->
+          </p>
           <div class="badges" v-if="!is_subpage">
             <div class="badge">
               <div class="key">

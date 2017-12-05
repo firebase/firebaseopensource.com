@@ -15,6 +15,11 @@
     padding: 0px 30px 0px 30px;
     width: 60%;
     margin: 0 auto;
+
+
+    @media (max-width: $tablet) { 
+      width: 100%;
+    }
   }
 
   header {

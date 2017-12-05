@@ -23,6 +23,11 @@ export default class HeaderBar extends Vue {
     }
   }
 
+  @Watch("subheader_tab_selection")
+  onSubheaderTabSelectionChange(subheader_tab_selection: string) {
+    this.$emit("subheader_tab_selection:change", subheader_tab_selection);
+  }
+
   setSubheaderTabSelection(tab: string) {
     Vue.set(this, "subheader_tab_selection", tab);
   }

@@ -121,9 +121,9 @@ Project.prototype.pathToSlug = function(path) {
  */
 Project.prototype.inferPlatforms = function(id) {
   const platforms = {
-    "ios": ["ios", "objc", "swift", "apple"],
-    "android": ["android", "kotlin"],
-    "web": ["web", "js", "angular", "react"]
+    ios: ["ios", "objc", "swift", "apple"],
+    android: ["android", "kotlin"],
+    web: ["web", "js", "angular", "react"]
   };
 
   const result = {};
@@ -373,12 +373,31 @@ Project.prototype.sanitizeRelativeLink = function(el, attrName, base) {
   if (val) {
     const valUrl = url.parse(val);
 
-    // Relative link has a pathname but not a host
-    if (!valUrl.host && valUrl.pathname) {
+    if (this._isRelativeLink(val)) {
       const newVal = urljoin(base, val);
       el.attribs[attrName] = newVal;
     }
   }
+};
+
+/**
+ * Determine if a link is to github.com
+ */
+Project.prototype._isGithubLink = function(href) {
+  const hrefUrl = url.parse(href);
+  return (
+    hrefUrl.hostname && hrefUrl.pathname && href.indexOf("github.com") >= 0
+  );
+};
+
+/**
+ * Determine if a link is relative.
+ */
+Project.prototype._isRelativeLink = function(href) {
+  const hrefUrl = url.parse(href);
+
+  // Relative link has a pathname but not a host
+  return !hrefUrl.host && hrefUrl.pathname;
 };
 
 /**
@@ -419,12 +438,30 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
       return;
     }
 
-    // Check if the link is to a page within the repo
-    const repoRelative = path.join(pageDir, href);
-    if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
-      console.log(`Preserving relative link ${repoRelative}.`);
-    } else {
-      that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+    if (that._isGithubLink(href)) {
+      // Convert github.com/firebase/foo links to firebaseopensource links
+      // TODO: Support non-firebase projects
+      const hrefUrl = url.parse(href);
+
+      const pathSegments = hrefUrl.pathname
+        .split("/")
+        .filter(seg => seg.trim().length > 0);
+      if (pathSegments.length == 2 && pathSegments[0] === "firebase") {
+        const newLink = '/projects/' + pathSegments.join('/');
+
+        console.log(`Replacing ${href} with ${newLink}.`);
+        el.attribs['href'] = newLink;
+      }
+    }
+
+    if (that._isRelativeLink(href)) {
+      // Check if the link is to a page within the repo
+      const repoRelative = path.join(pageDir, href);
+      if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
+        console.log(`Preserving relative link ${repoRelative}.`);
+      } else {
+        that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+      }
     }
   });
 

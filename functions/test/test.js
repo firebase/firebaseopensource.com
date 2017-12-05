@@ -9,7 +9,7 @@ const project = require("../project");
 const ids = [
   "samtstern::BotTest",
   "firebase::firebaseui-android",
-  "samtstern::firebaseui-android",
+  "firebase::firebaseui-ios",
   "firebase::angularfire",
   "firebase::functions-samples"
 ];

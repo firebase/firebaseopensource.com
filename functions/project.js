@@ -117,12 +117,37 @@ Project.prototype.pathToSlug = function(path) {
 };
 
 /**
+ * Guess the platforms for a project.
+ */
+Project.prototype.inferPlatforms = function(id) {
+  const platforms = {
+    "ios": ["ios", "objc", "swift", "apple"],
+    "android": ["android", "kotlin"],
+    "web": ["web", "js", "angular", "react"]
+  };
+
+  const result = {};
+
+  for (let key in platforms) {
+    const keywords = platforms[key];
+    keywords.forEach(keyword => {
+      if (id.indexOf(keyword) >= 0) {
+        result[key] = true;
+      }
+    });
+  }
+
+  return result;
+};
+
+/**
  * Get the configuration for a project at a certain path.
  */
 Project.prototype.getProjectConfig = function(id) {
   const url = this.getConfigUrl(id);
   const idParsed = this.parseProjectId(id);
 
+  const that = this;
   return this.checkConfigExists(id)
     .then(exists => {
       if (exists) {
@@ -143,6 +168,11 @@ Project.prototype.getProjectConfig = function(id) {
       }
     })
     .then(config => {
+      // Add inferred platforms
+      if (!config.platforms) {
+        config.platforms = that.inferPlatforms(id);
+      }
+
       // Merge the config with repo metadata like stars
       // and updated time.
       return github

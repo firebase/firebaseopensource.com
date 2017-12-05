@@ -13,7 +13,7 @@
     "url-join": "^2.0.2"
   },
   "scripts": {
-    "fmt": "prettier --write *.js"
+    "fmt": "prettier --write *.js test/*.js"
   },
   "private": true,
   "devDependencies": {

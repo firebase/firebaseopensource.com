@@ -21,7 +21,7 @@ const GH_CONTENT_GET_OPTIONS = {
 };
 
 const GH_CONTENT_HEAD_OPTIONS = {
-  method: 'HEAD',
+  method: "HEAD",
   headers: GH_CONTENT_HEADERS
 };
 
@@ -48,32 +48,58 @@ const db = admin.firestore();
 const Project = function() {};
 
 /**
+ * Store all known projects.
+ *
+ * TODO: Support a whitelist of projects outside of Firebase.
+ */
+Project.prototype.storeAllProjects = function() {
+  var that = this;
+  return github.listAllRepos("firebase").then(repos => {
+    // Convert all repo names to ids
+    const ids = repos.map(repo => {
+      return that.pathToSlug(repo);
+    });
+
+    // Run in batches
+    return that._batchRun(that.recursiveStoreProject.bind(that), ids, 3);
+  });
+};
+
+/**
  * Store a project and all of its subprojects.
  */
 Project.prototype.recursiveStoreProject = function(id) {
   console.log(`recursiveStoreProject(${id})`);
 
-  const promises = [];
-
   const that = this;
-  return this.getProjectConfig(id).then(config => {
-    // Store this project
-    promises.push(that.storeProjectConfig(id, config));
-    promises.push(that.storeProjectContent(id, config));
+  return this.getProjectConfig(id)
+    .then(config => {
+      // Store this project's config and content
+      const storeConfig = that.storeProjectConfig(id, config);
+      const storeContent = that.storeProjectContent(id, config);
 
-    // Recurse on each subproject
-    if (config.subprojects) {
-      config.subprojects.forEach(sub => {
-        const slug = that.pathToSlug(sub);
-        const storePromise = that.recursiveStoreProject(`${id}::${slug}`);
+      // Wait for both to complete then pass on config
+      return Promise.all([storeConfig, storeContent]).then(config);
+    })
+    .then(config => {
+      const promises = [];
 
-        promises.push(storePromise);
-      });
-    }
+      // Recurse on each subproject
+      if (config.subprojects) {
+        config.subprojects.forEach(sub => {
+          const slug = that.pathToSlug(sub);
+          const storeSubProject = that.recursiveStoreProject(`${id}::${slug}`);
 
-    // Wait for all to complete
-    return Promise.all(promises);
-  });
+          promises.push(storeSubProject);
+        });
+      }
+
+      // Wait for all to complete
+      return Promise.all(promises);
+    })
+    .catch(e => {
+      console.warn(`Failed to store ${id}: ${e}`);
+    });
 };
 
 /**
@@ -505,6 +531,31 @@ Project.prototype.parseProjectId = function(id) {
     repo,
     path
   };
+};
+
+/**
+ * Run a function over arguments in batches.
+ */
+Project.prototype._batchRun = function(fn, args, batchSize) {
+  const promises = [];
+  const that = this;
+
+  const n = Math.min(batchSize, args.length);
+  if (n == 0) {
+    return;
+  }
+
+  for (let i = 0; i < n; i++) {
+    const p = fn(args[i]);
+    promises.push(p);
+  }
+
+  return Promise.all(promises)
+    .catch(console.warn)
+    .then(() => {
+      const newArgs = args.slice(n);
+      return that._batchRun(fn, newArgs, batchSize);
+    });
 };
 
 module.exports = new Project();

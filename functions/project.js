@@ -178,7 +178,10 @@ Project.prototype.getProjectConfig = function(id) {
       return github
         .getRepoMetadata(idParsed.owner, idParsed.repo)
         .then(meta => {
-          config.description = meta.description;
+          if (meta.description) {
+            config.description = meta.description;
+          }
+
           config.stars = meta.stars;
           config.last_updated = meta.last_updated;
 

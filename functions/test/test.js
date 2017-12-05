@@ -11,7 +11,8 @@ const ids = [
   "firebase::firebaseui-android",
   "firebase::firebaseui-ios",
   "firebase::angularfire",
-  "firebase::functions-samples"
+  "firebase::functions-samples",
+  "firebase::assistant-codelab"
 ];
 
 ids.forEach(id => {

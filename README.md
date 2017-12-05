@@ -6,10 +6,10 @@ A landing page for open source Firebase projects.
 
   * Meta-page (and / redirect)
   * Real logos
-  * Home page
   * Related projects section
   * Redirect firebase.github.io
   * Analytics
+  * 404 page
 
 # Functions Config
 

@@ -6,25 +6,25 @@
  */
 const project = require("../project");
 
-// const ids = [
-//   "samtstern::BotTest",
-//   "firebase::firebaseui-android",
-//   "samtstern::firebaseui-android",
-//   "firebase::angularfire",
-//   "firebase::functions-samples"
-// ];
+const ids = [
+  "samtstern::BotTest",
+  "firebase::firebaseui-android",
+  "samtstern::firebaseui-android",
+  "firebase::angularfire",
+  "firebase::functions-samples"
+];
 
-// ids.forEach(id => {
-//   return project.recursiveStoreProject(id).catch(err => {
-//     console.warn(err);
-//   });
-// });
-
-return project
-  .storeAllProjects()
-  .then(function() {
-    console.log("Done");
-  })
-  .catch(function(e) {
-    console.warn("Error", e);
+ids.forEach(id => {
+  return project.recursiveStoreProject(id).catch(err => {
+    console.warn(err);
   });
+});
+
+// return project
+//   .storeAllProjects()
+//   .then(function() {
+//     console.log("Done");
+//   })
+//   .catch(function(e) {
+//     console.warn("Error", e);
+//   });

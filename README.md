@@ -7,7 +7,6 @@ A landing page for open source Firebase projects.
   * Meta-page (and / redirect)
   * Real logos
   * Home page
-  * Cron job to fetch projects and redo SSR
   * Related projects section
   * Redirect firebase.github.io
   * Analytics

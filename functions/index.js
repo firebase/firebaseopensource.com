@@ -20,7 +20,7 @@ exports.getProject = functions.https.onRequest((request, response) => {
 });
 
 /**
- * Get the config for all projects.
+ * Get the config and content for all projects.
  *
  * Note: manually upped this function to 2GB memory and 360s timeout.
  */
@@ -28,10 +28,22 @@ exports.getAllProjects = functions.https.onRequest((request, response) => {
   project
     .storeAllProjects()
     .then(() => {
-      response.status(200).send(`Stored all projects!.`);
+      response.status(200).send("Stored all projects!.");
     })
     .catch(e => {
       console.warn("Error:", e);
-      response.status(500).send(`Failed to store all projects.`);
+      response.status(500).send("Failed to store all projects.");
     });
 });
+
+/**
+ * Store all projects every day.
+ *
+ * Note: manually upped this function to 2GB memory and 360s timeout.
+ */
+exports.dailyGetAllProjects = functions.pubsub
+  .topic("daily-tick")
+  .onPublish(event => {
+    console.log("Got daily tick message");
+    return project.storeAllProjects();
+  });

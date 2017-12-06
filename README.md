@@ -4,13 +4,11 @@ A landing page for open source Firebase projects.
 
 ## TODO
 
-  * Meta-page (and / redirect)
   * Real logos
-  * Home page
-  * Cron job to fetch projects and redo SSR
   * Related projects section
   * Redirect firebase.github.io
-  * Analytics
+  * 404 page
+  * Real README
 
 # Functions Config
 

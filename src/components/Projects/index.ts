@@ -60,6 +60,10 @@ export default class Projects extends Vue {
 
     const snapshot = await dataDoc.get();
 
+    if (!snapshot.exists) {
+      this.$router.push("/404");
+    }
+
     const data = snapshot.data();
 
     this.header = data.header as Section;
@@ -96,43 +100,51 @@ export default class Projects extends Vue {
       }
     );
 
-    const markers = document.querySelectorAll(".section-marker");
-    const tags: {[n: number]: string} = {};
+    // const markers = document.querySelectorAll(".section-marker");
+    // const tags: { [n: number]: string } = {};
 
-    for (let marker of markers) {
-      tags[(marker as HTMLElement).offsetTop] = marker.getAttribute("name");
-    }
+    // for (let marker of markers) {
+    //   tags[(marker as HTMLElement).offsetTop] = marker.getAttribute("name");
+    // }
 
-    const tagScrollYs = Object.keys(tags).reverse().map((t) => {return parseInt(t)});
+    // const tagScrollYs = Object.keys(tags)
+    //   .reverse()
+    //   .map(t => {
+    //     return parseInt(t);
+    //   });
 
-    var last_known_scroll_position = 0;
-    var ticking = false;
+    // var last_known_scroll_position = 0;
+    // var ticking = false;
 
-    const doSomething = (scroll_pos: number) => {
-      // do something with the scroll position
+    // const doSomething = (scroll_pos: number) => {
+    //   // do something with the scroll position
 
-      let selection = "";
-      for (let tagScrollY of tagScrollYs) {
-        if (tagScrollY < scroll_pos) {
-          selection = tags[tagScrollY]
-          break;
-        }
-      }
-      this.dropdown_selection = selection;
-    }
+    //   let selection = "";
+    //   for (let tagScrollY of tagScrollYs) {
+    //     if (tagScrollY < scroll_pos + 10) {
+    //       selection = tags[tagScrollY];
+    //       break;
+    //     }
+    //   }
+    //   this.dropdown_selection = selection;
+    // };
 
-    window.addEventListener("scroll", function(e) {
-      last_known_scroll_position = window.scrollY;
+    // window.addEventListener(
+    //   "scroll",
+    //   function(e) {
+    //     last_known_scroll_position = window.scrollY;
 
-      if (!ticking) {
-        window.requestAnimationFrame(function() {
-          doSomething(last_known_scroll_position);
-          ticking = false;
-        });
+    //     if (!ticking) {
+    //       window.requestAnimationFrame(function() {
+    //         doSomething(last_known_scroll_position);
+    //         ticking = false;
+    //       });
 
-        ticking = true;
-      }
-    }, true);
+    //       ticking = true;
+    //     }
+    //   },
+    //   true
+    // );
   }
 
   as_id(text: String) {

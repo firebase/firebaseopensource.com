@@ -26,4 +26,5 @@ export interface Config {
   color?: string;
   repo?: string;
   org?: string;
+  description?: string;
 }

@@ -15,6 +15,10 @@
     padding: 0px 30px 0px 30px;
     width: 60%;
     margin: 0 auto;
+
+    @media (max-width: $tablet) {
+      width: 100%;
+    }
   }
 
   header {
@@ -38,11 +42,15 @@
         height: $header-height;
         padding: 4px;
         vertical-align: middle;
+        position: relative;
+        top: -5px;
       }
 
       a {
         line-height: $header-height;
         vertical-align: middle;
+        position: relative;
+        top: 2px;
       }
     }
 
@@ -72,6 +80,8 @@
         padding: 10px 20px 5px 20px;
         border-bottom: 3px solid $blue;
         opacity: 0.6;
+
+        user-select: none;
 
         transition: opacity 0.1s linear;
 

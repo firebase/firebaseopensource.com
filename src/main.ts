@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 
 import Homepage from "./components/Homepage";
 import Projects from "./components/Projects";
+import FourOhFour from "./components/FourOhFour";
 
 Vue.use(VueRouter);
 
@@ -22,7 +23,12 @@ const routes = [
   {
     path: "/projects/:organization/:repository/:page(.+)",
     component: Projects
-  }
+  },
+  {
+    path: "/404",
+    component: FourOhFour
+  },
+  { path: "*", redirect: "404" }
 ];
 
 const router = new VueRouter({

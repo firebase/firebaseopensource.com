@@ -46,6 +46,17 @@ li {
   width: 60%;
 }
 
+@media (max-width: $tablet) {
+  .grid_2 {
+    width: 0;
+  }
+
+  .grid_6 {
+    width: 100%;
+    padding: 0px 20px;
+  }
+}
+
 .nav {
   position: fixed;
   right: 0px;
@@ -77,6 +88,10 @@ li {
   margin: 30px auto 0px auto;
   width: 100%;
 
+  @media (max-width: $phone) {
+    margin-top: 15px;
+  }
+
   &:last-child:nth-child(2) {
     margin-top: 0px;
   }
@@ -92,6 +107,10 @@ li {
 
   .content {
     padding: 30px 50px;
+
+    @media (max-width: $phone) {
+      padding: 20px 25px;
+    }
 
     color: black;
     background-color: white;

@@ -60,6 +60,7 @@ export default class Projects extends Vue {
       fbt.fs
         .collection("configs")
         .orderBy(`platforms.${category.platform}`)
+        .orderBy(`description`)
         .get()
         .then(snapshot => {
           snapshot.docs.forEach(doc => {
@@ -77,10 +78,29 @@ export default class Projects extends Vue {
             // }
 
             // console.log(config.color);
+
+            // if (config.description) {
+            const words = config.description.split(" ");
+            let sentence = words.slice(0, 10).join(" ");
+
+            if (words.length > 15) {
+              sentence += "...";
+            }
+
+            config.description = sentence;
+
             category.projects.push(config);
+            // }
           });
         });
     });
+
+    (this.$refs.header as HeaderBar).$on(
+      "subheader_tab_selection:change",
+      () => {
+        window.scrollTo(0, 0);
+      }
+    );
   }
 
   isSectionVisible(section: string) {

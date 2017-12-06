@@ -28,6 +28,7 @@ pre {
   padding: 5px 10px;
   background-color: #f0f0f0;
   font-family: "Roboto Mono";
+  overflow: auto;
 }
 
 a {
@@ -61,6 +62,10 @@ tr {
 .img-parent {
   text-align: center;
   padding: 20px 0px;
+}
+
+.img-parent img {
+  max-width: 100%;
 }
 
 pre {

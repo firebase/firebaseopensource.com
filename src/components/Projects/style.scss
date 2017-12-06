@@ -1,45 +1,9 @@
 @import "../../styles/base.scss";
+@import "../../styles/variables.scss";
 
-pre {
-  background-color: #eee;
-  padding: 10px;
+h1 {
+  line-height: 120%;
 }
-
-// .badges {
-//   overflow: auto;
-//   margin-top: 30px;
-//   .badge {
-//     border-radius: 3px;
-//     overflow: hidden;
-//     color: rgba(0, 0, 0, 0.6);
-//     font-size: 0.9em;
-//     float: left;
-//     padding-right: 20px;
-
-//     * {
-//       height: 30px;
-//     }
-//     .key {
-//       background-color: #ddd;
-//       float: left;
-//       padding-top: 3px;
-//       padding-right: 10px;
-
-//       .material-icons {
-//         font-size: 18px;
-//         position: relative;
-//         top: 2px;
-//         width: 18px;
-//         margin-left: 8px;
-//       }
-//     }
-//     .value {
-//       background-color: #eee;
-//       float: left;
-//       padding: 3px 10px 0px 10px;
-//     }
-//   }
-// }
 
 .badges {
   overflow: auto;
@@ -100,4 +64,8 @@ img[hidden] {
 .section-marker {
   position: relative;
   top: -100px;
+}
+
+.dropdown a.selected {
+  font-weight: bold;
 }

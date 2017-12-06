@@ -1,7 +1,6 @@
 <div id="app">
   <img src="../../assets/background-top.svg" hidden/>
-  <header-bar enable_subheader="true" :subheader_title="header.name" :subheader_tabs="['Docs', 'Github']" ></header-bar>
-  <!-- :subheader_tabs="['Info', 'Github', '10,314 Stars', 'Last Updated 10 days ago']" -->
+  <header-bar enable_subheader="true" ref="header" :subheader_tabs="['Docs', 'Github']" ></header-bar>
 
   <div class="page">
     <div class="grid_2"></div>
@@ -12,31 +11,35 @@
           <a href="">{{config.parent}}</a> > <a href="">{{header.name}}</a>
         </div> -->
         <div class="content">
-          <!-- <h1>
+           <h1>
             {{header.name}}
           </h1>
           <p v-html="header.content">
-          </p> -->
+          </p>
           <div class="badges" v-if="!is_subpage">
-            <div class="badge">
-              <div class="key">
-                <i class="material-icons">star</i>
+            <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
+              <div class="badge">
+                <div class="key">
+                  <i class="material-icons">star</i>
+                </div>
+                <div class="value">{{config.stars}}</div>
               </div>
-              <div class="value">{{config.stars}}</div>
-            </div>
+            </a>
 
-            <div class="badge">
-              <div class="key">
-                  <i class="material-icons">access_time</i>              
+            <a :href="`https://github.com/${config.org}/${config.repo}/commits/master`">
+              <div class="badge">
+                <div class="key">
+                    <i class="material-icons">access_time</i>              
+                </div>
+                  <div class="value">{{config.last_updated_from_now}} ago</div>
               </div>
-                <div class="value">{{config.last_updated_from_now}} ago</div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
 
       <div v-for="section in sections" class="section">
-        <div class="section-marker" :id="section.id"></div>
+        <div class="section-marker" :id="section.id" :name="section.name"></div>
         <div class="content">
           <h2>{{section.name}}</h2>
           <div v-html="section.content"></div>
@@ -46,7 +49,12 @@
 
     <div class="grid_2 nav">
       <div class="dropdown" id="docs-dropdown" v-if="sections.length > 1" >
-        <a v-for="section in sections" :href="section.ref">{{section.name}}</a>
+        <a 
+          v-for="section in sections" 
+          :href="section.ref" 
+          :class="{selected: section.name==dropdown_selection}">
+            {{section.name}}
+        </a>
       </div>
     </div>
   </div>

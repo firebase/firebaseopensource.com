@@ -18,14 +18,18 @@ h1 {
     position: relative;
     padding: 20px;
 
-    @media (max-width: $phone) { 
+    @media (max-width: $phone) {
       width: 100%;
-      clear:both; 
+      clear: both;
       padding: 20px 10px;
     }
 
     &:nth-child(3n) {
       border-width: 1px 0px 0px 0px;
+    }
+
+    &:nth-child(3n + 1) {
+      clear: left;
     }
 
     .logo-circle {
@@ -39,7 +43,7 @@ h1 {
       margin-bottom: 30px;
       color: rgba(255, 255, 255, 1);
 
-      @media (max-width: $phone) { 
+      @media (max-width: $phone) {
         width: 30px;
         height: 30px;
         font-size: 30px;
@@ -79,7 +83,7 @@ h1 {
         cursor: pointer;
       }
 
-      @media (max-width: $phone) { 
+      @media (max-width: $phone) {
         float: right;
       }
     }

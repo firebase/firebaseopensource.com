@@ -65,3 +65,7 @@ img[hidden] {
   position: relative;
   top: -100px;
 }
+
+.dropdown a.selected {
+  font-weight: bold;
+}

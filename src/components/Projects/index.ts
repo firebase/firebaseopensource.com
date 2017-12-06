@@ -28,6 +28,7 @@ export default class Projects extends Vue {
   header: Section = { content: "", name: "", id: "", ref: "" };
   config: Config = {};
   is_subpage = false;
+  dropdown_selection = "";
 
   async mounted() {
     const fbt = await Firebaseton.get();
@@ -81,12 +82,57 @@ export default class Projects extends Vue {
     this.config.last_updated_from_now = distanceInWordsToNow(
       this.config.last_updated
     );
+    this.config.repo = this.$route.params.repository;
+    this.config.org = this.$route.params.organization;
 
-    (this.$refs.header as HeaderBar).$on("subheader_tab_selection:change", (subheader_tab_selection:string) => {
-      if (subheader_tab_selection == "Github") {
-        (document as any).location = `https://github.com/${this.$route.params.organization}/${this.$route.params.repository}`
+    (this.$refs.header as HeaderBar).$on(
+      "subheader_tab_selection:change",
+      (subheader_tab_selection: string) => {
+        if (subheader_tab_selection == "Github") {
+          (document as any).location = `https://github.com/${
+            this.$route.params.organization
+          }/${this.$route.params.repository}`;
+        }
       }
-    });
+    );
+
+    const markers = document.querySelectorAll(".section-marker");
+    const tags: {[n: number]: string} = {};
+
+    for (let marker of markers) {
+      tags[(marker as HTMLElement).offsetTop] = marker.getAttribute("name");
+    }
+
+    const tagScrollYs = Object.keys(tags).reverse().map((t) => {return parseInt(t)});
+
+    var last_known_scroll_position = 0;
+    var ticking = false;
+
+    const doSomething = (scroll_pos: number) => {
+      // do something with the scroll position
+
+      let selection = "";
+      for (let tagScrollY of tagScrollYs) {
+        if (tagScrollY < scroll_pos) {
+          selection = tags[tagScrollY]
+          break;
+        }
+      }
+      this.dropdown_selection = selection;
+    }
+
+    window.addEventListener("scroll", function(e) {
+      last_known_scroll_position = window.scrollY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(function() {
+          doSomething(last_known_scroll_position);
+          ticking = false;
+        });
+
+        ticking = true;
+      }
+    }, true);
   }
 
   as_id(text: String) {

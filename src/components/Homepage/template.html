@@ -12,7 +12,7 @@
                   <div class="logo-circle" :style="{backgroundColor: project.color}">{{project.letter}}</div>
                 <h2>{{project.name}}</h2>
                 <p>
-                    Store and sync data between users and devices.
+                    {{project.description}}
                 </p>
                 <router-link :to="`/projects/${project.org}/${project.repo}`">
                   <button>LEARN MORE</button>

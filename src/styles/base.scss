@@ -46,7 +46,7 @@ li {
   width: 60%;
 }
 
-@media (max-width: $tablet) { 
+@media (max-width: $tablet) {
   .grid_2 {
     width: 0;
   }
@@ -88,11 +88,9 @@ li {
   margin: 30px auto 0px auto;
   width: 100%;
 
-
-  @media (max-width: $phone) { 
+  @media (max-width: $phone) {
     margin-top: 15px;
   }
-
 
   &:last-child:nth-child(2) {
     margin-top: 0px;
@@ -110,8 +108,7 @@ li {
   .content {
     padding: 30px 50px;
 
-
-    @media (max-width: $phone) { 
+    @media (max-width: $phone) {
       padding: 20px 25px;
     }
 

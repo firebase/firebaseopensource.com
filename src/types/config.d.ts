@@ -27,4 +27,6 @@ export interface Config {
   repo?: string;
   org?: string;
   description?: string;
+  last_fetched?: Date;
+  last_fetched_from_now?: string;
 }

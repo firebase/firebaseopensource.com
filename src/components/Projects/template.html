@@ -14,8 +14,6 @@
            <h1>
             {{header.name}}
           </h1>
-          <p v-html="header.content">
-          </p>
           <div class="badges" v-if="!is_subpage">
             <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
               <div class="badge">
@@ -35,8 +33,25 @@
               </div>
             </a>
           </div>
+          <p v-html="header.content">
+          </p>
+          <br />
+          <div class="dropdown" id="docs-dropdown">
+              <a 
+                v-for="section in sections" 
+                :href="section.ref" 
+                :class="{selected: section.name==dropdown_selection}">
+                  {{section.name}}
+              </a>
+            </div>
         </div>
       </div>
+
+      <!-- <div class="section" v-if="sections.length > 1" >
+        <div class="content">
+
+        </div>
+      </div> -->
 
       <div v-for="section in sections" class="section">
         <div class="section-marker" :id="section.id" :name="section.name"></div>
@@ -45,17 +60,24 @@
           <div v-html="section.content"></div>
         </div>
       </div>
+
+      <div class="section footer">
+        <div class="content">
+          This page was generated approximately {{config.last_fetched_from_now}} ago.<br />
+          For copyright and licensing details please see the <a :href="`https://github.com/${config.org}/${config.repo}/blob/master/LICENSE`">LICENSE</a> file.
+        </div>
+      </div>
     </div>
 
     <div class="grid_2 nav">
-      <div class="dropdown" id="docs-dropdown" v-if="sections.length > 1" >
+      <!-- <div class="dropdown" id="docs-dropdown" v-if="sections.length > 1" >
         <a 
           v-for="section in sections" 
           :href="section.ref" 
           :class="{selected: section.name==dropdown_selection}">
             {{section.name}}
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

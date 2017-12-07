@@ -267,6 +267,9 @@ Project.prototype.getPageUrl = function(id, page) {
 Project.prototype.storeProjectConfig = function(id, config) {
   const data = this.arraysToMaps(config);
 
+  // Add server timestamp
+  data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
+
   const configProm = db
     .collection("configs")
     .doc(this.normalizeId(id))

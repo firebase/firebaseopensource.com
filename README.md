@@ -9,6 +9,7 @@ A landing page for open source Firebase projects.
   * Redirect firebase.github.io
   * 404 page
   * Real README
+  * Whitelist of non-Firebase projects to sync (stored in Github)
 
 # Functions Config
 

@@ -63,6 +63,7 @@ export default class Projects extends Vue {
         .orderBy("stars", "desc")
         .orderBy("description")
         .where("fork", "==", false)
+        .limit(6)
         .get()
         .then(snapshot => {
           snapshot.docs.forEach(doc => {

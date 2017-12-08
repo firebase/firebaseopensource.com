@@ -97,12 +97,23 @@ export default class Projects extends Vue {
         });
     });
 
+    if (this.$route.params.platform) {
+      (this.$refs.header as HeaderBar).subheader_tab_selection = this.$route.params.platform
+    }
+
     (this.$refs.header as HeaderBar).$on(
       "subheader_tab_selection:change",
-      () => {
+      (subheader_tab_selection: string) => {
+        this.$router.push(`/platform/${subheader_tab_selection}`)
         window.scrollTo(0, 0);
       }
     );
+  }
+
+  @Watch("$route.params.platform", {immediate: true})
+  onRouteParamPlatformChange(platform: string) {
+    if (!this.$refs.header) return;
+    (this.$refs.header as HeaderBar).subheader_tab_selection = platform;
   }
 
   isSectionVisible(section: string) {

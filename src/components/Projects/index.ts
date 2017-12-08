@@ -34,9 +34,9 @@ export default class Projects extends Vue {
   found = false;
 
   async mounted() {
-    // if (!document.location.pathname.endsWith ("/")) {
-    //   document.location.pathname += "/";
-    // }
+    if (document.location.pathname.split("/").length == 4) {
+      document.location.pathname += "/";
+    }
 
     const fbt = await Firebaseton.get();
 
@@ -72,10 +72,7 @@ export default class Projects extends Vue {
 
     if (!snapshot.exists) {
       this.not_found = true;
-    } else {
-      this.found = true;
     }
-
     const data = snapshot.data();
 
     this.header = data.header as Section;
@@ -104,7 +101,9 @@ export default class Projects extends Vue {
     this.config.repo = this.$route.params.repository;
     this.config.org = this.$route.params.organization;
 
-    console.log(this.config);
+    if (configSnapshot.exists && !this.not_found) {
+      this.found = true;
+    }
 
     (this.$refs.header as HeaderBar).$on(
       "subheader_tab_selection:change",
@@ -116,52 +115,6 @@ export default class Projects extends Vue {
         }
       }
     );
-
-    // const markers = document.querySelectorAll(".section-marker");
-    // const tags: { [n: number]: string } = {};
-
-    // for (let marker of markers) {
-    //   tags[(marker as HTMLElement).offsetTop] = marker.getAttribute("name");
-    // }
-
-    // const tagScrollYs = Object.keys(tags)
-    //   .reverse()
-    //   .map(t => {
-    //     return parseInt(t);
-    //   });
-
-    // var last_known_scroll_position = 0;
-    // var ticking = false;
-
-    // const doSomething = (scroll_pos: number) => {
-    //   // do something with the scroll position
-
-    //   let selection = "";
-    //   for (let tagScrollY of tagScrollYs) {
-    //     if (tagScrollY < scroll_pos + 10) {
-    //       selection = tags[tagScrollY];
-    //       break;
-    //     }
-    //   }
-    //   this.dropdown_selection = selection;
-    // };
-
-    // window.addEventListener(
-    //   "scroll",
-    //   function(e) {
-    //     last_known_scroll_position = window.scrollY;
-
-    //     if (!ticking) {
-    //       window.requestAnimationFrame(function() {
-    //         doSomething(last_known_scroll_position);
-    //         ticking = false;
-    //       });
-
-    //       ticking = true;
-    //     }
-    //   },
-    //   true
-    // );
   }
 
   as_id(text: String) {

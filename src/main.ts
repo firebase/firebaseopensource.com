@@ -13,6 +13,10 @@ const routes = [
     component: Homepage
   },
   {
+    path: "/platform/:platform",
+    component: Homepage
+  },
+  {
     path: "/projects/:organization/:repository/",
     component: Projects
   },

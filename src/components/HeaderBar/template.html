@@ -14,7 +14,7 @@
         </header>
         <div class="subheader" v-if="enable_subheader">
           <div class="content">
-            <h2>{{subheader_title}}</h2>
+            <h2 v-if="subheader_title">{{subheader_title}}</h2>
             <div class="tabs">
               <div class="tab" v-for="tab in subheader_tabs" :class="{selected: subheader_tab_selection == tab}" @click="setSubheaderTabSelection(tab)">
                 {{tab}}

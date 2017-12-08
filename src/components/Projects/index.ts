@@ -86,8 +86,13 @@ export default class Projects extends Vue {
     this.config.last_updated_from_now = distanceInWordsToNow(
       this.config.last_updated
     );
+    this.config.last_fetched_from_now = distanceInWordsToNow(
+      this.config.last_fetched
+    );
     this.config.repo = this.$route.params.repository;
     this.config.org = this.$route.params.organization;
+
+    console.log(this.config);
 
     (this.$refs.header as HeaderBar).$on(
       "subheader_tab_selection:change",

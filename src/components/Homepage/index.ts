@@ -61,6 +61,7 @@ export default class Projects extends Vue {
         .collection("configs")
         .orderBy(`platforms.${category.platform}`)
         .orderBy(`description`)
+        .where("fork", "==", false)
         .get()
         .then(snapshot => {
           snapshot.docs.forEach(doc => {

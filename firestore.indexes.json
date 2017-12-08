@@ -1,14 +1,220 @@
 {
-  // Example:
-  //
-  // "indexes": [
-  //   {
-  //     "collectionId": "widgets",
-  //     "fields": [
-  //       { "fieldPath": "foo", "mode": "ASCENDING" },
-  //       { "fieldPath": "bar", "mode": "DESCENDING" }
-  //     ]
-  //   }
-  // ]
-  "indexes": []
+  "indexes": [
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "platforms.ios",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.android",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.ios",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "platforms.web",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.web",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.web",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "platforms.android",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.android",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.android",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.web",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.ios",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.ios",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    }
+  ]
 }

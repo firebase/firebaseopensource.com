@@ -60,7 +60,8 @@ export default class Projects extends Vue {
       fbt.fs
         .collection("configs")
         .orderBy(`platforms.${category.platform}`)
-        .orderBy(`description`)
+        .orderBy("stars", "desc")
+        .orderBy("description")
         .where("fork", "==", false)
         .get()
         .then(snapshot => {

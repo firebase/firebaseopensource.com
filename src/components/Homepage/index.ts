@@ -12,6 +12,7 @@ type Category = {
   title: string;
   platform: string;
   projects: Config[];
+  featured: Config[];
 };
 
 const COLORS = [
@@ -35,17 +36,20 @@ export default class Projects extends Vue {
     {
       title: "Android",
       platform: "android",
-      projects: []
+      projects: [],
+      featured: []
     },
     {
       title: "Web",
       platform: "web",
-      projects: []
+      projects: [],
+      featured: []
     },
     {
       title: "iOS",
       platform: "ios",
-      projects: []
+      projects: [],
+      featured: []
     }
   ];
 
@@ -64,7 +68,6 @@ export default class Projects extends Vue {
         .orderBy(`platforms.${category.platform}`)
         .orderBy("stars", "desc")
         .orderBy("description")
-        .limit(6)
         .get()
         .then(snapshot => {
           snapshot.docs.forEach(doc => {
@@ -75,15 +78,7 @@ export default class Projects extends Vue {
             const id = doc.id;
             config.org = id.split("::")[0];
             config.repo = id.split("::")[1];
-            // config.color = "#";
 
-            // for(let i=0; i<3; i++) {
-            //   config.color += Math.floor(Math.random()*255).toString(16);
-            // }
-
-            // console.log(config.color);
-
-            // if (config.description) {
             const words = config.description.split(" ");
             let sentence = words.slice(0, 10).join(" ");
 
@@ -93,8 +88,11 @@ export default class Projects extends Vue {
 
             config.description = sentence;
 
+            if (category.featured.length < 6) {
+              category.featured.push(config);
+            }
+
             category.projects.push(config);
-            // }
           });
         });
     });

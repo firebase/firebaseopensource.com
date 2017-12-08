@@ -44,19 +44,27 @@ marked.setOptions({
 
 const db = admin.firestore();
 
+// TODO: Support a version-controlled whitelist of projects outside of Firebase.
+const ADDITIONAL_REPOS = [
+  'angular/angularfire2',
+  'googlesamples/easypermissions',
+  'tylermcginnis/re-base',
+  'prescottprue/react-redux-firebase'
+];
+
 /** Prototype */
 const Project = function() {};
 
 /**
  * Store all known projects.
- *
- * TODO: Support a whitelist of projects outside of Firebase.
  */
 Project.prototype.storeAllProjects = function() {
   var that = this;
   return github.listAllRepos("firebase").then(repos => {
+    const allRepos = repos.concat(ADDITIONAL_REPOS);
+
     // Convert all repo names to ids
-    const ids = repos.map(repo => {
+    const ids = allRepos.map(repo => {
       return that.pathToSlug(repo);
     });
 

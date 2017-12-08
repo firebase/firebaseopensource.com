@@ -55,6 +55,27 @@
       "collectionId": "configs",
       "fields": [
         {
+          "fieldPath": "blacklist",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.ios",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
           "fieldPath": "platforms.web",
           "mode": "ASCENDING"
         },
@@ -110,6 +131,27 @@
       "collectionId": "configs",
       "fields": [
         {
+          "fieldPath": "blacklist",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.android",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
           "fieldPath": "platforms.android",
           "mode": "ASCENDING"
         },
@@ -150,6 +192,27 @@
         {
           "fieldPath": "platforms.android",
           "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "blacklist",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.web",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
         },
         {
           "fieldPath": "description",

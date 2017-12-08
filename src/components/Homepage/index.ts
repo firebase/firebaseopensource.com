@@ -59,10 +59,11 @@ export default class Projects extends Vue {
     this.categories.forEach(category => {
       fbt.fs
         .collection("configs")
+        .where("blacklist", "==", false)
+        .where("fork", "==", false)
         .orderBy(`platforms.${category.platform}`)
         .orderBy("stars", "desc")
         .orderBy("description")
-        .where("fork", "==", false)
         .limit(6)
         .get()
         .then(snapshot => {

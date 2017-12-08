@@ -45,12 +45,18 @@ marked.setOptions({
 const db = admin.firestore();
 
 // TODO: Support a version-controlled whitelist of projects outside of Firebase.
-const ADDITIONAL_REPOS = [
-  'angular/angularfire2',
-  'googlesamples/easypermissions',
-  'tylermcginnis/re-base',
-  'prescottprue/react-redux-firebase'
+const ADDITIONAL_PROJECTS = [
+  'angular::angularfire2',
+  'googlesamples::easypermissions',
+  'tylermcginnis::re-base',
+  'prescottprue::react-redux-firebase'
 ];
+
+// TODO: Support a version-controlled blacklist of projects never to feature.
+const FEATURED_BLACKLIST_PROJECTS = [
+  'firebase::androidchat',
+  'firebase::androiddrawing'
+]
 
 /** Prototype */
 const Project = function() {};
@@ -61,15 +67,15 @@ const Project = function() {};
 Project.prototype.storeAllProjects = function() {
   var that = this;
   return github.listAllRepos("firebase").then(repos => {
-    const allRepos = repos.concat(ADDITIONAL_REPOS);
-
     // Convert all repo names to ids
-    const ids = allRepos.map(repo => {
+    const ids = repos.map(repo => {
       return that.pathToSlug(repo);
     });
 
+    const allIds = ids.concat(ADDITIONAL_PROJECTS);
+
     // Run in batches
-    return that._batchRun(that.recursiveStoreProject.bind(that), ids, 3);
+    return that._batchRun(that.recursiveStoreProject.bind(that), allIds, 3);
   });
 };
 
@@ -179,6 +185,13 @@ Project.prototype.getProjectConfig = function(id) {
       // Add inferred platforms
       if (!config.platforms) {
         config.platforms = that.inferPlatforms(id);
+      }
+
+      // Consult the feature blacklist
+      if (FEATURED_BLACKLIST_PROJECTS.indexOf(id) >= 0) {
+        config.blacklist = true;
+      } else {
+        config.blacklist = false;
       }
 
       // Merge the config with repo metadata like stars

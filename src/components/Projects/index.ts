@@ -4,6 +4,7 @@ import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { Firebaseton } from "../../services/firebaseton";
 
 import HeaderBar from "../HeaderBar";
+import FourOhFour from "../FourOhFour";
 
 import { Config } from "../../types/config";
 
@@ -20,7 +21,7 @@ type Section = {
 declare const hljs: any;
 
 @Component({
-  components: { HeaderBar }
+  components: { HeaderBar, FourOhFour }
 })
 export default class Projects extends Vue {
   name = "projects";
@@ -29,8 +30,14 @@ export default class Projects extends Vue {
   config: Config = {};
   is_subpage = false;
   dropdown_selection = "";
+  not_found = false;
+  found = false;
 
   async mounted() {
+    // if (!document.location.pathname.endsWith ("/")) {
+    //   document.location.pathname += "/";
+    // }
+
     const fbt = await Firebaseton.get();
 
     const blocked_sections = ["table of contents"];
@@ -46,7 +53,10 @@ export default class Projects extends Vue {
 
     let dataDoc;
     if (page) {
-      let page_id = page.split("/").join("::");
+      let page_id = page
+        .split("/")
+        .join("::")
+        .toLowerCase();
 
       if (!page_id.endsWith(".md")) {
         page_id += ".md";
@@ -61,7 +71,9 @@ export default class Projects extends Vue {
     const snapshot = await dataDoc.get();
 
     if (!snapshot.exists) {
-      this.$router.push("/404");
+      this.not_found = true;
+    } else {
+      this.found = true;
     }
 
     const data = snapshot.data();

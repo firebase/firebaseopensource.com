@@ -8,11 +8,12 @@ h1 {
 }
 
 .projects {
-  border-bottom: 1px solid #eceff1;
+  // border-bottom: 1px solid #eceff1;
   overflow: auto;
 
   .project {
     border: 1px solid #eceff1;
+    // background-color: pink;
     border-width: 1px 0px 0px 0px;
     float: left;
     position: relative;
@@ -67,26 +68,32 @@ h1 {
       font-weight: 400;
       font-size: 15px;
     }
+  }
+}
 
-    button {
-      color: #039be5;
-      background-color: transparent;
-      border-width: 0px;
-      font-weight: bold;
-      border-radius: 2px;
-      padding: 10px;
+h1 button {
+  position: relative;
+  top: -4px;
+}
 
-      transition: 0.1s linear background-color;
+button {
+  color: #039be5;
+  background-color: transparent;
+  border-width: 0px;
+  font-weight: bold;
+  border-radius: 2px;
+  padding: 10px;
+  float: right;
 
-      &:hover {
-        background-color: #9edfff;
-        cursor: pointer;
-      }
+  transition: 0.1s linear background-color;
 
-      @media (max-width: $phone) {
-        float: right;
-      }
-    }
+  &:hover {
+    background-color: #9edfff;
+    cursor: pointer;
+  }
+
+  @media (max-width: $phone) {
+    float: right;
   }
 }
 

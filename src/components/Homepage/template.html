@@ -6,7 +6,7 @@
       <div class="sections grid_6">
         <div class="section" v-for="category in categories">
           <div class="content" v-if="isSectionVisible(category.title)">
-            <h1>{{category.title}}</h1>
+            <h1>{{category.title}}  <button v-if="$refs.header && $refs.header.subheader_tab_selection == 'All'" @click="setSubheaderTabSelection(category.title)">SEE ALL</button></h1>
             <div class="projects">
               <div class="project grid_third" v-for="project in category.projects">
                   <div class="logo-circle" :style="{backgroundColor: project.color}">{{project.letter}}</div>
@@ -14,7 +14,7 @@
                 <p>
                     {{project.description}}
                 </p>
-                <router-link :to="`/projects/${project.org}/${project.repo}`">
+                <router-link :to="`/projects/${project.org}/${project.repo}/`">
                   <button>LEARN MORE</button>
                 </router-link>
               </div>

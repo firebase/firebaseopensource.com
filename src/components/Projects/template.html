@@ -1,8 +1,9 @@
 <div id="app">
   <img src="../../assets/background-top.svg" hidden/>
-  <header-bar enable_subheader="true" ref="header" :subheader_tabs="['Docs', 'Github']" ></header-bar>
+  <header-bar :enable_subheader="found" ref="header" :subheader_tabs="['Docs', 'Github']" ></header-bar>
 
-  <div class="page">
+  <four-oh-four v-if="not_found"></four-oh-four>
+  <div class="page" v-if="found">
     <div class="grid_2"></div>
 
     <div class="sections grid_6">

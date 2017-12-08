@@ -115,6 +115,10 @@ export default class Projects extends Vue {
       header.subheader_tab_selection == section
     );
   }
+
+  setSubheaderTabSelection(tab: string) {
+    (this.$refs.header as HeaderBar).subheader_tab_selection = tab;
+  }
 }
 
 require("./template.html")(Projects);

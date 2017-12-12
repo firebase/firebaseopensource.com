@@ -46,17 +46,17 @@ const db = admin.firestore();
 
 // TODO: Support a version-controlled whitelist of projects outside of Firebase.
 const ADDITIONAL_PROJECTS = [
-  'angular::angularfire2',
-  'googlesamples::easypermissions',
-  'tylermcginnis::re-base',
-  'prescottprue::react-redux-firebase'
+  "angular::angularfire2",
+  "googlesamples::easypermissions",
+  "tylermcginnis::re-base",
+  "prescottprue::react-redux-firebase"
 ];
 
 // TODO: Support a version-controlled blacklist of projects never to feature.
 const FEATURED_BLACKLIST_PROJECTS = [
-  'firebase::androidchat',
-  'firebase::androiddrawing'
-]
+  "firebase::androidchat",
+  "firebase::androiddrawing"
+];
 
 /** Prototype */
 const Project = function() {};
@@ -328,7 +328,9 @@ Project.prototype.storeProjectContent = function(id, config) {
           const slug = that.pathToSlug(page.name).toString();
           const ref = contentRef.collection("pages").doc(slug);
 
-          console.log(`[${id}] Storing ${page.name} content at path ${ref.path}`);
+          console.log(
+            `[${id}] Storing ${page.name} content at path ${ref.path}`
+          );
           batch.set(ref, page.content);
         });
 
@@ -483,10 +485,10 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
         .split("/")
         .filter(seg => seg.trim().length > 0);
       if (pathSegments.length == 2 && pathSegments[0] === "firebase") {
-        const newLink = '/projects/' + pathSegments.join('/') + '/';
+        const newLink = "/projects/" + pathSegments.join("/") + "/";
 
         console.log(`[${repoId}] Replacing ${href} with ${newLink}.`);
-        el.attribs['href'] = newLink;
+        el.attribs["href"] = newLink;
       }
     }
 

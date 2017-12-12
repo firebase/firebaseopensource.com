@@ -5,12 +5,20 @@ h1 {
   font-size: 32px;
   color: #424242;
   padding-bottom: 30px;
+  border-bottom: 1px solid #eceff1;
+}
+
+.antiline {
+  width: 100%;
+  height: 1px;
+  background-color:white;
+  position: relative;
+  top: -1px;
 }
 
 .projects {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  overflow: auto;
 
   // In tablet layout, two projects per row
   @media (max-width: $tablet) {
@@ -23,32 +31,26 @@ h1 {
   }
 
   .project {
-    display: grid;
-    grid-template-areas: "logo"
-                         "title"
-                         "description"
-                         "link";
-    grid-template-rows: 120px 50px 100px 20px;
-
-    @media (max-width: $phone) {
-      grid-template-rows: 60px 30px 70px 20px;
-      padding: 20px 10px;
-    }
-
+    overflow: hidden;
 
     border: 1px solid #eceff1;
-    // background-color: pink;
-    border-width: 1px 0px 0px 0px;
-    float: left;
-    position: relative;
-    padding: 20px;
+    border-width: 0px 0px 1px 0px;
 
-    &:nth-child(3n) {
-      border-width: 1px 0px 0px 0px;
-    }
+    .grid {
+      display: grid;
+      grid-template-areas: "logo"
+                          "title"
+                          "description"
+                          "link";
+      grid-template-rows: 120px 50px 100px;
 
-    &:nth-child(3n + 1) {
-      clear: left;
+      @media (max-width: $phone) {
+        grid-template-rows: 60px 30px 70px 20px;
+        padding: 20px 10px;
+      }
+      float: left;
+      position: relative;
+      padding: 20px;
     }
 
     .logo-circle {

@@ -11,7 +11,7 @@ h1 {
 .antiline {
   width: 100%;
   height: 1px;
-  background-color:white;
+  background-color: white;
   position: relative;
   top: -1px;
 }
@@ -22,12 +22,12 @@ h1 {
 
   // In tablet layout, two projects per row
   @media (max-width: $tablet) {
-      grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   // In phone layout, only one project per row
   @media (max-width: $phone) {
-      grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .project {
@@ -38,10 +38,11 @@ h1 {
 
     .grid {
       display: grid;
-      grid-template-areas: "logo"
-                          "title"
-                          "description"
-                          "link";
+      grid-template-areas:
+        "logo"
+        "title"
+        "description"
+        "link";
       grid-template-rows: 120px 50px 100px;
 
       @media (max-width: $phone) {

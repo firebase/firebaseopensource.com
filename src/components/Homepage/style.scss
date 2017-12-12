@@ -8,22 +8,40 @@ h1 {
 }
 
 .projects {
-  // border-bottom: 1px solid #eceff1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   overflow: auto;
 
+  // In tablet layout, two projects per column
+  @media (max-width: $tablet) {
+      grid-template-columns: repeat(2, 1fr);
+  }
+
+  // In phone layout, only one project per column
+  @media (max-width: $phone) {
+      grid-template-columns: repeat(1, 1fr);
+  }
+
   .project {
+    display: grid;
+    grid-template-areas: "logo"
+                         "title"
+                         "description"
+                         "link";
+    grid-template-rows: 120px 50px 100px 20px;
+
+    @media (max-width: $phone) {
+      grid-template-rows: 60px 30px 70px 20px;
+      padding: 20px 10px;
+    }
+
+
     border: 1px solid #eceff1;
     // background-color: pink;
     border-width: 1px 0px 0px 0px;
     float: left;
     position: relative;
     padding: 20px;
-
-    @media (max-width: $phone) {
-      width: 100%;
-      clear: both;
-      padding: 20px 10px;
-    }
 
     &:nth-child(3n) {
       border-width: 1px 0px 0px 0px;
@@ -34,6 +52,8 @@ h1 {
     }
 
     .logo-circle {
+      grid-area: logo;
+
       width: 100px;
       height: 100px;
       background-color: #eee;
@@ -45,16 +65,18 @@ h1 {
       color: rgba(255, 255, 255, 1);
 
       @media (max-width: $phone) {
-        width: 30px;
-        height: 30px;
-        font-size: 30px;
-        line-height: 32px;
+        width: 50px;
+        height: 50px;
+        font-size: 35px;
+        line-height: 52px;
         float: left;
         margin: 0px 10px 0px 0px;
       }
     }
 
-    h2 {
+    .project-title {
+      grid-area: title;
+
       color: #ff8f00;
       font-weight: bold;
       font-size: 18px;
@@ -63,10 +85,16 @@ h1 {
       min-height: 20px;
     }
 
-    p {
+    .project-descripion {
+      grid-area: description;
+
       color: #757575;
       font-weight: 400;
       font-size: 15px;
+    }
+
+    a {
+      grid-area: link;
     }
   }
 }

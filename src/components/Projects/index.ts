@@ -8,6 +8,8 @@ import FourOhFour from "../FourOhFour";
 
 import { Config } from "../../types/config";
 
+const Clipboard = require("clipboard");
+
 // Include automock for automated mocking
 import "../../automock";
 
@@ -32,6 +34,7 @@ export default class Projects extends Vue {
   dropdown_selection = "";
   not_found = false;
   found = false;
+  show_clone_cmd = false;
 
   async mounted() {
     if (document.location.pathname.split("/").length == 4) {
@@ -133,6 +136,8 @@ export default class Projects extends Vue {
     document.querySelectorAll("pre code").forEach(function(el) {
       hljs.highlightBlock(el);
     });
+
+    new Clipboard('.copy-btn');
   }
 }
 

@@ -19,6 +19,7 @@
     "@types/isomorphic-fetch": "^0.0.34",
     "@types/shelljs": "^0.7.6",
     "chalk": "^2.3.0",
+    "clipboard": "^1.7.1",
     "date-fns": "^1.29.0",
     "firebase": "^4.5.0",
     "firebase-tools": "^3.15.2",

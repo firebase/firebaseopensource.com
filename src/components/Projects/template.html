@@ -16,23 +16,62 @@
             {{header.name}}
           </h1>
           <div class="badges" v-if="!is_subpage">
-            <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
-              <div class="badge">
-                <div class="key">
-                  <i class="material-icons">star</i>
-                </div>
-                <div class="value">{{config.stars}}</div>
-              </div>
-            </a>
 
-            <a :href="`https://github.com/${config.org}/${config.repo}/commits/master`">
-              <div class="badge">
-                <div class="key">
-                    <i class="material-icons">access_time</i>
+            <div class="badge-group">
+              <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
+                <div class="badge">
+                  <div class="key">
+                    <i class="material-icons">star</i>
+                  </div>
+                  <div class="value">{{config.stars}}</div>
                 </div>
-                  <div class="value">{{config.last_updated_from_now}} ago</div>
+              </a>
+
+              <a :href="`https://github.com/${config.org}/${config.repo}/commits/master`">
+                <div class="badge">
+                  <div class="key">
+                      <i class="material-icons">access_time</i>
+                  </div>
+                    <div class="value">{{config.last_updated_from_now}} ago</div>
+                </div>
+              </a>
+            </div>
+
+            <div class="badge-group">
+              <!-- TODO: reveal git clone -->
+              <a href="#" @click="show_clone_cmd = !show_clone_cmd">
+                <div class="badge badge-action">
+                  <div class="key">
+                      <i class="material-icons">code</i>
+                  </div>
+                    <div class="value">Clone Repo</div>
+                </div>
+              </a>
+
+              <a :href="`https://github.com/${config.org}/${config.repo}/archive/master.zip`">
+                <div class="badge badge-action">
+                  <div class="key">
+                      <i class="material-icons">file_download</i>
+                  </div>
+                    <div class="value">Download ZIP</div>
+                </div>
+              </a>
+
+              <div class="copy-code-container" v-if="show_clone_cmd">
+                <input
+                  id="git-clone-copy-txt"
+                  type="text"
+                  :value="`git clone git@github.com:${config.org}/${config.repo}.git`"
+                  readonly />
+                <button
+                  id="git-clone-copy-btn"
+                  class="copy-btn"
+                  type="button"
+                  data-clipboard-target="#git-clone-copy-txt">
+                  <i class="material-icons">content_copy</i>
+                </button>
               </div>
-            </a>
+            </div>
           </div>
 
           <!-- Header section body -->

@@ -137,7 +137,7 @@ export default class Projects extends Vue {
       hljs.highlightBlock(el);
     });
 
-    new Clipboard('.copy-btn');
+    new Clipboard(".copy-btn");
   }
 }
 

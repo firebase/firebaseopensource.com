@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import * as fetch from 'isomorphic-fetch';
 import * as fs from 'fs-extra';
 import { Observable } from 'rxjs/Observable';
@@ -49,9 +64,9 @@ function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
       const res = await fetch(`${RENDERTON_URL}/render/${BASE_URL}/projects/${path}`);
       const html = await res.text();
       // Save some bytes by minifying the document
-      const minHtml = minify(html, { 
+      const minHtml = minify(html, {
         minifyCSS: true,
-        collapseWhitespace: true 
+        collapseWhitespace: true
       });
       fs.mkdirpSync(`${__dirname}/${org}`)
       fs.writeFileSync(`${__dirname}/${path}.html`, minHtml, 'utf8');
@@ -65,9 +80,9 @@ function prerender({ app, localUrl, rendertronUrl }: PrerenderOptions) {
  * Create an child process observable that only emits once a condition
  * is statified. This condition indicates that the child process has
  * launched or done enough work to use.
- * @param cmd 
- * @param args 
- * @param matchingCondition 
+ * @param cmd
+ * @param args
+ * @param matchingCondition
  */
 function spawnLaunched(cmd: string, args: string[], matchingCondition: string) {
   return spawnDetached(cmd, args).pipe(

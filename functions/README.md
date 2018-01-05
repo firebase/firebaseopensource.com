@@ -1,4 +1,4 @@
-# Functiosn
+# Functions
 
 # Required Config
 

@@ -18,7 +18,7 @@ const cheerio = require("cheerio");
 const cjson = require("comment-json");
 const config = require("./config");
 const functions = require("firebase-functions");
-const fs = require("fs");
+const fs = require("fs-extra");
 const github = require("./github");
 const marked = require("marked");
 const path = require("path");
@@ -59,39 +59,64 @@ marked.setOptions({
 
 const db = admin.firestore();
 
-// TODO: Support a version-controlled whitelist of projects outside of Firebase.
-const ADDITIONAL_PROJECTS = [
-  "angular::angularfire2",
-  "googlesamples::easypermissions",
-  "tylermcginnis::re-base",
-  "prescottprue::react-redux-firebase"
-];
-
-// TODO: Support a version-controlled blacklist of projects never to feature.
-const FEATURED_BLACKLIST_PROJECTS = [
-  "firebase::androidchat",
-  "firebase::androiddrawing"
-];
+/**
+ * Global lists, see loadGlobalConfig()
+ */
+let ADDITIONAL_PROJECTS = [];
+let FEATURED_BLACKLIST_PROJECTS = [];
 
 /** Prototype */
 const Project = function() {};
+
+/**
+ * Load globally relevant blacklists and whitelists.
+ */
+Project.prototype.loadGlobalConfig = function() {
+  if (
+    ADDITIONAL_PROJECTS.length > 0 &&
+    FEATURED_BLACKLIST_PROJECTS.length > 0
+  ) {
+    return Promise.resolve();
+  }
+
+  // TODO(samstern): Load this from Github rather than from local files
+  const configDir = path.join(__dirname, "config");
+
+  const loadAdditional = fs
+    .readFile(configDir + "/additional_projects.json")
+    .then(buf => {
+      ADDITIONAL_PROJECTS = JSON.parse(buf.toString()).projects;
+    });
+
+  const loadBlacklist = fs
+    .readFile(configDir + "/feature_blacklist_projects.json")
+    .then(buf => {
+      FEATURED_BLACKLIST_PROJECTS = JSON.parse(buf.toString()).projects;
+    });
+
+  return Promise.all([loadAdditional, loadBlacklist]);
+};
 
 /**
  * Store all known projects.
  */
 Project.prototype.storeAllProjects = function() {
   var that = this;
-  return github.listAllRepos("firebase").then(repos => {
-    // Convert all repo names to ids
-    const ids = repos.map(repo => {
-      return that.pathToSlug(repo);
+  return this.loadGlobalConfig()
+    .then(() => {
+      return github.listAllRepos("firebase");
+    })
+    .then(repos => {
+      // Convert all repo names to ids
+      const ids = repos.map(repo => {
+        return that.pathToSlug(repo);
+      });
+
+      const allIds = ids.concat(ADDITIONAL_PROJECTS);
+
+      // Run in batches
+      return that._batchRun(that.recursiveStoreProject.bind(that), allIds, 3);
     });
-
-    const allIds = ids.concat(ADDITIONAL_PROJECTS);
-
-    // Run in batches
-    return that._batchRun(that.recursiveStoreProject.bind(that), allIds, 3);
-  });
 };
 
 /**
@@ -101,7 +126,10 @@ Project.prototype.recursiveStoreProject = function(id) {
   console.log(`[${id}] recursiveStoreProject()`);
 
   const that = this;
-  return this.getProjectConfig(id)
+  return this.loadGlobalConfig()
+    .then(() => {
+      return that.getProjectConfig(id);
+    })
     .then(config => {
       // Store this project's config and content
       const storeConfig = that.storeProjectConfig(id, config);

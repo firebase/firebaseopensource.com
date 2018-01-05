@@ -31,17 +31,10 @@ const ids = [
   "firebase::androidchat"
 ];
 
-ids.forEach(id => {
-  return project.recursiveStoreProject(id).catch(err => {
-    console.warn(err);
+project.loadGlobalConfig().then(() => {
+  ids.forEach(id => {
+    return project.recursiveStoreProject(id).catch(err => {
+      console.warn(err);
+    });
   });
 });
-
-// return project
-//   .storeAllProjects()
-//   .then(function() {
-//     console.log("Done");
-//   })
-//   .catch(function(e) {
-//     console.warn("Error", e);
-//   });

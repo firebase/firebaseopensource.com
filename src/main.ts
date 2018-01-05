@@ -20,10 +20,6 @@ const routes = [
     path: "/projects/:organization/:repository/",
     component: Projects
   },
-  // {
-  //   path: "/projects/:organization/:repository",
-  //   redirect: "/projects/:organization/:repository/"
-  // },
   {
     path: "/projects/:organization/:repository/:page(.+)",
     component: Projects

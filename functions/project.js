@@ -45,13 +45,13 @@ const db = admin.firestore();
 const ADDITIONAL_PROJECTS_URL = github.getRawContentUrl(
   "firebase",
   "firebaseopensource.com",
-  "functions/config/additional_projects.json"
+  "config/additional_projects.json"
 );
 
 const FEATURED_BLACKLIST_PROJECTS_URL = github.getRawContentUrl(
   "firebase",
   "firebaseopensource.com",
-  "functions/config/feature_blacklist_projects.json"
+  "config/feature_blacklist_projects.json"
 );
 
 /**

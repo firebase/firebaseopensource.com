@@ -16,29 +16,12 @@
 const admin = require("firebase-admin");
 const cheerio = require("cheerio");
 const cjson = require("comment-json");
-const config = require("./config");
 const functions = require("firebase-functions");
-const fs = require("fs-extra");
 const github = require("./github");
 const marked = require("marked");
 const path = require("path");
-const request = require("request-promise-native");
 const url = require("url");
 const urljoin = require("url-join");
-
-const GH_CONTENT_HEADERS = {
-  "Cache-Control": "max-age=0",
-  Authorization: `token ${config.get("github.token")}`
-};
-
-const GH_CONTENT_GET_OPTIONS = {
-  headers: GH_CONTENT_HEADERS
-};
-
-const GH_CONTENT_HEAD_OPTIONS = {
-  method: "HEAD",
-  headers: GH_CONTENT_HEADERS
-};
 
 // Initialize the Admin SDK with the right credentials for the environment
 try {
@@ -58,6 +41,18 @@ marked.setOptions({
 });
 
 const db = admin.firestore();
+
+const ADDITIONAL_PROJECTS_URL = github.getRawContentUrl(
+  "firebase",
+  "firebaseopensource.com",
+  "functions/config/additional_projects.json"
+);
+
+const FEATURED_BLACKLIST_PROJECTS_URL = github.getRawContentUrl(
+  "firebase",
+  "firebaseopensource.com",
+  "functions/config/feature_blacklist_projects.json"
+);
 
 /**
  * Global lists, see loadGlobalConfig()
@@ -79,19 +74,16 @@ Project.prototype.loadGlobalConfig = function() {
     return Promise.resolve();
   }
 
-  // TODO(samstern): Load this from Github rather than from local files
-  const configDir = path.join(__dirname, "config");
-
-  const loadAdditional = fs
-    .readFile(configDir + "/additional_projects.json")
-    .then(buf => {
-      ADDITIONAL_PROJECTS = JSON.parse(buf.toString()).projects;
+  const loadAdditional = github
+    .getContent(ADDITIONAL_PROJECTS_URL)
+    .then(data => {
+      return JSON.parse(data);
     });
 
-  const loadBlacklist = fs
-    .readFile(configDir + "/feature_blacklist_projects.json")
-    .then(buf => {
-      FEATURED_BLACKLIST_PROJECTS = JSON.parse(buf.toString()).projects;
+  const loadBlacklist = github
+    .getContent(FEATURED_BLACKLIST_PROJECTS_URL)
+    .then(data => {
+      return JSON.parse(data);
     });
 
   return Promise.all([loadAdditional, loadBlacklist]);
@@ -211,7 +203,7 @@ Project.prototype.getProjectConfig = function(id) {
     .then(exists => {
       if (exists) {
         // Config exists, fetch and parse it
-        return request(url, GH_CONTENT_GET_OPTIONS).then(data => {
+        return github.getContent(url).then(data => {
           // Parse and remove comments
           const contents = data.toString();
           return cjson.parse(contents, null, true);
@@ -262,14 +254,7 @@ Project.prototype.getProjectConfig = function(id) {
  */
 Project.prototype.checkConfigExists = function(id) {
   const url = this.getConfigUrl(id);
-
-  return request(url, GH_CONTENT_HEAD_OPTIONS)
-    .then(() => {
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
+  return github.pageExists(url);
 };
 
 /**
@@ -281,11 +266,8 @@ Project.prototype.getRawContentBaseUrl = function(id) {
 
   // Get the URL to the root folder
   const pathPrefix = idObj.path ? idObj.path + "/" : "";
-  const url = `https://raw.githubusercontent.com/${idObj.owner}/${
-    idObj.repo
-  }/master/${pathPrefix}`;
 
-  return url;
+  return github.getRawContentUrl(idObj.owner, idObj.repo, pathPrefix);
 };
 
 /**
@@ -389,7 +371,8 @@ Project.prototype.getProjectContent = function(id, config) {
   const url = this.getContentUrl(id, config);
 
   var that = this;
-  return request(url, GH_CONTENT_GET_OPTIONS)
+  return github
+    .getContent(url)
     .then(data => {
       return marked(data);
     })
@@ -421,7 +404,8 @@ Project.prototype.getProjectPagesContent = function(id, config) {
     const pageUrl = that.getPageUrl(id, page);
     console.log(`[${id}] Rendering page: ${pageUrl}`);
 
-    const pagePromise = request(pageUrl, GH_CONTENT_GET_OPTIONS)
+    const pagePromise = github
+      .getContent(pageUrl)
       .then(data => {
         return marked(data);
       })

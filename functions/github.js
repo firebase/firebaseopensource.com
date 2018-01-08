@@ -34,6 +34,20 @@ const _GH_OPTIONS_FULL = {
   resolveWithFullResponse: true
 };
 
+const _GH_CONTENT_HEADERS = {
+  "Cache-Control": "max-age=0",
+  Authorization: `token ${config.get("github.token")}`
+};
+
+const _GH_OPTIONS_CONTENT_GET = {
+  headers: _GH_CONTENT_HEADERS
+};
+
+const _GH_OPTIONS_CONTENT_HEAD = {
+  method: "HEAD",
+  headers: _GH_CONTENT_HEADERS
+};
+
 /** Prototype */
 const Github = function() {};
 
@@ -88,6 +102,35 @@ Github.prototype.readAllPages = function(url, results) {
       }
     }
   });
+};
+
+/**
+ * Get the raw.githubusercontent URL for a file
+ */
+Github.prototype.getRawContentUrl = function(owner, repo, path) {
+  return `https://raw.githubusercontent.com/${owner}/${repo}/master/${path}`;
+};
+
+/**
+ * Get raw content from Github.
+ * URL should be a raw.githubusercontent page.
+ */
+Github.prototype.getContent = function(url) {
+  return request(url, _GH_OPTIONS_CONTENT_GET);
+};
+
+/**
+ * Issue a HEAD request to check if a page exists.
+ * URL should be a raw.githubusercontent page.
+ */
+Github.prototype.pageExists = function(url) {
+  return request(url, _GH_OPTIONS_CONTENT_HEAD)
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      return false;
+    });
 };
 
 module.exports = new Github();

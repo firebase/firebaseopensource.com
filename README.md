@@ -2,6 +2,9 @@
 
 A landing page for open source Firebase projects.
 
+Example:
+https://firebaseopensource.com/projects/firebase/firebaseui-android/
+
 
 ## Contributing
 

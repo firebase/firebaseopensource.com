@@ -28,7 +28,8 @@ const ids = [
   "firebase::angularfire",
   "firebase::functions-samples",
   "firebase::assistant-codelab",
-  "firebase::androidchat"
+  "firebase::androidchat",
+  "googlesamples::easypermissions",
 ];
 
 project.loadGlobalConfig().then(() => {

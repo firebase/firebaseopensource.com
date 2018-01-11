@@ -381,7 +381,38 @@ Project.prototype.getProjectContent = function(id, config) {
     })
     .then(html => {
       return that.htmlToSections(html);
+    })
+    .then(content => {
+      content.sections = that.filterProjectSections(content.sections);
+      return content;
     });
+};
+
+/**
+ * Filter sections that are not useful when rendered.
+ */
+Project.prototype.filterProjectSections = function(sections) {
+  const blacklist = [
+    "license",
+    "licensing",
+    "contribute",
+    "contributing",
+    "build status"
+  ];
+
+  return sections.filter(section => {
+    if (!section.name) {
+      return true;
+    }
+
+    for (let i = 0; i < blacklist.length; i++) {
+      if (blacklist[i] === section.name.toLowerCase().trim()) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 };
 
 /**

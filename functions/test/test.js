@@ -29,7 +29,7 @@ const ids = [
   "firebase::functions-samples",
   "firebase::assistant-codelab",
   "firebase::androidchat",
-  "googlesamples::easypermissions",
+  "googlesamples::easypermissions"
 ];
 
 project.loadGlobalConfig().then(() => {

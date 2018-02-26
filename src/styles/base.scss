@@ -1,8 +1,10 @@
 @import "./variables.scss";
 
-h1,
-h2 {
-  font-weight: normal;
+h1 {
+  font-weight: 300;
+  font-size: 34px;
+  line-height: 40px;
+  color: #757575;
 }
 
 ul {
@@ -89,7 +91,6 @@ li {
     clear: both;
     display: block;
     width: 100%;
-    color: black;
     text-decoration: none;
     // opacity: 0.8;
     font-size: 1em;
@@ -108,8 +109,6 @@ li {
     //   top: 8px;
     //   margin-right: 10px;
     // }
-
-    color: darken($blue, 0%);
 
     &:hover {
       text-decoration: underline;
@@ -140,13 +139,12 @@ li {
   }
 
   .content {
-    padding: 30px 50px;
+    padding: 24px 50px;
 
     @media (max-width: $phone) {
       padding: 20px 25px;
     }
 
-    color: black;
     background-color: white;
     overflow: auto;
 

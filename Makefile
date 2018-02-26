@@ -2,7 +2,8 @@ PROD_PROJECT="fir-oss"
 
 build-appengine:
 	cd appengine \
-		&& rm -rf lib \
+		&& rm -rf lib env \
+		&& virtualenv env && source env/bin/activate \
 		&& gcloud components install app-engine-python \
 		&& pip install -t lib -r requirements.txt \
 		&& cd -
@@ -23,7 +24,12 @@ build-hosting:
 	yarn install \
 		&& npm run build
 
-deploy-firebase: build-hosting build-functions
-	firebase --project=$(PROD_PROJECT) deploy
+deploy-functions: build-functions
+	firebase --project=$(PROD_PROJECT) deploy --only functions
+
+deploy-hosting: build-hosting
+	firebase --project=$(PROD_PROJECT) deploy --only hosting
+
+deploy-firebase: deploy-functions deploy-hosting
 
 deploy: deploy-appengine deploy-firebase

@@ -29,7 +29,6 @@ module.exports = {
         test: /\.html$/,
         loader: "vue-template-loader",
         options: {
-          scoped: true,
           transformToRequire: {
             // The key should be element name,
             // the value should be attribute name or its array

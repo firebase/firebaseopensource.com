@@ -1,133 +1,132 @@
 @import "../../styles/base.scss";
 
-h1 {
-  font-weight: 100;
-  font-size: 32px;
-  color: #424242;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #eceff1;
-}
-
-.antiline {
-  width: 100%;
-  height: 1px;
-  background-color: white;
-  position: relative;
-  top: -1px;
-}
-
-.projects {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-
-  // In tablet layout, two projects per row
-  @media (max-width: $tablet) {
-    grid-template-columns: repeat(2, 1fr);
+#homepage {
+  h1 {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eceff1;
   }
 
-  // In phone layout, only one project per row
-  @media (max-width: $phone) {
-    grid-template-columns: repeat(1, 1fr);
+  .antiline {
+    width: 100%;
+    height: 1px;
+    background-color: white;
+    position: relative;
+    top: -1px;
   }
 
-  .project {
-    overflow: hidden;
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 
-    border: 1px solid #eceff1;
-    border-width: 0px 0px 1px 0px;
-
-    .grid {
-      display: grid;
-      grid-template-areas:
-        "logo"
-        "title"
-        "description"
-        "link";
-      grid-template-rows: 120px 50px 100px;
-
-      @media (max-width: $phone) {
-        grid-template-rows: 60px 30px 70px 20px;
-        padding: 20px 10px;
-      }
-      float: left;
-      position: relative;
-      padding: 20px;
+    // In tablet layout, two projects per row
+    @media (max-width: $tablet) {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .logo-circle {
-      grid-area: logo;
+    // In phone layout, only one project per row
+    @media (max-width: $phone) {
+      grid-template-columns: repeat(1, 1fr);
+    }
 
-      width: 100px;
-      height: 100px;
-      background-color: #eee;
-      border-radius: 100%;
-      text-align: center;
-      line-height: 105px;
-      font-size: 70px;
-      margin-bottom: 30px;
-      color: rgba(255, 255, 255, 1);
+    .project {
+      overflow: hidden;
 
-      @media (max-width: $phone) {
-        width: 50px;
-        height: 50px;
-        font-size: 35px;
-        line-height: 52px;
+      border: 1px solid #eceff1;
+      border-width: 0px 0px 1px 0px;
+
+      .grid {
+        display: grid;
+        grid-template-areas:
+          "logo"
+          "title"
+          "description"
+          "link";
+        grid-template-rows: 120px 50px 100px;
+
+        @media (max-width: $phone) {
+          grid-template-rows: 60px 30px 70px 20px;
+          padding: 20px 10px;
+        }
         float: left;
-        margin: 0px 10px 0px 0px;
+        position: relative;
+        padding: 20px;
+      }
+
+      .logo-circle {
+        grid-area: logo;
+
+        width: 100px;
+        height: 100px;
+        background-color: #eee;
+        border-radius: 100%;
+        text-align: center;
+        line-height: 105px;
+        font-size: 70px;
+        margin-bottom: 30px;
+        color: rgba(255, 255, 255, 1);
+
+        @media (max-width: $phone) {
+          width: 50px;
+          height: 50px;
+          font-size: 35px;
+          line-height: 52px;
+          float: left;
+          margin: 0px 10px 0px 0px;
+        }
+      }
+
+      .project-title {
+        grid-area: title;
+
+        color: #ff8f00;
+        font-weight: bold;
+        font-size: 18px;
+        margin: 0px;
+        padding: 0px;
+        min-height: 20px;
+      }
+
+      .project-descripion {
+        grid-area: description;
+
+        color: #757575;
+        font-weight: 400;
+        font-size: 15px;
+      }
+
+      a {
+        grid-area: link;
       }
     }
-
-    .project-title {
-      grid-area: title;
-
-      color: #ff8f00;
-      font-weight: bold;
-      font-size: 18px;
-      margin: 0px;
-      padding: 0px;
-      min-height: 20px;
-    }
-
-    .project-descripion {
-      grid-area: description;
-
-      color: #757575;
-      font-weight: 400;
-      font-size: 15px;
-    }
-
-    a {
-      grid-area: link;
-    }
-  }
-}
-
-h1 button {
-  position: relative;
-  top: -4px;
-}
-
-button {
-  color: #039be5;
-  background-color: transparent;
-  border-width: 0px;
-  font-weight: bold;
-  border-radius: 2px;
-  padding: 10px;
-  float: right;
-
-  transition: 0.1s linear background-color;
-
-  &:hover {
-    background-color: #9edfff;
-    cursor: pointer;
   }
 
-  @media (max-width: $phone) {
+  h1 button {
+    position: relative;
+    top: -4px;
+  }
+
+  button {
+    color: #039be5;
+    background-color: transparent;
+    border-width: 0px;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 10px;
     float: right;
-  }
-}
 
-.section {
-  margin-bottom: 30px;
+    transition: 0.1s linear background-color;
+
+    &:hover {
+      background-color: #9edfff;
+      cursor: pointer;
+    }
+
+    @media (max-width: $phone) {
+      float: right;
+    }
+  }
+
+  .section {
+    margin-bottom: 30px;
+  }
 }

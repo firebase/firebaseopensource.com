@@ -1,6 +1,6 @@
 <div id="projects">
   <img src="../../assets/background-top.svg" hidden/>
-  <header-bar :enable_subheader="found" ref="header" :subheader_tabs="['Docs', 'Github']" ></header-bar>
+  <header-bar :enable_subheader="found" subheader_title="Documentation" ref="header" :subheader_tabs="['Guides', 'Github']" ></header-bar>
 
   <four-oh-four v-if="not_found"></four-oh-four>
   <div class="page" v-if="found">
@@ -80,7 +80,6 @@
 
           <!-- Table of contents shown if > 1 sections -->
           <div class="dropdown" id="docs-dropdown" v-if="sections.length > 1">
-              <br />
               <a
                 v-for="section in sections"
                 :href="section.ref"

@@ -2,24 +2,26 @@
 @import "../../styles/variables.scss";
 
 #projects {
-  h1 {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
+  .section {
+    h1 {
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
 
-  h2 {
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 32px;
-    color: #212121;
-    border-bottom: 1px solid #ebebeb;
-  }
+    h2 {
+      font-weight: 300;
+      font-size: 24px;
+      line-height: 32px;
+      color: #212121;
+      border-bottom: 1px solid #ebebeb;
+    }
 
-  h3 {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 32px;
-    color: #212121;
+    h3 {
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 32px;
+      color: #212121;
+    }
   }
 
   ul {

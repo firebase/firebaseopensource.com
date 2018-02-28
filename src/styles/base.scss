@@ -64,54 +64,29 @@ li {
   right: 0px;
 }
 
-// .dropdown {
-//   padding: 5px 15px;
-//   width: 270px;
-//   margin-top: 30px;
-//   margin-left: 20px;
-//   border-left: 3px solid rgba(0, 0, 0, 0.1);
-
-//   a {
-//     clear: both;
-//     display: block;
-//     width: 100%;
-//     color: black;
-//     text-decoration: none;
-//     opacity: 0.8;
-
-//     &:hover {
-//       text-decoration: underline;
-//       cursor: pointer;
-//     }
-//   }
-// }
-
 .dropdown {
-  a {
+  a,
+  span {
+    font-size: 13px;
+    line-height: 22px;
+    border-left: 4px solid #039be5;
+    padding-left: 10px;
     clear: both;
     display: block;
+  }
+
+  span {
+    color: #757575;
+    font-weight: bold;
+  }
+
+  a {
+    color: #212121;
     width: 100%;
     text-decoration: none;
-    // opacity: 0.8;
-    font-size: 1em;
-    border-left: 2px solid #eee;
-    padding-left: 10px;
-
-    // &::before {
-    //   content: "";
-    //   display: block;
-    //   background-color: #ccc;
-    //   // border-radius: 100%;
-    //   height: 10px;
-    //   width: 2px;
-    //   float: left;
-    //   position: relative;
-    //   top: 8px;
-    //   margin-right: 10px;
-    // }
 
     &:hover {
-      text-decoration: underline;
+      color: #039be5;
       cursor: pointer;
     }
   }
@@ -188,4 +163,10 @@ li {
       top: 40px;
     }
   }
+}
+
+.ellipsize {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

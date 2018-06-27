@@ -75,7 +75,7 @@ export default class Projects extends Vue {
 
     const fbt = await Firebaseton.get();
 
-    this.categories.forEach(category => {
+    this.categories.forEach((category, categoryIndex) => {
       fbt.fs
         .collection("configs")
         .where("blacklist", "==", false)
@@ -85,10 +85,10 @@ export default class Projects extends Vue {
         .orderBy("description")
         .get()
         .then(snapshot => {
-          snapshot.docs.forEach(doc => {
+          snapshot.docs.forEach((doc, docIndex) => {
             const config = doc.data() as Config;
             config.letter = pickLogoLetter(config.name);
-            config.color = COLORS[config.letter.charCodeAt(0) % COLORS.length];
+            config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
 
             const id = doc.id;
             config.org = id.split("::")[0];

@@ -26,6 +26,8 @@ build-hosting:
 
 deploy-functions: build-functions
 	firebase --project=$(PROD_PROJECT) deploy --only functions
+	gcloud --project=$(PROD_PROJECT) functions deploy \
+		SaveOrganizationSnapshot --memory 2048 --timeout 540
 
 deploy-hosting: build-hosting
 	firebase --project=$(PROD_PROJECT) deploy --only hosting

@@ -1,5 +1,9 @@
 @import "./variables.scss";
 
+body {
+  min-width: 480px;
+}
+
 h1 {
   font-weight: 300;
   font-size: 34px;
@@ -20,40 +24,26 @@ li {
   height: 50px;
 }
 
-.grid_2,
-.grid_3,
-.grid_4,
-.grid_6 {
+.col_gutter,
+.col_main {
   float: left;
   min-height: 10px;
 }
 
-.grid_2 {
-  width: 20%;
+.col_gutter {
+  width: 15%;
 }
 
-.grid_3 {
-  width: 30%;
-}
-
-.grid_third {
-  width: 33.33333%;
-}
-
-.grid_4 {
-  width: 40%;
-}
-
-.grid_6 {
-  width: 60%;
+.col_main {
+  width: 70%;
 }
 
 @media (max-width: $tablet) {
-  .grid_2 {
+  .col_gutter {
     width: 0;
   }
 
-  .grid_6 {
+  .col_main {
     width: 100%;
     padding: 0px 20px;
   }

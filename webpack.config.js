@@ -91,7 +91,7 @@ module.exports = {
     proxy: {
       "/**.md": {
         target: "http://localhost:8080",
-        pathRewrite: {'.md$' : ''},
+        pathRewrite: { ".md$": "" },
         secure: false
       },
       "/__/**": {

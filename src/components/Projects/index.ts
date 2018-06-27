@@ -110,11 +110,12 @@ export default class Projects extends Vue {
       .get();
 
     this.config = configSnapshot.data() as Config;
+    console.log(this.config);
     this.config.last_updated_from_now = distanceInWordsToNow(
-      this.config.last_updated
+      new Date(this.config.last_updated)
     );
     this.config.last_fetched_from_now = distanceInWordsToNow(
-      this.config.last_fetched
+      this.config.last_fetched.toDate()
     );
     this.config.repo = this.$route.params.repository;
     this.config.org = this.$route.params.organization;

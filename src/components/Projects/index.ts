@@ -87,25 +87,36 @@ export default class Projects extends Vue {
       dataDoc = repoDoc;
     }
 
-    this.cancels.push(
-      dataDoc.onSnapshot(snapshot => {
-        if (!snapshot.exists) {
-          this.not_found = true;
-        }
-        const data = snapshot.data();
+    const snapshot = await dataDoc.get();
 
-        this.header = data.header as Section;
-        this.page_title = data.header.name;
-        const sections = snapshot.data().sections as Section[];
+    if (!snapshot.exists) {
+      this.not_found = true;
+    }
+    const data = snapshot.data();
 
-        sections.forEach(section => {
-          if (blocked_sections.indexOf(section.name.toLowerCase()) != -1)
-            return;
-          section.id = this.as_id(section.name);
-          section.ref = "#" + section.id;
-          this.sections.push(section);
-        });
-      })
+    this.header = data.header as Section;
+    this.page_title = data.header.name;
+    const sections = snapshot.data().sections as Section[];
+
+    sections.forEach(section => {
+      if (blocked_sections.indexOf(section.name.toLowerCase()) != -1) return;
+      section.id = this.as_id(section.name);
+      section.ref = "#" + section.id;
+      this.sections.push(section);
+    });
+
+    const configSnapshot = await fbt.fs
+      .collection("configs")
+      .doc(id)
+      .get();
+
+    this.config = configSnapshot.data() as Config;
+    console.log(this.config);
+    this.config.last_updated_from_now = distanceInWordsToNow(
+      new Date(this.config.last_updated)
+    );
+    this.config.last_fetched_from_now = distanceInWordsToNow(
+      this.config.last_fetched.toDate()
     );
 
     this.cancels.push(

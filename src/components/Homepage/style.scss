@@ -35,16 +35,22 @@
       border-width: 0px 0px 1px 0px;
 
       .grid {
+        width: 100%;
         display: grid;
         grid-template-areas:
           "logo"
           "title"
           "description"
           "link";
-        grid-template-rows: 120px 50px 100px;
+        grid-template-rows: 120px 50px 100px 20px;
 
         @media (max-width: $phone) {
-          grid-template-rows: 60px 30px 70px 20px;
+          grid-template-areas:
+            "logo title"
+            "description description"
+            "link link";
+          grid-template-columns: 50px auto;
+          grid-template-rows: 60px 70px 20px;
           padding: 20px 10px;
         }
         float: left;
@@ -60,18 +66,24 @@
         background-color: #eee;
         border-radius: 100%;
         text-align: center;
-        line-height: 105px;
-        font-size: 70px;
+        line-height: 100px;
+        font-size: 50px;
         margin-bottom: 30px;
         color: rgba(255, 255, 255, 1);
 
         @media (max-width: $phone) {
           width: 50px;
           height: 50px;
-          font-size: 35px;
-          line-height: 52px;
+          font-size: 25px;
+          line-height: 50px;
           float: left;
           margin: 0px 10px 0px 0px;
+        }
+
+        img {
+          width: 74px;
+          height: 74px;
+          margin: 13px;
         }
       }
 
@@ -81,17 +93,26 @@
         color: #ff8f00;
         font-weight: bold;
         font-size: 18px;
-        margin: 0px;
         padding: 0px;
         min-height: 20px;
+
+        @media (max-width: $phone) {
+          // Wrap title text to one line
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          // Align next to the logo circle
+          line-height: 50px;
+          padding-left: 15px;
+        }
       }
 
-      .project-descripion {
+      .project-description {
+        margin: 0px;
         grid-area: description;
-
         color: #757575;
         font-weight: 400;
-        font-size: 15px;
       }
 
       a {

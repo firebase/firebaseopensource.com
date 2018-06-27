@@ -11,7 +11,16 @@
               <div class="project" v-for="project in ($refs.header && $refs.header.subheader_tab_selection == 'All')? category.featured : category.projects">
 
                 <div class="grid">
-                  <div class="logo-circle" :style="{backgroundColor: project.color}">{{project.letter}}</div>
+                  <div class="logo-circle" :style="{backgroundColor: project.color}">
+                    <!--
+                      TODO: Need to find an SVG letter font free for commercial use
+                      ex: https://www.behance.net/gallery/48597451/Free-SVG-Alphabet
+                    -->
+                    <!-- <img
+                      class="logo-letter"
+                      v-bind:src="`/src/assets/letters/${project.letter}.svg`"> -->
+                      {{project.letter}}
+                  </div>
                   <h2 class="project-title">{{project.name}}</h2>
                   <p class="project-description">
                       {{project.description}}

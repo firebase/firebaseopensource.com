@@ -16,7 +16,7 @@
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
-import { Firebaseton } from "../../services/firebaseton";
+import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../HeaderBar";
 import FourOhFour from "../FourOhFour";
@@ -50,13 +50,14 @@ export default class Projects extends Vue {
   not_found = false;
   found = false;
   show_clone_cmd = false;
+  cancels: Function[] = [];
 
-  async mounted() {
+  async created() {
     if (document.location.pathname.split("/").length == 4) {
       document.location.pathname += "/";
     }
 
-    const fbt = await Firebaseton.get();
+    const fbt = await FirebaseSingleton.GetInstance();
 
     const blocked_sections = ["table of contents"];
 
@@ -117,12 +118,28 @@ export default class Projects extends Vue {
     this.config.last_fetched_from_now = distanceInWordsToNow(
       this.config.last_fetched.toDate()
     );
-    this.config.repo = this.$route.params.repository;
-    this.config.org = this.$route.params.organization;
 
-    if (configSnapshot.exists && !this.not_found) {
-      this.found = true;
-    }
+    this.cancels.push(
+      fbt.fs
+        .collection("configs")
+        .doc(id)
+        .onSnapshot(configSnapshot => {
+          this.config = configSnapshot.data() as Config;
+          console.log(this.config);
+          this.config.last_updated_from_now = distanceInWordsToNow(
+            new Date(this.config.last_updated)
+          );
+          this.config.last_fetched_from_now = distanceInWordsToNow(
+            this.config.last_fetched.toDate()
+          );
+          this.config.repo = this.$route.params.repository;
+          this.config.org = this.$route.params.organization;
+
+          if (configSnapshot.exists && !this.not_found) {
+            this.found = true;
+          }
+        })
+    );
 
     (this.$refs.header as HeaderBar).$on(
       "subheader_tab_selection:change",
@@ -134,6 +151,10 @@ export default class Projects extends Vue {
         }
       }
     );
+  }
+
+  destroyed() {
+    this.cancels.forEach(c => c());
   }
 
   as_id(text: String) {

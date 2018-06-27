@@ -15,7 +15,7 @@
  */
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
-import { Firebaseton } from "../../services/firebaseton";
+import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../HeaderBar";
 
@@ -69,47 +69,50 @@ export default class Projects extends Vue {
   ];
 
   subheader_tabs = ["All", "iOS", "Android", "Web"];
+  fbt: FirebaseSingleton;
+  cancels: Function[] = [];
 
-  async mounted() {
+  async created() {
     document.querySelector("title").innerText = "Firebase Opensource";
 
-    const fbt = await Firebaseton.get();
+    this.fbt = await FirebaseSingleton.GetInstance();
 
     this.categories.forEach((category, categoryIndex) => {
-      fbt.fs
-        .collection("configs")
-        .where("blacklist", "==", false)
-        .where("fork", "==", false)
-        .orderBy(`platforms.${category.platform}`)
-        .orderBy("stars", "desc")
-        .orderBy("description")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach((doc, docIndex) => {
-            const config = doc.data() as Config;
-            config.letter = pickLogoLetter(config.name);
-            config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
+      this.cancels.push(
+        this.fbt.fs
+          .collection("configs")
+          .where("blacklist", "==", false)
+          .where("fork", "==", false)
+          .orderBy(`platforms.${category.platform}`)
+          .orderBy("stars", "desc")
+          .orderBy("description")
+          .onSnapshot(snapshot => {
+            snapshot.docs.forEach((doc, docIndex) => {
+              const config = doc.data() as Config;
+              config.letter = pickLogoLetter(config.name);
+              config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
 
-            const id = doc.id;
-            config.org = id.split("::")[0];
-            config.repo = id.split("::")[1];
+              const id = doc.id;
+              config.org = id.split("::")[0];
+              config.repo = id.split("::")[1];
 
-            const words = config.description.split(" ");
-            let sentence = words.slice(0, 10).join(" ");
+              const words = config.description.split(" ");
+              let sentence = words.slice(0, 10).join(" ");
 
-            if (words.length > 15) {
-              sentence += "...";
-            }
+              if (words.length > 15) {
+                sentence += "...";
+              }
 
-            config.description = sentence;
+              config.description = sentence;
 
-            if (category.featured.length < 6) {
-              category.featured.push(config);
-            }
+              if (category.featured.length < 6) {
+                category.featured.push(config);
+              }
 
-            category.projects.push(config);
-          });
-        });
+              category.projects.push(config);
+            });
+          })
+      );
     });
 
     if (this.$route.params.platform) {
@@ -124,6 +127,10 @@ export default class Projects extends Vue {
         window.scrollTo(0, 0);
       }
     );
+  }
+
+  destroyed() {
+    this.cancels.forEach(c => c());
   }
 
   @Watch("$route.params.platform", { immediate: true })
@@ -143,6 +150,18 @@ export default class Projects extends Vue {
 
   setSubheaderTabSelection(tab: string) {
     (this.$refs.header as HeaderBar).subheader_tab_selection = tab;
+  }
+
+  async preload(project: Config) {
+    const id = [project.org, project.repo].join("::");
+
+    const cancel = this.fbt.fs
+      .collection("content")
+      .doc(id)
+      .onSnapshot(snapshot => {
+        // console.log(snapshot.data())
+        setTimeout(cancel, 15000);
+      });
   }
 }
 

@@ -19,7 +19,9 @@ import VueRouter from "vue-router";
 import Homepage from "./components/Homepage";
 import Projects from "./components/Projects";
 import FourOhFour from "./components/FourOhFour";
+import { FirebaseSingleton } from "./services/firebaseSingleton";
 
+FirebaseSingleton.GetInstance();
 Vue.use(VueRouter);
 
 const routes = [

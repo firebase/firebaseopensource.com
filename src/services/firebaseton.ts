@@ -25,7 +25,7 @@ export class Firebaseton {
 
   async init() {
     await Promise.all([
-      System.import("firebase"),
+      System.import("firebase/app"),
       System.import("isomorphic-fetch")
     ]);
 
@@ -40,6 +40,9 @@ export class Firebaseton {
     this.required.firebase.initializeApp(config);
 
     this.fs = this.required.firebase.firestore();
+    this.fs.settings({
+      timestampsInSnapshots: true
+    })
   }
 
   static async get(): Promise<Firebaseton> {

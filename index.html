@@ -15,6 +15,10 @@
 
       ga('create', 'UA-110728272-1', 'auto');
       ga('send', 'pageview');
+
+      if (document.location.port == "5000") {
+        document.location.port = "8080";
+      }
     </script>
 
     <link rel="stylesheet"

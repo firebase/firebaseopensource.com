@@ -87,8 +87,13 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true,
+    noInfo: false,
     proxy: {
+      "/**.md": {
+        target: "http://localhost:8080",
+        pathRewrite: {'.md$' : ''},
+        secure: false
+      },
       "/__/**": {
         target: "http://localhost:5000/",
         secure: false

@@ -26,7 +26,7 @@
                       {{project.description}}
                   </p>
                   <router-link :to="`/projects/${project.org}/${project.repo}/`">
-                    <button>LEARN MORE</button>
+                    <button @mouseover="preload(project)">LEARN MORE</button>
                   </router-link>
                 </div>
               </div>

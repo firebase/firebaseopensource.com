@@ -15,7 +15,7 @@
  */
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
-import { Firebaseton } from "../../services/firebaseton";
+import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../HeaderBar";
 
@@ -69,22 +69,23 @@ export default class Projects extends Vue {
   ];
 
   subheader_tabs = ["All", "iOS", "Android", "Web"];
+  fbt: FirebaseSingleton;
+  cancels: Function[] = [];
 
-  async mounted() {
+  async created() {
     document.querySelector("title").innerText = "Firebase Opensource";
 
-    const fbt = await Firebaseton.get();
+    this.fbt = await FirebaseSingleton.GetInstance();
 
     this.categories.forEach((category, categoryIndex) => {
-      fbt.fs
+      this.cancels.push(this.fbt.fs
         .collection("configs")
         .where("blacklist", "==", false)
         .where("fork", "==", false)
         .orderBy(`platforms.${category.platform}`)
         .orderBy("stars", "desc")
         .orderBy("description")
-        .get()
-        .then(snapshot => {
+        .onSnapshot(snapshot => {
           snapshot.docs.forEach((doc, docIndex) => {
             const config = doc.data() as Config;
             config.letter = pickLogoLetter(config.name);
@@ -109,7 +110,7 @@ export default class Projects extends Vue {
 
             category.projects.push(config);
           });
-        });
+        }));
     });
 
     if (this.$route.params.platform) {
@@ -124,6 +125,10 @@ export default class Projects extends Vue {
         window.scrollTo(0, 0);
       }
     );
+  }
+
+  destroyed() {
+    this.cancels.forEach((c) => c());
   }
 
   @Watch("$route.params.platform", { immediate: true })
@@ -143,6 +148,18 @@ export default class Projects extends Vue {
 
   setSubheaderTabSelection(tab: string) {
     (this.$refs.header as HeaderBar).subheader_tab_selection = tab;
+  }
+
+  async preload(project: Config) {
+    const id = [
+      project.org,
+      project.repo
+    ].join("::");
+
+    const cancel = this.fbt.fs.collection("content").doc(id).onSnapshot((snapshot) => {
+      // console.log(snapshot.data())
+      setTimeout(cancel, 15000);
+    });
   }
 }
 

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-let instance: Firebaseton;
-
 import FirebaseAppModule = require("firebase/app");
 
-export class Firebaseton {
+let singleton: FirebaseSingleton;
+let waitForSingleton: Promise<FirebaseSingleton>;
+
+export class FirebaseSingleton {
   required = {
     firebase: FirebaseAppModule
   };
@@ -42,14 +43,22 @@ export class Firebaseton {
     this.fs = this.required.firebase.firestore();
     this.fs.settings({
       timestampsInSnapshots: true
-    })
+    });
+
+    return this;
   }
 
-  static async get(): Promise<Firebaseton> {
-    if (instance) return instance;
-
-    instance = new Firebaseton();
-    await instance.init();
-    return instance;
+  public static async GetInstance() {
+    if (singleton) {
+      return singleton;
+    } else if (waitForSingleton) {
+      return waitForSingleton;
+    } else {
+      return (waitForSingleton = new FirebaseSingleton()
+        .init()
+        .then(_singleton => {
+          return (singleton = _singleton);
+        }));
+    }
   }
 }

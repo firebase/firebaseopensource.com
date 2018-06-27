@@ -2,8 +2,8 @@
   <header-bar enable_subheader="true" subheader_title="Platforms" :subheader_tabs="subheader_tabs" ref="header"></header-bar>
 
   <div class="page">
-      <div class="grid_2"></div>
-      <div class="sections grid_6">
+      <div class="col_gutter"></div>
+      <div class="sections col_main">
         <div class="section" v-for="category in categories">
           <div class="content" v-if="isSectionVisible(category.title)">
             <h1>{{category.title}}  <button v-if="$refs.header && $refs.header.subheader_tab_selection == 'All'" @click="setSubheaderTabSelection(category.title)">SEE ALL</button></h1>
@@ -35,7 +35,6 @@
           </div>
         </div>
       </div>
-
-      <div class="grid_2"></div>
+      <div class="col_gutter"></div>
     </div>
 </div>

@@ -42,7 +42,7 @@ export class Firebaseton {
     this.fs = this.required.firebase.firestore();
     this.fs.settings({
       timestampsInSnapshots: true
-    })
+    });
   }
 
   static async get(): Promise<Firebaseton> {

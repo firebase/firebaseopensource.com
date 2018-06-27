@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import FirestoreAppModule = require("@firebase/firestore-types");
+
 export interface TrueMap {
   [s: string]: true;
 }
@@ -26,7 +29,7 @@ export interface Subprojects {
 
 export interface Config {
   content?: string;
-  last_updated?: Date;
+  last_updated?: string;
   last_updated_from_now?: string;
   name?: string;
   pages?: TrueMap;
@@ -42,6 +45,6 @@ export interface Config {
   repo?: string;
   org?: string;
   description?: string;
-  last_fetched?: Date;
+  last_fetched?: FirestoreAppModule.Timestamp;
   last_fetched_from_now?: string;
 }

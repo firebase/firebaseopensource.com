@@ -75,7 +75,7 @@ Github.prototype.getRepoMetadata = function(org, repo) {
       description: repo.description,
       fork: repo.fork,
       stars: repo.stargazers_count,
-      last_updated: repo.updated_at
+      last_updated: repo.pushed_at
     };
   });
 };

@@ -81,6 +81,17 @@ Github.prototype.getRepoMetadata = function(org, repo) {
 };
 
 /**
+ * Get README file name for a Github repo.
+ */
+Github.prototype.getRepoReadmeFile = function(org, repo) {
+  const url = `https://api.github.com/repos/${org}/${repo}/readme`;
+
+  return request(url, _GH_OPTIONS_STANDARD).then(resp => {
+    return resp.path;
+  });
+};
+
+/**
  * Read all of the pages from a Github API url and return them concatenated.
  */
 Github.prototype.readAllPages = function(url, results) {

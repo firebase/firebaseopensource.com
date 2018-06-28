@@ -65,10 +65,16 @@ export default class Projects extends Vue {
       platform: "ios",
       projects: [],
       featured: []
+    },
+    {
+      title: "Games",
+      platform: "games",
+      projects: [],
+      featured: []
     }
   ];
 
-  subheader_tabs = ["All", "iOS", "Android", "Web"];
+  subheader_tabs = ["All", "iOS", "Android", "Web", "Games"];
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
 

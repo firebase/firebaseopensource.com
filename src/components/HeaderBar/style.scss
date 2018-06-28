@@ -17,7 +17,7 @@
       margin: 0 auto;
 
       @media (max-width: $tablet) {
-        width: 100vw;
+        width: 100%;
       }
     }
 
@@ -25,13 +25,14 @@
       padding: 4px 0px 4px 0px;
       background-color: #ffffff;
       color: #a0a0a0;
-      overflow: auto;
       box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.8);
+      width: 100%;
 
       .content {
         display: grid;
         grid-template-columns: 1fr fit-content(100%);
         justify-content: space-between;
+        padding: 0px 20px;
       }
 
       .link {
@@ -39,6 +40,11 @@
       }
 
       .title {
+        a.logo {
+          display: block;
+          width: 250px;
+          overflow: hidden;
+        }
         img {
           margin-top: 4px;
           height: $header-height - 8px;
@@ -74,6 +80,10 @@
         font-weight: normal;
         font-size: 20px;
         padding: 24px 0px 0px 0px;
+      }
+
+      .content {
+        padding: 0px 20px;
       }
 
       .tab-spacer {

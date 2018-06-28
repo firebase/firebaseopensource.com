@@ -44,7 +44,7 @@ export class FirebaseSingleton {
     this.fs.settings({
       timestampsInSnapshots: true
     });
-    
+
     return this;
   }
 

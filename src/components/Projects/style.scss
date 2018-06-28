@@ -4,9 +4,9 @@
 #projects {
   .section {
     h1 {
-      padding: 32px 0px 0px 0px;
+      padding: 16px 0px 0px 0px;
       margin: 0px;
-      line-height: 0.8em;
+      line-height: 1em;
     }
 
     h2 {
@@ -58,12 +58,20 @@
         margin-top: 0px;
       }
     }
+
+    @media (max-width: $tablet) {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "left"
+        "right"
+        "content";
+    }
   }
 
   .badges {
-    margin-top: 14px;
+    margin-top: 16px;
     display: grid;
-    grid-template-columns: fit-content(100%) fit-content(100%);
+    grid-auto-columns: max-content;
     grid-template-areas:
       "button button"
       "button button"
@@ -111,6 +119,11 @@
     .badge-action {
       color: lighten($blue, 10%);
       background-color: white;
+
+      // Action buttons are not relevant on a phone
+      @media(max-width: $phone) {
+        display: none;
+      }
     }
   }
 
@@ -132,9 +145,8 @@
       float: left;
       font-size: 0.8em;
       margin-right: 10px;
+      margin-bottom: 4px;
 
-      display: grid;
-      grid-template-columns: fit-content(100%) fit-content(100%);
       align-items: center;
       color: black;
       opacity: 0.5;
@@ -143,7 +155,7 @@
         margin-right: 8px;
         font-size: 1.5em;
         position: relative;
-        top: 1px;
+        top: 5px;
       }
 
       transition: 0.2s;

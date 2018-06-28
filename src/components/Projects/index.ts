@@ -29,10 +29,10 @@ const Clipboard = require("clipboard");
 import "../../automock";
 
 type Section = {
-  content: String;
-  name: String;
-  id: String;
-  ref: String;
+  content?: String;
+  name?: String;
+  id?: String;
+  ref?: String;
 };
 
 declare const hljs: any;
@@ -43,7 +43,7 @@ declare const hljs: any;
 export default class Projects extends Vue {
   name = "projects";
   sections: Section[] = [];
-  header: Section = { content: "", name: "", id: "", ref: "" };
+  header: Section = {};
   config: Config = {};
   is_subpage = false;
   dropdown_selection = "";
@@ -52,11 +52,22 @@ export default class Projects extends Vue {
   show_clone_cmd = false;
   cancels: Function[] = [];
 
+  @Watch("$route.params", { deep: true })
+  onRouteChanged() {
+    this.config = {};
+    this.sections = [];
+    this.header = {};
+    this.DoLoadPage();
+  }
+
   async created() {
     if (document.location.pathname.split("/").length == 4) {
       document.location.pathname += "/";
     }
+    this.DoLoadPage();
+  }
 
+  async DoLoadPage() {
     const fbt = await FirebaseSingleton.GetInstance();
 
     const blocked_sections = ["table of contents"];
@@ -128,7 +139,7 @@ export default class Projects extends Vue {
           console.log(this.config);
           this.config.last_updated_from_now = distanceInWordsToNow(
             new Date(this.config.last_updated)
-          );
+          ).replace("about", "");
           this.config.last_fetched_from_now = distanceInWordsToNow(
             this.config.last_fetched.toDate()
           );

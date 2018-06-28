@@ -4,8 +4,9 @@
 #projects {
   .section {
     h1 {
-      padding-top: 24px;
-      padding-bottom: 24px;
+      padding: 32px 0px 0px 0px;
+      margin: 0px;
+      line-height: 0.8em;
     }
 
     h2 {
@@ -43,28 +44,45 @@
     padding-left: 20px;
   }
 
-  .badges {
-    display: flex;
-    justify-content: space-between;
-    overflow: auto;
-    flex-wrap: wrap;
+  .body-column {
+    display: grid;
+    grid-template-columns: 1fr fit-content(100%);
+    grid-template-areas:
+      "left right"
+      "content content";
 
-    .badge-group {
-      margin-top: 6px;
-      flex-shrink: 0;
+    > p {
+      grid-area: content;
+
+      &:first-of-type {
+        margin-top: 0px;
+      }
     }
+  }
+
+  .badges {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: fit-content(100%) fit-content(100%);
+    grid-template-areas:
+      "button button"
+      "button button"
+      "copy copy";
+    grid-gap: 6px;
 
     .badge {
       border-radius: 3px;
       overflow: hidden;
-      color: lighten($blue, 10%);
+      width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-      margin: 0px 4px 4px 4px;
       font-size: 0.9em;
-      float: left;
+      text-align: center;
       padding: 5px 16px 0px 16px;
       font-weight: bold;
+
+      background-color: $blue;
+      color: white;
       * {
         height: 30px;
       }
@@ -91,16 +109,59 @@
     }
 
     .badge-action {
-      background-color: $blue;
-      color: white;
+      color: lighten($blue, 10%);
+      background-color: white;
+    }
+  }
+
+  .related {
+    width: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: fit-content(100%) 1fr;
+    align-items: center;
+    margin-top: 16px;
+
+    .title {
+      margin-right: 10px;
+    }
+    .repo {
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      border-radius: 100px;
+      padding: 0px 14px;
+      float: left;
+      font-size: 0.8em;
+      margin-right: 10px;
+
+      display: grid;
+      grid-template-columns: fit-content(100%) fit-content(100%);
+      align-items: center;
+      color: black;
+      opacity: 0.5;
+
+      .material-icons {
+        margin-right: 8px;
+        font-size: 1.5em;
+        position: relative;
+        top: 1px;
+      }
+
+      transition: 0.2s;
+      &:hover {
+        cursor: pointer;
+        background-color: $yellow;
+        color: darken($yellow, 50%);
+        border: 1px solid darken($yellow, 5%);
+        opacity: 1;
+      }
     }
   }
 
   .copy-code-container {
     position: relative;
-    margin: 3px;
     clear: both;
 
+    grid-area: copy;
     input {
       width: 100%;
       height: 30px;

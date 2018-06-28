@@ -23,6 +23,7 @@ const project = require("../project");
 const ids = [
   "samtstern::BotTest",
   "firebase::quickstart-js",
+  "firebase::quickstart-cpp",
   "firebase::firebaseui-android",
   "firebase::firebaseui-ios",
   "firebase::angularfire",

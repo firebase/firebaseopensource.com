@@ -174,7 +174,8 @@ Project.prototype.inferPlatforms = function(id) {
   const platforms = {
     ios: ["ios", "objc", "swift", "apple"],
     android: ["android", "kotlin"],
-    web: ["web", "js", "angular", "react"]
+    web: ["web", "js", "angular", "react"],
+    games: ["cpp", "unity"]
   };
 
   const result = {};
@@ -211,11 +212,16 @@ Project.prototype.getProjectConfig = function(id) {
       } else {
         // If the project has no config, make one up
         console.log(`[${id}] WARN: Using default config.`);
-        return {
-          name: idParsed.repo,
-          type: "library",
-          content: "README.md"
-        };
+        return github
+          .getRepoReadmeFile(idParsed.owner, idParsed.repo)
+          .then(readme => {
+            console.log(`[${id}] README: ${readme}`);
+            return {
+              name: idParsed.repo,
+              type: "library",
+              content: readme
+            };
+          });
       }
     })
     .then(config => {

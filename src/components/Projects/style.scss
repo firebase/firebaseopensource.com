@@ -121,7 +121,7 @@
       background-color: white;
 
       // Action buttons are not relevant on a phone
-      @media(max-width: $phone) {
+      @media (max-width: $phone) {
         display: none;
       }
     }

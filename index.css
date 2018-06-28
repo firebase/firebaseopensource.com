@@ -1,6 +1,12 @@
 html {
   box-sizing: border-box;
 }
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0px;
   line-height: 170%;
@@ -13,11 +19,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: "Roboto", sans-serif;
 }
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
+
 h1,
 h2 {
   padding: 10px 0px;

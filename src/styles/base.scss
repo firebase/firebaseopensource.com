@@ -45,41 +45,13 @@ li {
 
   .col_main {
     width: 100%;
-    padding: 0px 20px;
+    //padding: 0px 20px;
   }
 }
 
 .nav {
   position: fixed;
   right: 0px;
-}
-
-.dropdown {
-  a,
-  span {
-    font-size: 13px;
-    line-height: 22px;
-    border-left: 4px solid #039be5;
-    padding-left: 10px;
-    clear: both;
-    display: block;
-  }
-
-  span {
-    color: #757575;
-    font-weight: bold;
-  }
-
-  a {
-    color: #212121;
-    width: 100%;
-    text-decoration: none;
-
-    &:hover {
-      color: #039be5;
-      cursor: pointer;
-    }
-  }
 }
 
 .section {
@@ -108,14 +80,9 @@ li {
   }
 
   .content {
-    padding: 24px 50px;
-
-    @media (max-width: $phone) {
-      padding: 20px 25px;
-    }
-
     background-color: white;
-    overflow: auto;
+    width: 100%;
+    padding: 20px;
 
     border-radius: 0px 0px 2px 2px;
     &:first-child {

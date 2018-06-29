@@ -27,6 +27,7 @@ const Clipboard = require("clipboard");
 
 // Include automock for automated mocking
 import "../../automock";
+import { VueRouter } from "vue-router/types/router";
 
 type Section = {
   content?: String;
@@ -53,7 +54,12 @@ export default class Projects extends Vue {
   cancels: Function[] = [];
 
   @Watch("$route.params", { deep: true })
-  onRouteChanged() {
+  onRouteChanged(newParams: any, oldParams: any) {
+    if (
+      oldParams.repository == newParams.repository &&
+      oldParams.organization == newParams.organization
+    )
+      return;
     this.config = {};
     this.sections = [];
     this.header = {};

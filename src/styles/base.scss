@@ -53,32 +53,31 @@ li {
 }
 
 .dropdown {
+  a,
+  span {
+    font-size: 13px;
+    line-height: 22px;
+    border-left: 4px solid #039be5;
+    padding-left: 10px;
+    clear: both;
+    display: block;
+  }
 
- a,
- span {
-   font-size: 13px;
-   line-height: 22px;
-   border-left: 4px solid #039be5;
-   padding-left: 10px;
-   clear: both;
-   display: block;
- }
+  span {
+    color: #757575;
+    font-weight: bold;
+  }
 
- span {
-   color: #757575;
-   font-weight: bold;
- }
+  a {
+    color: #212121;
+    width: 100%;
+    text-decoration: none;
 
- a {
-   color: #212121;
-   width: 100%;
-   text-decoration: none;
-
-   &:hover {
-     color: #039be5;
-     cursor: pointer;
-   }
- }
+    &:hover {
+      color: #039be5;
+      cursor: pointer;
+    }
+  }
 }
 
 .shadow_top {
@@ -98,11 +97,13 @@ li {
 }
 
 .shadow_top_left_right {
-  box-shadow: 0 -2px 2px -2px $shadow, -2px 0 2px -2px $shadow, 2px 0 2px -2px $shadow;
+  box-shadow: 0 -2px 2px -2px $shadow, -2px 0 2px -2px $shadow,
+    2px 0 2px -2px $shadow;
 }
 
 .shadow_bottom_left_right {
-  box-shadow: 0 2px 2px -2px $shadow, -2px 0 2px -2px $shadow, 2px 0 2px -2px $shadow;
+  box-shadow: 0 2px 2px -2px $shadow, -2px 0 2px -2px $shadow,
+    2px 0 2px -2px $shadow;
 }
 
 .shadow_left_right {

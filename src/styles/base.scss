@@ -26,8 +26,7 @@ li {
 
 .content_grid {
   display: grid;
-  grid-template-areas: "gutter main gutter";
-  grid-template-columns: 1fr minmax(max-content, $max-content-width) 1fr;
+  grid-template-columns: 1fr minmax(min-content, $max-content-width) 1fr;
 }
 
 .col_gutter,

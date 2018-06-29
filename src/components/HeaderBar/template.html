@@ -1,7 +1,8 @@
   <div id="header-bar" :class={spacer}>
     <div class="header-clone" v-for="header in headers" :class="header">
-      <header>
-          <div class="content">
+      <header class="content_grid">
+          <div class="col_gutter" />
+          <div class="content col_main">
             <div class="title">
               <router-link to="/" class="logo"><img src="../../assets/oss-logo-small.png" /></router-link>
               <!-- <router-link to="/" class="text">Open Source</router-link> -->
@@ -15,7 +16,9 @@
                 </div>
               </a>
             </div>
+
           </div>
+          <div class="col_gutter" />
         </header>
         <div class="subheader" v-if="enable_subheader">
           <div class="content">

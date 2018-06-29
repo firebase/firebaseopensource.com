@@ -13,7 +13,8 @@
     }
 
     .content {
-      width: 70%;
+      width: 100%;
+      max-width: $max-content-width;
       margin: 0 auto;
 
       @media (max-width: $tablet) {

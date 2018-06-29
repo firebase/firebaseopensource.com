@@ -24,18 +24,16 @@ li {
   height: 50px;
 }
 
+.content_grid {
+  display: grid;
+  grid-template-areas: "gutter main gutter";
+  grid-template-columns: 1fr minmax(max-content, $max-content-width) 1fr;
+}
+
 .col_gutter,
 .col_main {
-  float: left;
+  max-width: $max-content-width;
   min-height: 10px;
-}
-
-.col_gutter {
-  width: 15%;
-}
-
-.col_main {
-  width: 70%;
 }
 
 @media (max-width: $tablet) {

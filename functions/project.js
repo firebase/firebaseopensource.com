@@ -77,13 +77,13 @@ Project.prototype.loadGlobalConfig = function() {
   const loadAdditional = github
     .getContent(ADDITIONAL_PROJECTS_URL)
     .then(data => {
-      return JSON.parse(data);
+      ADDITIONAL_PROJECTS = JSON.parse(data).projects;
     });
 
   const loadBlacklist = github
     .getContent(FEATURED_BLACKLIST_PROJECTS_URL)
     .then(data => {
-      return JSON.parse(data);
+      FEATURED_BLACKLIST_PROJECTS = JSON.parse(data).projects;
     });
 
   return Promise.all([loadAdditional, loadBlacklist]);

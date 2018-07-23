@@ -3,7 +3,6 @@ PROD_PROJECT="fir-oss"
 build-appengine:
 	cd appengine \
 		&& npm install \
-		&& npm run deploy \
 		&& cd -
 
 deploy-appengine: build-appengine

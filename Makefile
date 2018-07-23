@@ -2,10 +2,8 @@ PROD_PROJECT="fir-oss"
 
 build-appengine:
 	cd appengine \
-		&& rm -rf lib env \
-		&& virtualenv env && source env/bin/activate \
-		&& gcloud components install app-engine-python \
-		&& pip install -t lib -r requirements.txt \
+		&& npm install \
+		&& npm run deploy \
 		&& cd -
 
 deploy-appengine: build-appengine

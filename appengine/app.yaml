@@ -11,29 +11,4 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-runtime: python27
-api_version: 1
-threadsafe: true
-
-handlers:
-
-# Handler for the pubsub cron.
-- url: /publish/.*
-  script: main.app
-  login: admin
-  secure: always
-
-- url: /.*
-  script: main.app
-
-libraries:
-- name: webapp2
-  version: latest
-- name: pycrypto
-  version: latest
-- name: ssl
-  version: latest
-
-basic_scaling:
-  max_instances: 1
-  idle_timeout: 10s
+runtime:  nodejs8

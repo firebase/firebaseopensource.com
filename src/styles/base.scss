@@ -1,7 +1,79 @@
 @import "./variables.scss";
 
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0px;
   min-width: 340px;
+  line-height: 170%;
+
+  background: #fcfcfc url(/dist/background-top.svg) no-repeat;
+  background-attachment: fixed;
+  background-size: 100%;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Roboto", sans-serif;
+}
+
+h1,
+h2 {
+  padding: 10px 0px;
+  margin: 0px;
+}
+
+pre {
+  padding: 5px 10px;
+  background-color: #f8f8f8;
+  font-family: "Roboto Mono";
+  overflow: auto;
+}
+
+a {
+  text-decoration: none;
+  color: #039be5;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  background-color: #f8f9fa;
+}
+
+td {
+  border-width: 0px;
+  padding: 0px 10px;
+}
+
+th {
+  background-color: #78909c;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+tr {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #cfd8dc;
+}
+
+.img-parent {
+  padding: 20px 0px;
+}
+
+.img-parent img {
+  max-width: 100%;
+}
+
+pre {
+  line-height: 100%;
 }
 
 h1 {

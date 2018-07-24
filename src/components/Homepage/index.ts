@@ -74,7 +74,13 @@ export default class Projects extends Vue {
     }
   ];
 
-  subheader_tabs = ["All", "iOS", "Android", "Web", "Games"];
+  subheader_tabs: any[] = [
+    {text: "All", link: "/platform/all"},
+    {text: "iOS", link: "/platform/ios"},
+    {text: "Android", link: "/platform/android"},
+    {text: "Web", link: "/platform/web"},
+    {text: "Games", link: "/platform/games"},
+  ];
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
 
@@ -117,6 +123,8 @@ export default class Projects extends Vue {
 
               category.projects.push(config);
             });
+
+            setTimeout(() => (window as any).renderComplete = true, 100);
           })
       );
     });
@@ -125,14 +133,6 @@ export default class Projects extends Vue {
       (this.$refs
         .header as HeaderBar).subheader_tab_selection = this.$route.params.platform;
     }
-
-    (this.$refs.header as HeaderBar).$on(
-      "subheader_tab_selection:change",
-      (subheader_tab_selection: string) => {
-        this.$router.push(`/platform/${subheader_tab_selection}`);
-        window.scrollTo(0, 0);
-      }
-    );
   }
 
   destroyed() {
@@ -147,15 +147,12 @@ export default class Projects extends Vue {
 
   isSectionVisible(section: string) {
     const header = this.$refs.header as HeaderBar;
+
     return (
       !header ||
-      header.subheader_tab_selection == "All" ||
+      header.subheader_tab_selection == "all" ||
       header.subheader_tab_selection == section
     );
-  }
-
-  setSubheaderTabSelection(tab: string) {
-    (this.$refs.header as HeaderBar).subheader_tab_selection = tab;
   }
 
   async preload(project: Config) {

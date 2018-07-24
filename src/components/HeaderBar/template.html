@@ -24,9 +24,11 @@
           <div class="content">
             <h2 v-if="subheader_title">{{subheader_title}}</h2>
             <div class="tabs">
-              <div class="tab" v-for="tab in subheader_tabs" :class="{selected: subheader_tab_selection == tab}" @click="setSubheaderTabSelection(tab)">
-                {{tab}}
-              </div>
+              <a class="tab" v-for="tab in subheader_tabs"
+                   :class="{selected: subheader_tab_selection == tab.text.toLowerCase()}"
+                   :href="tab.link">
+                {{tab.text}}
+              </a>
             </div>
             <div class="tab-spacer" v-if="!subheader_tabs"></div>
           </div>

@@ -1,6 +1,6 @@
 <div id="projects">
   <img src="../../assets/background-top.svg" hidden/>
-  <header-bar :enable_subheader="found" subheader_title="Documentation" ref="header" :subheader_tabs="['Guides', 'Github']" ></header-bar>
+  <header-bar :enable_subheader="found" subheader_title="Documentation" ref="header" :subheader_tabs="subheader_tabs" ></header-bar>
 
   <four-oh-four v-if="not_found"></four-oh-four>
   <div class="page content_grid" v-if="found">
@@ -18,10 +18,8 @@
 
             <div class="related" v-if="!is_subpage">
               <div class="repos">
-                <router-link :to="`/projects/${repo}`" v-for="repo in Object.keys(config.related || {})">
-                  <a class="repo">
-                    <i class="material-icons">link</i><span>{{repo}}</span>
-                  </a>
+                <router-link class="repo test" :to="`/projects/${repo}`" v-for="repo in Object.keys(config.related || {})">
+                  <i class="material-icons">link</i><span>{{repo}}</span>
                 </router-link>
               </div>
             </div>
@@ -52,14 +50,22 @@
 
               <!-- Git clone and download ZIP buttons -->
               <!--<div class="badge-group">-->
-                <a href="#" @click="show_clone_cmd = !show_clone_cmd">
-                  <div class="badge badge-action">
-                    <div class="key">
-                        <i class="material-icons">code</i>
-                    </div>
-                      <div class="value">Clone Repo</div>
+                <!--<a href="#" @click="show_clone_cmd = !show_clone_cmd">-->
+                  <!--<div class="badge badge-action">-->
+                    <!--<div class="key">-->
+                        <!--<i class="material-icons">code</i>-->
+                    <!--</div>-->
+                      <!--<div class="value">Clone Repo</div>-->
+                  <!--</div>-->
+                <!--</a>-->
+              <a :href="`https://github.com/${config.org}/${config.repo}/`">
+                <div class="badge badge-action">
+                  <div class="key">
+                    <i class="material-icons">code</i>
                   </div>
-                </a>
+                  <div class="value">Clone Repo</div>
+                </div>
+              </a>
 
                 <a :href="`https://github.com/${config.org}/${config.repo}/archive/master.zip`">
                   <div class="badge badge-action">
@@ -89,7 +95,7 @@
           </div>
 
           <!-- Header section body -->
-          <p v-html="header.content" v-if="header.content"></p>
+          <div class="header_content" v-html="header.content" v-if="header.content"></div>
 
         </div><!-- END body-column -->
 

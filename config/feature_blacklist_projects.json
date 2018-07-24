@@ -1,6 +1,7 @@
 {
   "projects": [
     "firebase::androidchat",
-    "firebase::androiddrawing"
+    "firebase::androiddrawing",
+    "firebase::reactfire"
   ]
 }

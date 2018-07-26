@@ -54,21 +54,6 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  console.log(to);
-
-  // var path = undefined;
-  // if (to.redirectedFrom) {
-  //   path = to.redirectedFrom.replace("/app", "");
-  // }
-  // if (path) {
-  //   next(path);
-  // } else {
-  //   next();
-  // }
-  next();
-});
-
 new Vue({
   el: "#app",
   router,

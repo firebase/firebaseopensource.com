@@ -31,6 +31,16 @@ admin.firestore().settings({timestampsInSnapshots: true});
 const RENDERTON_URL = 'http://localhost:3000';
 const BASE_URL = 'http://localhost:8080';
 const BUILD_PATH = "/usr/local/google/home/abehaskins/Development/fosdc";
+const GA_TAG = `<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110728272-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-110728272-1');
+</script>
+`;
 
 (async () => {
   const pages: string[] = [
@@ -59,6 +69,7 @@ const BUILD_PATH = "/usr/local/google/home/abehaskins/Development/fosdc";
     console.log(pageUrl);
     const res = await fetch(pageUrl);
     const $ = cheerio.load(await res.text());
+    $("head").html($("head").html() + GA_TAG);
 
     $("a").each(function() {
       var old_src=$(this).attr("href") || "";

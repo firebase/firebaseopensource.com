@@ -50,7 +50,23 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
+  base: "/app/",
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  console.log(to);
+
+  // var path = undefined;
+  // if (to.redirectedFrom) {
+  //   path = to.redirectedFrom.replace("/app", "");
+  // }
+  // if (path) {
+  //   next(path);
+  // } else {
+  //   next();
+  // }
+  next();
 });
 
 new Vue({

@@ -75,11 +75,11 @@ export default class Projects extends Vue {
   ];
 
   subheader_tabs: any[] = [
-    {text: "All", link: "/platform/all"},
-    {text: "iOS", link: "/platform/ios"},
-    {text: "Android", link: "/platform/android"},
-    {text: "Web", link: "/platform/web"},
-    {text: "Games", link: "/platform/games"},
+    { text: "All", link: "/platform/all" },
+    { text: "iOS", link: "/platform/ios" },
+    { text: "Android", link: "/platform/android" },
+    { text: "Web", link: "/platform/web" },
+    { text: "Games", link: "/platform/games" }
   ];
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
@@ -124,7 +124,7 @@ export default class Projects extends Vue {
               category.projects.push(config);
             });
 
-            setTimeout(() => (window as any).renderComplete = true, 100);
+            setTimeout(() => ((window as any).renderComplete = true), 100);
           })
       );
     });

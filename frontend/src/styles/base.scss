@@ -101,6 +101,10 @@ li {
   grid-template-columns: 1fr minmax(min-content, $max-content-width) 1fr;
 }
 
+.page {
+  word-break: break-word;
+}
+
 .col_gutter,
 .col_main {
   max-width: $max-content-width;
@@ -113,7 +117,7 @@ li {
   }
 
   .col_main {
-    width: 100%;
+    max-width: 100vw;
     //padding: 0px 20px;
   }
 }

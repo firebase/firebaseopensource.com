@@ -16,6 +16,7 @@
 const functions = require("firebase-functions");
 const github = require("./github");
 const project = require("./project");
+const render = require("./render");
 
 /**
  * Get the config and content for a single project and its subprojects.
@@ -62,3 +63,13 @@ exports.dailyGetAllProjects = functions.pubsub
     console.log("Got daily tick message");
     return project.storeAllProjects();
   });
+
+/**
+ * Render website pages
+ */
+exports.pageRenderer = functions.https.onRequest(render.renderer);
+
+/**
+ * Manually fill Hosting cache with rendered pages
+ */
+exports.pagePrerender = functions.https.onRequest(render.prerender);

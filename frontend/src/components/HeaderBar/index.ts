@@ -16,7 +16,7 @@
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 
-type Tab = {link: string, text: string};
+type Tab = { link: string; text: string };
 
 @Component
 export default class HeaderBar extends Vue {
@@ -42,7 +42,10 @@ export default class HeaderBar extends Vue {
 
   @Watch("subheader_tab_selection")
   onSubheaderTabSelectionChange(subheader_tab_selection: string) {
-    this.$emit("subheader_tab_selection:change", subheader_tab_selection.toLowerCase());
+    this.$emit(
+      "subheader_tab_selection:change",
+      subheader_tab_selection.toLowerCase()
+    );
   }
 
   setSubheaderTabSelection(tab: string) {

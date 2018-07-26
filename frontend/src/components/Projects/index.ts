@@ -89,7 +89,9 @@ export default class Projects extends Vue {
       },
       {
         text: "Github",
-        link: `https://github.com/${this.$route.params.organization}/${this.$route.params.repository}`
+        link: `https://github.com/${this.$route.params.organization}/${
+          this.$route.params.repository
+        }`
       }
     ];
 
@@ -164,7 +166,7 @@ export default class Projects extends Vue {
             this.found = true;
           }
 
-          setTimeout(() => (window as any).renderComplete = true, 100);
+          setTimeout(() => ((window as any).renderComplete = true), 100);
         })
     );
     //

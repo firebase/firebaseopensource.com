@@ -18,7 +18,8 @@ build-functions:
 		&& cd -
 
 build-hosting:
-	yarn install \
+	cd frontend \
+	    && yarn install \
 		&& npm run build
 
 deploy-functions: build-functions
@@ -26,6 +27,8 @@ deploy-functions: build-functions
 	gcloud --project=${PROD_PROJECT} functions deploy dailyGetAllProjects --memory 2048 --timeout 540
 	gcloud --project=${PROD_PROJECT} functions deploy getAllProjects --memory 2048 --timeout 540
 	gcloud --project=${PROD_PROJECT} functions deploy getProject --memory 2048 --timeout 540
+    gcloud --project=${PROD_PROJECT} functions deploy pageRender --memory 2048 --timeout 540
+    gcloud --project=${PROD_PROJECT} functions deploy pagePrerender --memory 2048 --timeout 540
 
 deploy-hosting: build-hosting
 	firebase --project=$(PROD_PROJECT) deploy --only hosting

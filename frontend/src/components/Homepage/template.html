@@ -7,9 +7,9 @@
         <div class="section" v-for="category in categories">
           <div class="content" v-if="isSectionVisible(category.platform)">
             <h1>{{category.title}}
-              <router-link :to="`/platform/${category.title}`">
+              <a :href="`/platform/${category.title}`">
               <button v-if="$refs.header && $refs.header.subheader_tab_selection == 'all'">SEE ALL</button>
-              </router-link>
+              </a>
             </h1>
             <div class="projects">
               <div class="project" v-for="project in ($refs.header && $refs.header.subheader_tab_selection == 'all')? category.featured : category.projects">
@@ -29,9 +29,9 @@
                   <p class="project-description">
                       {{project.description}}
                   </p>
-                  <router-link :to="`/projects/${project.org}/${project.repo}/`">
+                  <a :href="`/projects/${project.org}/${project.repo}/`">
                     <button @mouseover="preload(project)">LEARN MORE</button>
-                  </router-link>
+                  </a>
                 </div>
               </div>
             </div>

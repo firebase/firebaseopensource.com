@@ -18,3 +18,4 @@ prerender/**/*.html
 
 # Python
 appengine/env
+appengine/lib

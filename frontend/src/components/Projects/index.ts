@@ -25,10 +25,6 @@ import { Config } from "../../types/config";
 
 const Clipboard = require("clipboard");
 
-// Include automock for automated mocking
-import "../../automock";
-import { VueRouter } from "vue-router/types/router";
-
 type Section = {
   content?: String;
   name?: String;
@@ -53,6 +49,8 @@ export default class Projects extends Vue {
   show_clone_cmd = false;
   cancels: Function[] = [];
 
+  subheader_tabs: any[] = [];
+
   @Watch("$route.params", { deep: true })
   onRouteChanged(newParams: any, oldParams: any) {
     if (
@@ -60,6 +58,7 @@ export default class Projects extends Vue {
       oldParams.organization == newParams.organization
     )
       return;
+
     this.config = {};
     this.sections = [];
     this.header = {};
@@ -82,6 +81,19 @@ export default class Projects extends Vue {
       this.$route.params.organization,
       this.$route.params.repository
     ].join("::");
+
+    this.subheader_tabs = [
+      {
+        text: "Guides",
+        link: "#"
+      },
+      {
+        text: "Github",
+        link: `https://github.com/${this.$route.params.organization}/${
+          this.$route.params.repository
+        }`
+      }
+    ];
 
     const repoDoc = fbt.fs.collection("content").doc(id);
 
@@ -128,7 +140,6 @@ export default class Projects extends Vue {
       .get();
 
     this.config = configSnapshot.data() as Config;
-    console.log(this.config);
     this.config.last_updated_from_now = distanceInWordsToNow(
       new Date(this.config.last_updated)
     );
@@ -142,7 +153,6 @@ export default class Projects extends Vue {
         .doc(id)
         .onSnapshot(configSnapshot => {
           this.config = configSnapshot.data() as Config;
-          console.log(this.config);
           this.config.last_updated_from_now = distanceInWordsToNow(
             new Date(this.config.last_updated)
           ).replace("about", "");
@@ -155,19 +165,21 @@ export default class Projects extends Vue {
           if (configSnapshot.exists && !this.not_found) {
             this.found = true;
           }
+
+          setTimeout(() => ((window as any).renderComplete = true), 100);
         })
     );
-
-    (this.$refs.header as HeaderBar).$on(
-      "subheader_tab_selection:change",
-      (subheader_tab_selection: string) => {
-        if (subheader_tab_selection == "Github") {
-          (document as any).location = `https://github.com/${
-            this.$route.params.organization
-          }/${this.$route.params.repository}`;
-        }
-      }
-    );
+    //
+    // (this.$refs.header as HeaderBar).$on(
+    //   "subheader_tab_selection:change",
+    //   (subheader_tab_selection: string) => {
+    //     if (subheader_tab_selection == "Github") {
+    //       (document as any).location = `https://github.com/${
+    //         this.$route.params.organization
+    //       }/${this.$route.params.repository}`;
+    //     }
+    //   }
+    // );
   }
 
   destroyed() {

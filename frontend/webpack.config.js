@@ -88,6 +88,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: false,
+    contentBase: [path.join(__dirname, "app"), __dirname],
     proxy: {
       "/**.md": {
         target: "http://localhost:8080",

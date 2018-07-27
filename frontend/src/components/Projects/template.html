@@ -18,46 +18,33 @@
 
             <div class="related" v-if="!is_subpage">
               <div class="repos">
-                <router-link class="repo test" :to="`/projects/${repo}`" v-for="repo in Object.keys(config.related || {})">
+                <a class="repo test" :href="`/projects/${repo}`" v-for="repo in Object.keys(config.related || {})">
                   <i class="material-icons">link</i><span>{{repo}}</span>
-                </router-link>
+                </a>
               </div>
             </div>
           </div>
 
           <div class="right">
             <div class="badges" v-if="!is_subpage">
-              <!-- Stars and updated time -->
-              <!--<div class="badge-group">-->
-                <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
-                  <div class="badge">
-                    <div class="key">
-                      <i class="material-icons">star</i>
-                    </div>
-                    <div class="value">{{config.stars}}</div>
+              <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
+                <div class="badge">
+                  <div class="key">
+                    <i class="material-icons">star</i>
                   </div>
-                </a>
+                  <div class="value">{{config.stars}}</div>
+                </div>
+              </a>
 
-                <a :href="`https://github.com/${config.org}/${config.repo}/commits/master`">
-                  <div class="badge">
-                    <div class="key">
-                        <i class="material-icons">access_time</i>
-                    </div>
-                      <div class="value">{{config.last_updated_from_now}} ago</div>
+              <a :href="`https://github.com/${config.org}/${config.repo}/commits/master`">
+                <div class="badge">
+                  <div class="key">
+                      <i class="material-icons">access_time</i>
                   </div>
-                </a>
-              <!--</div>-->
+                    <div class="value">{{config.last_updated_from_now}} ago</div>
+                </div>
+              </a>
 
-              <!-- Git clone and download ZIP buttons -->
-              <!--<div class="badge-group">-->
-                <!--<a href="#" @click="show_clone_cmd = !show_clone_cmd">-->
-                  <!--<div class="badge badge-action">-->
-                    <!--<div class="key">-->
-                        <!--<i class="material-icons">code</i>-->
-                    <!--</div>-->
-                      <!--<div class="value">Clone Repo</div>-->
-                  <!--</div>-->
-                <!--</a>-->
               <a :href="`https://github.com/${config.org}/${config.repo}/`">
                 <div class="badge badge-action">
                   <div class="key">
@@ -90,7 +77,6 @@
                     <i class="material-icons">content_copy</i>
                   </button>
                 </div>
-              <!--</div>-->
             </div>
           </div>
 

@@ -31,9 +31,13 @@ h2 {
 
 pre {
   padding: 5px 10px;
-  background-color: #f8f8f8;
+  background-color: #eee;
   font-family: "Roboto Mono";
   overflow: auto;
+
+  code.hljs {
+    background: #eee;
+  }
 }
 
 a {
@@ -128,6 +132,7 @@ li {
 }
 
 .dropdown {
+  margin-top: 20px;
   a,
   span {
     font-size: 13px;
@@ -153,6 +158,14 @@ li {
       cursor: pointer;
     }
   }
+}
+
+img[alt] {
+  margin: 16px 0px;
+}
+
+table {
+  margin: 16px 0px;
 }
 
 .shadow_top {
@@ -246,4 +259,37 @@ li {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+p {
+  padding: 0px;
+  margin: 16px 0px;
+
+  &[align="center"] {
+    text-align: left;
+  }
+}
+
+h3,
+h4 {
+  padding: 2px 0px;
+  margin: 16px 0px 10px 0px;
+  border-bottom: 1px solid #eee;
+}
+
+blockquote {
+  background-color: #eee;
+  margin: 0px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  p {
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
+code {
+  background-color: #eee;
+  padding: 2px 4px;
+  border-radius: 3px;
 }

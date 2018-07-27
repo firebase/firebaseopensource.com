@@ -19,7 +19,7 @@ build-functions:
 
 build-hosting:
 	cd frontend \
-	    && yarn install \
+		&& yarn install \
 		&& npm run build
 
 deploy-functions: build-functions

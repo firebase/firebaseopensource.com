@@ -169,17 +169,6 @@ export default class Projects extends Vue {
           setTimeout(() => ((window as any).renderComplete = true), 100);
         })
     );
-    //
-    // (this.$refs.header as HeaderBar).$on(
-    //   "subheader_tab_selection:change",
-    //   (subheader_tab_selection: string) => {
-    //     if (subheader_tab_selection == "Github") {
-    //       (document as any).location = `https://github.com/${
-    //         this.$route.params.organization
-    //       }/${this.$route.params.repository}`;
-    //     }
-    //   }
-    // );
   }
 
   destroyed() {

@@ -1,9 +1,29 @@
 @import "../../styles/base.scss";
 
 #homepage {
-  h1 {
-    padding-bottom: 30px;
+  .section-title {
+    font-size: 30px;
     border-bottom: 1px solid #eceff1;
+    height: 70px;
+    padding: 0px 12px 20px 12px;
+
+    > a {
+      color: #656565;
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    button {
+      position: relative;
+      top: 12px;
+    }
+
+    .material-icons {
+      font-size: 40px;
+      position: relative;
+      top: 9.6px;
+      margin-right: 6px;
+      opacity: 0.4;
+    }
   }
 
   .antiline {
@@ -42,7 +62,7 @@
           "title"
           "description"
           "link";
-        grid-template-rows: 120px 50px 100px 20px;
+        grid-template-rows: 70px fit-content(100%) 70px 20px;
 
         @media (max-width: $phone) {
           grid-template-areas:
@@ -61,15 +81,15 @@
       .logo-circle {
         grid-area: logo;
 
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         background-color: #eee;
         border-radius: 100%;
-        text-align: center;
-        line-height: 100px;
-        font-size: 50px;
-        margin-bottom: 30px;
-        color: rgba(255, 255, 255, 1);
+        font-size: 30px;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        color: white;
 
         @media (max-width: $phone) {
           width: 50px;
@@ -93,8 +113,8 @@
         color: #ff8f00;
         font-weight: bold;
         font-size: 18px;
-        padding: 0px;
         min-height: 20px;
+        margin-bottom: 16px;
 
         @media (max-width: $phone) {
           // Wrap title text to one line
@@ -104,7 +124,7 @@
 
           // Align next to the logo circle
           line-height: 50px;
-          padding-left: 15px;
+          margin-left: 15px;
         }
       }
 

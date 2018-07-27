@@ -49,8 +49,11 @@ function getRendererHTML(path) {
 
       $("a").each(function() {
         var old_src = $(this).attr("href") || "";
-        var new_src = old_src.toLowerCase();
-        $(this).attr("href", new_src);
+
+        if (old_src.startsWith("/")) {
+          var new_src = old_src.toLowerCase();
+          $(this).attr("href", new_src);
+        }
       });
 
       $("base").remove();

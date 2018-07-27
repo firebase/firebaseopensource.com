@@ -6,11 +6,15 @@
       <div class="sections col_main">
         <div class="section" v-for="category in categories">
           <div class="content" v-if="isSectionVisible(category.platform)">
-            <h1>{{category.title}}
-              <a :href="`/platform/${category.title}`">
-              <button v-if="$refs.header && $refs.header.subheader_tab_selection == 'all'">SEE ALL</button>
+            <div class="section-title">
+              <a :href="`/platform/${category.platform}`">
+                <i class="material-icons">{{category.icon}}</i>
+                {{category.title}}
               </a>
-            </h1>
+              <a :href="`/platform/${category.platform}`">
+                <button v-if="$refs.header && $refs.header.subheader_tab_selection == 'all'">SEE ALL</button>
+              </a>
+            </div>
             <div class="projects">
               <div class="project" v-for="project in ($refs.header && $refs.header.subheader_tab_selection == 'all')? category.featured : category.projects">
 
@@ -23,14 +27,15 @@
                     <!-- <img
                       class="logo-letter"
                       v-bind:src="`/src/assets/letters/${project.letter}.svg`"> -->
-                      {{project.letter}}
+                    <div>{{project.letter}}</div>
                   </div>
-                  <h2 class="project-title">{{project.name}}</h2>
+                  <a :href="`/projects/${project.org}/${project.repo}/`" class="project-title">
+                    {{project.name}}</a>
                   <p class="project-description">
                       {{project.description}}
                   </p>
                   <a :href="`/projects/${project.org}/${project.repo}/`">
-                    <button @mouseover="preload(project)">LEARN MORE</button>
+                    <button>LEARN MORE</button>
                   </a>
                 </div>
               </div>

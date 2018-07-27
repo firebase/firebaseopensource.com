@@ -26,6 +26,7 @@ import { Config } from "../../types/config";
 type Category = {
   title: string;
   platform: string;
+  icon: string;
   projects: Config[];
   featured: Config[];
 };
@@ -50,24 +51,28 @@ export default class Projects extends Vue {
   categories: Category[] = [
     {
       title: "Android",
+      icon: "android",
       platform: "android",
       projects: [],
       featured: []
     },
     {
       title: "Web",
+      icon: "web",
       platform: "web",
       projects: [],
       featured: []
     },
     {
       title: "iOS",
+      icon: "phone_android",
       platform: "ios",
       projects: [],
       featured: []
     },
     {
       title: "Games",
+      icon: "gamepad",
       platform: "games",
       projects: [],
       featured: []
@@ -153,18 +158,6 @@ export default class Projects extends Vue {
       header.subheader_tab_selection == "all" ||
       header.subheader_tab_selection == section
     );
-  }
-
-  async preload(project: Config) {
-    const id = [project.org, project.repo].join("::");
-
-    const cancel = this.fbt.fs
-      .collection("content")
-      .doc(id)
-      .onSnapshot(snapshot => {
-        // console.log(snapshot.data())
-        setTimeout(cancel, 15000);
-      });
   }
 }
 

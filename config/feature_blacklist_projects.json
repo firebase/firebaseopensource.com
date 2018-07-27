@@ -2,6 +2,9 @@
   "projects": [
     "firebase::androidchat",
     "firebase::androiddrawing",
-    "firebase::reactfire"
+    "firebase::reactfire",
+    "firebase::firechat-ios",
+    "firebase::snippets-android",
+    "firebase::snippets-ios"
   ]
 }

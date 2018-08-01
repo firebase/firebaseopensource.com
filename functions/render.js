@@ -20,9 +20,9 @@ const minify = require("html-minifier").minify;
 const cheerio = require("cheerio");
 const admin = require("firebase-admin");
 
-admin.firestore().settings({timestampsInSnapshots: true});
+admin.firestore().settings({ timestampsInSnapshots: true });
 
-var RENDERTON_URL = "http://rt.firebaseopensource.com";
+var RENDERTRON_URL = "http://rt.firebaseopensource.com";
 var APP_URL = "https://firebaseopensource.com/app";
 var RENDERED_URL = "https://firebaseopensource.com";
 var GA_TAG = `<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -37,7 +37,7 @@ var GA_TAG = `<!-- Global site tag (gtag.js) - Google Analytics -->
 `;
 
 function getRendererHTML(path) {
-  const pageUrl = `${RENDERTON_URL}/render/${APP_URL}${path}`;
+  const pageUrl = `${RENDERTRON_URL}/render/${APP_URL}${path}`;
   console.log(pageUrl);
   return fetch(pageUrl)
     .then(function(res) {
@@ -72,17 +72,31 @@ app.use(function(req, res) {
 });
 
 exports.prerender = function(req, res) {
-  getAllPagePaths().then(function(pages) {
-    console.log(pages);
-    return Promise.all(pages.map(function(pagePath) {
-      const url = `${RENDERED_URL}/${pagePath}`;
-      console.log(`Prerendering ${url}`);
-      return fetch(url);
-    }));
-  }).then(function() {
-    res.json({ status: "ready" });
+  getAllPagePaths()
+    .then(function(pages) {
+      console.log(pages);
+      return Promise.all(
+        pages.map(function(pagePath) {
+          const url = `${RENDERED_URL}/${pagePath}`;
+          console.log(`Prerendering ${url}`);
+          return fetch(url);
+        })
+      );
+    })
+    .then(function() {
+      res.json({ status: "ready" });
+    });
+};
+
+exports.renderToStorage = function(storagePath, pagePath) {
+  return getRendererHTML(pagePath).then(function(html) {
+    const file = admin
+      .storage()
+      .bucket()
+      .file(storagePath + pagePath + ".html");
+    return file.save(html);
   });
-}
+};
 
 function getAllPagePaths() {
   const pages = [
@@ -114,7 +128,8 @@ function getAllPagePaths() {
             });
         })
       );
-    }).then(function() {
+    })
+    .then(function() {
       return pages;
     });
 }
@@ -124,9 +139,10 @@ function getPath(id) {
 }
 
 exports.renderer = app;
+exports.getAllPagePaths = getAllPagePaths;
 
 if (require.main === module) {
-  RENDERTON_URL = "http://localhost:3000";
+  RENDERTRON_URL = "http://localhost:3000";
   APP_URL = "http://localhost:8080";
   GA_TAG = "";
   app.listen(5050, function() {

@@ -53,18 +53,6 @@ exports.getAllProjects = functions.https.onRequest((request, response) => {
 });
 
 /**
- * Store all projects every day.
- *
- * Note: manually upped this function to 2GB memory and 360s timeout.
- */
-exports.dailyGetAllProjects = functions.pubsub
-  .topic("daily-tick")
-  .onPublish(event => {
-    console.log("Got daily tick message");
-    return project.storeAllProjects();
-  });
-
-/**
  * Render website pages
  */
 exports.pageRenderer = functions.https.onRequest(render.renderer);

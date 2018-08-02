@@ -30,33 +30,37 @@ const RUNTIME_OPTS = {
 
 /**
  * Get the config and content for a single project and its subprojects.
+ *
+ * @param message.id the project ID to store.
  */
 exports.getProject = functions
   .runWith(RUNTIME_OPTS)
-  .https.onRequest((request, response) => {
-    const id = request.query.id;
-
-    project
-      .recursiveStoreProject(id)
-      .then(() => {
-        response.status(200).send(`Successfully retrieved ${id}.`);
-      })
-      .catch(e => {
-        console.warn("Error:", e);
-        response.status(500).send(`Failed to retrieve ${id}.`);
-      });
+  .pubsub.topic("get-project")
+  .onPublish(message => {
+    const id = message.json.id;
+    return project.recursiveStoreProject(id);
   });
 
 /**
  * Get the config and content for all projects.
- *
- * Note: manually upped this function to 2GB memory and 360s timeout.
  */
 exports.getAllProjects = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest((request, response) => {
     project
-      .storeAllProjects()
+      .listAllProjectIds()
+      .then(allIds => {
+        const publisher = pubsubClient.topic("get-project").publisher();
+        const promises = [];
+
+        allIds.forEach(id => {
+          const data = { id };
+          const dataBuffer = Buffer.from(JSON.stringify(data));
+          promises.push(publisher.publish(dataBuffer));
+        });
+
+        return Promise.all(promises);
+      })
       .then(() => {
         response.status(200).send("Stored all projects!.");
       })

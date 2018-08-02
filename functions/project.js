@@ -77,7 +77,9 @@ Project.prototype.loadGlobalConfig = async function() {
   const additionalData = await github.getContent(ADDITIONAL_PROJECTS_URL);
   ADDITIONAL_PROJECTS = JSON.parse(additionalData).projects;
 
-  const blacklistData = await github.getContent(FEATURED_BLACKLIST_PROJECTS_URL);
+  const blacklistData = await github.getContent(
+    FEATURED_BLACKLIST_PROJECTS_URL
+  );
   FEATURED_BLACKLIST_PROJECTS = JSON.parse(blacklistData).projects;
 };
 

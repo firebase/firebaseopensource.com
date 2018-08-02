@@ -25,20 +25,19 @@ export class FirebaseSingleton {
   fs: FirebaseAppModule.firestore.Firestore;
 
   async init() {
-    await Promise.all([
-      System.import("firebase/app"),
-      System.import("isomorphic-fetch")
-    ]);
+    await Promise.all([System.import("firebase/app")]);
 
     this.required.firebase = <typeof FirebaseAppModule>require("firebase/app");
     require("firebase/firestore");
-    require("isomorphic-fetch");
 
-    const config = await fetch("/__/firebase/init.json").then(response =>
-      response.json()
-    );
-
-    this.required.firebase.initializeApp(config);
+    this.required.firebase.initializeApp({
+      apiKey: "AIzaSyDFjAR2cS_QCghJ_HtKdZK06VpcqxDBt9g",
+      databaseURL: "https://fir-oss.firebaseio.com",
+      storageBucket: "fir-oss.appspot.com",
+      authDomain: "fir-oss.firebaseapp.com",
+      messagingSenderId: "895878195922",
+      projectId: "fir-oss"
+    });
 
     this.fs = this.required.firebase.firestore();
     this.fs.settings({

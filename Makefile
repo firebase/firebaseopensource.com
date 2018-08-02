@@ -1,16 +1,5 @@
 PROD_PROJECT="fir-oss"
 
-build-appengine:
-	cd appengine \
-		&& npm install \
-		&& cd -
-
-deploy-appengine: build-appengine
-	gcloud config set project $(PROD_PROJECT)
-	cd appengine \
-		&& gcloud --quiet app deploy app.yaml cron.yaml \
-		&& cd -
-
 build-functions:
 	cd functions \
 		&& yarn install \
@@ -25,8 +14,22 @@ build-hosting:
 deploy-functions: build-functions
 	firebase --project=$(PROD_PROJECT) deploy --only functions
 
-deploy-hosting: build-hosting
-	firebase --project=$(PROD_PROJECT) deploy --only hosting
+deploy-hosting:
+	echo "Connecting to cluster..." \
+		&& gcloud container clusters get-credentials app --zone us-central1-a \
+		&& echo "Scaling down..." \
+		&& kubectl scale deployment app --replicas=0 \
+		&& sleep 5 \
+		&& echo "Scaling up..." \
+		&& kubectl scale deployment app --replicas=1 \
+		&& echo "Waiting for service to be awake..." \
+		&& while : ; do \
+		     echo "Waiting..."; \
+		     curl http://35.184.136.77/package.json; \
+		     sleep 5; \
+		     [[ "$$?" -eq 0 ]] || break;  \
+		   done \
+		&& echo "Looks deployed!"
 
 deploy-firebase: deploy-functions deploy-hosting
 

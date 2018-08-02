@@ -50,7 +50,7 @@ function getRendererHTML(path) {
       $("a").each(function() {
         var old_src = $(this).attr("href") || "";
 
-        if (old_src.startsWith("/")) {
+        if (!old_src.startsWith("http://") && !old_src.startsWith("https://")) {
           var new_src = old_src.toLowerCase();
           $(this).attr("href", new_src);
         }
@@ -93,7 +93,7 @@ exports.renderToStorage = function(storagePath, pagePath) {
     const file = admin
       .storage()
       .bucket()
-      .file(storagePath + pagePath + ".html");
+      .file(storagePath + pagePath + "/index.html");
     return file.save(html);
   });
 };
@@ -130,7 +130,9 @@ function getAllPagePaths() {
       );
     })
     .then(function() {
-      return pages;
+      return pages.map((page) => {
+        return page.toLowerCase();
+      });
     });
 }
 

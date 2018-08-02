@@ -86,9 +86,15 @@ export class Renderer {
     try {
       // Navigate to page. Wait until there are no oustanding network requests.
       response = await page.goto(
-          requestUrl, {timeout: 10000, waitUntil: 'networkidle0'});
+          requestUrl);
     } catch (e) {
       console.error(e);
+    }
+
+    while (true) {
+      const rendered = await page.evaluate(() => {return (window as any).renderComplete;});
+      if (rendered) break;
+      await sleep(500);
     }
 
     if (!response) {
@@ -155,4 +161,10 @@ export class Renderer {
     const buffer = await page.screenshot(screenshotOptions);
     return buffer;
   }
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }

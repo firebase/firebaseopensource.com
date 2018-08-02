@@ -90,9 +90,9 @@ Project.prototype.loadGlobalConfig = function() {
 };
 
 /**
- * Store all known projects.
+ * Get a list of all project IDs, useful for fan-out project storing.
  */
-Project.prototype.storeAllProjects = function() {
+Project.prototype.listAllProjectIds = function() {
   var that = this;
   return this.loadGlobalConfig()
     .then(() => {
@@ -106,9 +106,18 @@ Project.prototype.storeAllProjects = function() {
 
       const allIds = ids.concat(ADDITIONAL_PROJECTS);
 
-      // Run in batches
-      return that._batchRun(that.recursiveStoreProject.bind(that), allIds, 3);
+      return allIds;
     });
+};
+
+/**
+ * Store all known projects.
+ */
+Project.prototype.storeAllProjects = function() {
+  var that = this;
+  return this.listAllProjectIds().then(allIds => {
+    return that._batchRun(that.recursiveStoreProject.bind(that), allIds, 3);
+  });
 };
 
 /**

@@ -25,9 +25,9 @@ deploy-hosting:
 		&& echo "Waiting for service to be awake..." \
 		&& while : ; do \
 		     echo "Waiting..."; \
-		     curl http://35.184.136.77/package.json; \
+		     SIZE=$$(curl -s -w \%{size_header} -o /dev/null http://35.184.136.77/package.json); \
+		     [[ $$SIZE -eq 0 ]] || break;  \
 		     sleep 5; \
-		     [[ "$$?" -eq 0 ]] || break;  \
 		   done \
 		&& echo "Looks deployed!"
 

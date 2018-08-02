@@ -17,6 +17,9 @@
     "request-promise-native": "^1.0.5",
     "url-join": "^2.0.2"
   },
+  "engines": {
+    "node": "8"
+  },
   "scripts": {
     "build": "npm run fmt",
     "fmt": "prettier --write *.js test/*.js"

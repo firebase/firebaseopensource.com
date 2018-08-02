@@ -46,28 +46,25 @@ exports.getProject = functions
  */
 exports.getAllProjects = functions
   .runWith(RUNTIME_OPTS)
-  .https.onRequest((request, response) => {
-    project
-      .listAllProjectIds()
-      .then(allIds => {
-        const publisher = pubsubClient.topic("get-project").publisher();
-        const promises = [];
+  .https.onRequest(async (request, response) => {
+    allIds = await project.listAllProjectIds();
 
-        allIds.forEach(id => {
-          const data = { id };
-          const dataBuffer = Buffer.from(JSON.stringify(data));
-          promises.push(publisher.publish(dataBuffer));
-        });
+    const publisher = pubsubClient.topic("get-project").publisher();
+    const promises = [];
 
-        return Promise.all(promises);
-      })
-      .then(() => {
-        response.status(200).send("Stored all projects!.");
-      })
-      .catch(e => {
-        console.warn("Error:", e);
-        response.status(500).send("Failed to store all projects.");
-      });
+    allIds.forEach(id => {
+      const data = { id };
+      const dataBuffer = Buffer.from(JSON.stringify(data));
+      promises.push(publisher.publish(dataBuffer));
+    });
+
+    try {
+      await Promise.all(promises);
+      response.status(200).send("Stored all projects!.");
+    } catch (e) {
+      console.warn("Error:", e);
+      response.status(500).send("Failed to store all projects.");
+    }
   });
 
 /**
@@ -86,32 +83,31 @@ exports.pagePrerender = functions
 
 exports.storeAllPagesHtml = functions
   .runWith(RUNTIME_OPTS)
-  .https.onRequest((request, response) => {
-    render.getAllPagePaths().then(function(pagePaths) {
-      // TODO: Make a folder for each date
-      const storagePath = "prod";
-      const publisher = pubsubClient.topic("store-page-html").publisher();
+  .https.onRequest(async (request, response) => {
+    const pagePaths = await render.getAllPagePaths();
 
-      const promises = [];
-      pagePaths.forEach(pagePath => {
-        const data = {
-          storagePath: storagePath,
-          pagePath: "/" + pagePath
-        };
-        const dataBuffer = Buffer.from(JSON.stringify(data));
+    // TODO: Make a folder for each date
+    const storagePath = "prod";
+    const publisher = pubsubClient.topic("store-page-html").publisher();
 
-        promises.push(publisher.publish(dataBuffer));
-      });
+    const promises = [];
+    pagePaths.forEach(pagePath => {
+      const data = {
+        storagePath: storagePath,
+        pagePath: "/" + pagePath
+      };
+      const dataBuffer = Buffer.from(JSON.stringify(data));
 
-      Promise.all(promises)
-        .then(() => {
-          response.status(200).send("Done.");
-        })
-        .catch(e => {
-          console.warn("Error:", e);
-          response.status(500).send("Error.");
-        });
+      promises.push(publisher.publish(dataBuffer));
     });
+
+    try {
+      await Promise.all(promises);
+      response.status(200).send("Done.");
+    } catch (e) {
+      console.warn("Error:", e);
+      response.status(500).send("Error.");
+    }
   });
 
 /**

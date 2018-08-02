@@ -66,58 +66,37 @@ const Project = function() {};
 /**
  * Load globally relevant blacklists and whitelists.
  */
-Project.prototype.loadGlobalConfig = function() {
+Project.prototype.loadGlobalConfig = async function() {
   if (
     ADDITIONAL_PROJECTS.length > 0 &&
     FEATURED_BLACKLIST_PROJECTS.length > 0
   ) {
-    return Promise.resolve();
+    return;
   }
 
-  const loadAdditional = github
-    .getContent(ADDITIONAL_PROJECTS_URL)
-    .then(data => {
-      ADDITIONAL_PROJECTS = JSON.parse(data).projects;
-    });
+  const additionalData = await github.getContent(ADDITIONAL_PROJECTS_URL);
+  ADDITIONAL_PROJECTS = JSON.parse(additionalData).projects;
 
-  const loadBlacklist = github
-    .getContent(FEATURED_BLACKLIST_PROJECTS_URL)
-    .then(data => {
-      FEATURED_BLACKLIST_PROJECTS = JSON.parse(data).projects;
-    });
-
-  return Promise.all([loadAdditional, loadBlacklist]);
+  const blacklistData = await github.getContent(
+    FEATURED_BLACKLIST_PROJECTS_URL
+  );
+  FEATURED_BLACKLIST_PROJECTS = JSON.parse(blacklistData).projects;
 };
 
 /**
  * Get a list of all project IDs, useful for fan-out project storing.
  */
-Project.prototype.listAllProjectIds = function() {
-  var that = this;
-  return this.loadGlobalConfig()
-    .then(() => {
-      return github.listAllRepos("firebase");
-    })
-    .then(repos => {
-      // Convert all repo names to ids
-      const ids = repos.map(repo => {
-        return that.pathToSlug(repo);
-      });
+Project.prototype.listAllProjectIds = async function() {
+  // Loads ADDITIONAL_PROJECTS
+  await this.loadGlobalConfig();
 
-      const allIds = ids.concat(ADDITIONAL_PROJECTS);
-
-      return allIds;
-    });
-};
-
-/**
- * Store all known projects.
- */
-Project.prototype.storeAllProjects = function() {
-  var that = this;
-  return this.listAllProjectIds().then(allIds => {
-    return that._batchRun(that.recursiveStoreProject.bind(that), allIds, 3);
+  const repos = await github.listAllRepos("firebase");
+  const ids = repos.map(repo => {
+    return this.pathToSlug(repo);
   });
+
+  const allIds = ids.concat(ADDITIONAL_PROJECTS);
+  return allIds;
 };
 
 /**

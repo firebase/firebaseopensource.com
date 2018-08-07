@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: daily-renderstatic
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: daily-getallprojects
+            image: us.gcr.io/fir-oss/static-renderer:v2
+            volumeMounts:
+              - name: firebasetokenvol
+                mountPath: "/tmp/firebasetoken"
+                readOnly: true
+              - name: serviceaccountvol
+                mountPath: "/tmp/serviceaccount"
+                readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+          - name: firebasetokenvol
+            secret:
+              secretName: firebasetoken
+          - name: serviceaccountvol
+            secret:
+              secretName: serviceaccount

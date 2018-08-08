@@ -49,11 +49,14 @@ table {
   width: 100%;
   text-align: left;
   background-color: #f8f9fa;
+  border-collapse: collapse;
+  word-wrap: break-word;
 }
 
 td {
   border-width: 0px;
-  padding: 0px 10px;
+  padding: 8px 8px;
+  font-size: 14px;
 }
 
 th {
@@ -61,11 +64,16 @@ th {
   padding: 10px;
   font-weight: bold;
   color: white;
+  white-space: nowrap;
 }
 
 tr {
   background-color: #f8f9fa;
-  border-bottom: 1px solid #cfd8dc;
+  border-top: 1px solid #cfd8dc;
+
+  td:first-of-type {
+    white-space: nowrap;
+  }
 }
 
 .img-parent {

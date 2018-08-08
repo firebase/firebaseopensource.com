@@ -23,7 +23,7 @@ const admin = require("firebase-admin");
 admin.firestore().settings({ timestampsInSnapshots: true });
 
 var RENDERTRON_URL = "http://rt.firebaseopensource.com";
-var APP_URL = "https://firebaseopensource.com/app";
+var APP_URL = "http://35.184.136.77/app";
 var RENDERED_URL = "https://firebaseopensource.com";
 var GA_TAG = `<!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-110728272-1"></script>

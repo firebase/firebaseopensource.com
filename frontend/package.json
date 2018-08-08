@@ -58,6 +58,7 @@
     "sass-loader": "^6.0.6",
     "serve": "^9.4.0",
     "style-loader": "^0.18.2",
+    "superstatic": "^6.0.0",
     "ts-loader": "^2.3.2",
     "vue-template-compiler": "^2.4.2",
     "vue-template-compiler-loader": "^1.0.4",

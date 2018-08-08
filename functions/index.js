@@ -74,13 +74,6 @@ exports.pageRenderer = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(render.renderer);
 
-/**
- * Manually fill Hosting cache with rendered pages
- */
-exports.pagePrerender = functions
-  .runWith(RUNTIME_OPTS)
-  .https.onRequest(render.prerender);
-
 exports.storeAllPagesHtml = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {

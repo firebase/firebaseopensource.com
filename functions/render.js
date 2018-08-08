@@ -71,23 +71,6 @@ app.use(function(req, res) {
   });
 });
 
-exports.prerender = function(req, res) {
-  getAllPagePaths()
-    .then(function(pages) {
-      console.log(pages);
-      return Promise.all(
-        pages.map(function(pagePath) {
-          const url = `${RENDERED_URL}/${pagePath}`;
-          console.log(`Prerendering ${url}`);
-          return fetch(url);
-        })
-      );
-    })
-    .then(function() {
-      res.json({ status: "ready" });
-    });
-};
-
 exports.renderToStorage = function(storagePath, pagePath) {
   return getRendererHTML(pagePath).then(function(html) {
     const file = admin
@@ -130,7 +113,7 @@ function getAllPagePaths() {
       );
     })
     .then(function() {
-      return pages.map((page) => {
+      return pages.map(page => {
         return page.toLowerCase();
       });
     });

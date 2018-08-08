@@ -6,15 +6,15 @@ build-functions:
 		&& npm run build \
 		&& cd -
 
-build-hosting:
+deploy-functions: build-functions
+	firebase --project=$(PROD_PROJECT) deploy --only functions
+
+build-app:
 	cd frontend \
 		&& yarn install \
 		&& npm run build
 
-deploy-functions: build-functions
-	firebase --project=$(PROD_PROJECT) deploy --only functions
-
-deploy-hosting:
+deploy-app: build-app
 	echo "Connecting to cluster..." \
 		&& gcloud container clusters get-credentials app --zone us-central1-a \
 		&& echo "Scaling down..." \
@@ -31,6 +31,4 @@ deploy-hosting:
 		   done \
 		&& echo "Looks deployed!"
 
-deploy-firebase: deploy-functions deploy-hosting
-
-deploy: deploy-appengine deploy-firebase
+deploy: deploy-functions deploy-app

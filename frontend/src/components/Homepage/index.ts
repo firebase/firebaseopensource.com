@@ -50,7 +50,7 @@ export default class Homepage extends Vue {
   name = "homepage";
 
   subheader_tabs: any[] = [
-    { text: "All", link: "/platform/all" },
+    { text: "All", link: "/" },
     { text: "iOS", link: "/platform/ios" },
     { text: "Android", link: "/platform/android" },
     { text: "Web", link: "/platform/web" },
@@ -147,7 +147,7 @@ export default class Homepage extends Vue {
       };
   }
 
-  async created() {
+  async mounted() {
     try {
         document.querySelector("title").innerText = "Firebase Opensource";
     } catch (err) {
@@ -170,12 +170,10 @@ export default class Homepage extends Vue {
   // }
 
   isSectionVisible(section: string) {
-    const header = this.$refs.header as HeaderBar;
+    if (!this.platform || this.platform === "all") {
+      return true;
+    }
 
-    return (
-      !header ||
-      header.subheader_tab_selection == "all" ||
-      header.subheader_tab_selection == section
-    );
+    return section === this.platform;
   }
 }

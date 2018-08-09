@@ -96,8 +96,8 @@ export default class Projects extends Vue {
     // this.load();
   }
 
-  static async load(org: string, repo: string) {
-    console.log(`load(${org}, ${repo})`);
+  static async load(org: string, repo: string, page: string) {
+    console.log(`load(${org}, ${repo}, ${page})`);
     const result = {
       sections: []
     } as any;
@@ -105,10 +105,6 @@ export default class Projects extends Vue {
     const fbt = await FirebaseSingleton.GetInstance();
 
     const blocked_sections = ["table of contents"];
-
-    // TODO
-    // const page = this.$route.params.page;
-    const page: any = undefined;
 
     const id = [
       org, repo

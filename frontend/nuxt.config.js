@@ -11,10 +11,10 @@ module.exports = {
           path: "/platform/:platform",
           component: resolve(__dirname, "src/components/Homepage/index.vue")
         },
-        // {
-        //   path: "/projects/:organization/:repository/:page(.+)",
-        //   component: resolve(__dirname, "pages/projects/_org/_project/index.vue")
-        // },
+        {
+          path: "/projects/:org/:repo/:page(.+)",
+          component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
+        },
         // {
         //   path: "/404",
         //   component: FourOhFour

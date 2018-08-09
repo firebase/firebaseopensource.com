@@ -49,37 +49,6 @@ const COLORS = [
 export default class Homepage extends Vue {
   name = "homepage";
 
-  categories: Category[] = [
-    {
-      title: "Android",
-      icon: "android",
-      platform: "android",
-      projects: [],
-      featured: []
-    },
-    {
-      title: "Web",
-      icon: "web",
-      platform: "web",
-      projects: [],
-      featured: []
-    },
-    {
-      title: "iOS",
-      icon: "phone_android",
-      platform: "ios",
-      projects: [],
-      featured: []
-    },
-    {
-      title: "Games",
-      icon: "gamepad",
-      platform: "games",
-      projects: [],
-      featured: []
-    }
-  ];
-
   subheader_tabs: any[] = [
     { text: "All", link: "/platform/all" },
     { text: "iOS", link: "/platform/ios" },
@@ -87,21 +56,55 @@ export default class Homepage extends Vue {
     { text: "Web", link: "/platform/web" },
     { text: "Games", link: "/platform/games" }
   ];
+
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
-  $route: Route;
 
-  async asyncData(context: any) {
-    await this.load();
-    return this;
+  @Prop() platform: string;
+  @Prop() categories: Category[];
+
+  static getCategories() : Category[] {
+    return [
+        {
+          title: "Android",
+          icon: "android",
+          platform: "android",
+          projects: [],
+          featured: []
+        },
+        {
+          title: "Web",
+          icon: "web",
+          platform: "web",
+          projects: [],
+          featured: []
+        },
+        {
+          title: "iOS",
+          icon: "phone_android",
+          platform: "ios",
+          projects: [],
+          featured: []
+        },
+        {
+          title: "Games",
+          icon: "gamepad",
+          platform: "games",
+          projects: [],
+          featured: []
+        }
+      ];
   }
 
-  async load() {
-      this.fbt = await FirebaseSingleton.GetInstance();
-      await Promise.all(this.categories.map((category, categoryIndex) => {
+  static async load() {
+      const fbt = await FirebaseSingleton.GetInstance();
+      const categories = this.getCategories();
+      // TODO use
+      const cancels = [] as any[];
+      await Promise.all(categories.map((category, categoryIndex) => {
           return new Promise((resolve, reject) => {
-              this.cancels.push(
-                  this.fbt.fs
+              cancels.push(
+                  fbt.fs
                       .collection("configs")
                       .where("blacklist", "==", false)
                       .where("fork", "==", false)
@@ -111,7 +114,6 @@ export default class Homepage extends Vue {
                       .onSnapshot((snapshot: any) => {
                           snapshot.docs.forEach((doc: any, docIndex: any) => {
                               const config = doc.data() as Config;
-                              // console.log(config);
                               config.letter = pickLogoLetter(config.name);
                               config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
 
@@ -140,20 +142,20 @@ export default class Homepage extends Vue {
           });
       }));
 
-      return this.categories;
+      return {
+        categories
+      };
   }
 
   async created() {
-    this.load();
     try {
         document.querySelector("title").innerText = "Firebase Opensource";
     } catch (err) {
       console.warn("Cannot set page title.")
     }
 
-    if (this.$route && this.$route.params.platform) {
-      (this.$refs
-        .header as HeaderBar).subheader_tab_selection = this.$route.params.platform;
+    if (this.platform) {
+      (this.$refs.header as HeaderBar).subheader_tab_selection = this.platform;
     }
   }
 
@@ -161,11 +163,11 @@ export default class Homepage extends Vue {
     this.cancels.forEach(c => c());
   }
 
-  @Watch("$route.params.platform", { immediate: true })
-  onRouteParamPlatformChange(platform: string) {
-    if (!this.$refs.header) return;
-    (this.$refs.header as HeaderBar).subheader_tab_selection = platform;
-  }
+  // @Watch("$route.params.platform", { immediate: true })
+  // onRouteParamPlatformChange(platform: string) {
+  //   if (!this.$refs.header) return;
+  //   (this.$refs.header as HeaderBar).subheader_tab_selection = platform;
+  // }
 
   isSectionVisible(section: string) {
     const header = this.$refs.header as HeaderBar;

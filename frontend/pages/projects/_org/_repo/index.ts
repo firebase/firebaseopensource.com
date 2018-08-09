@@ -14,7 +14,7 @@ export default {
   },
 
   async asyncData(context: any) {
-    console.log(`asyncData(${context.route.path})`);
+    console.log(`project:asyncData(${context.route.path})`);
 
     const org = context.params.org || context.route.params.org;
     const repo = context.params.repo || context.route.params.repo;

@@ -4,17 +4,10 @@ module.exports = {
     extendRoutes (routes, resolve) {
       routes.push(
         {
-          path: "/",
-          component: resolve(__dirname, "src/components/Homepage/index.vue")
-        },
-        {
-          path: "/platform/:platform",
-          component: resolve(__dirname, "src/components/Homepage/index.vue")
-        },
-        {
           path: "/projects/:org/:repo/:page(.+)",
           component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
         },
+        // TODO
         // {
         //   path: "/404",
         //   component: FourOhFour

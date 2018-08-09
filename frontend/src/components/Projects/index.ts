@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 import { distanceInWordsToNow } from "date-fns";
 
-// import { FirebaseSingleton } from "../../../../src/services/firebaseSingleton";
+import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../../components/HeaderBar";
 import FourOhFour from "../../components/FourOhFour";
@@ -12,37 +12,7 @@ import {Route} from "vue-router";
 
 const Clipboard = require("clipboard");
 
-const firebase = require("firebase");
-class FirebaseSingleton {
-
-  fs: any = {};
-
-  constructor(fs: any) {
-    this.fs = fs;
-  }
-
-  static async GetInstance() {
-    try {
-      firebase.initializeApp({
-            apiKey: "AIzaSyDFjAR2cS_QCghJ_HtKdZK06VpcqxDBt9g",
-            databaseURL: "https://fir-oss.firebaseio.com",
-            storageBucket: "fir-oss.appspot.com",
-            authDomain: "fir-oss.firebaseapp.com",
-            messagingSenderId: "895878195922",
-            projectId: "fir-oss"
-      });
-      firebase.firestore().settings({
-        timestampsInSnapshots: true
-      })
-    } catch (e) {
-      console.warn("Firebase init error.");
-    }
-
-    return new FirebaseSingleton(firebase.firestore());
-  }
-};
-
-
+// TODO: Move out
 type Section = {
   content?: String;
   name?: String;

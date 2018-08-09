@@ -25,7 +25,9 @@ export class FirebaseSingleton {
   fs: FirebaseAppModule.firestore.Firestore;
 
   async init() {
-    await Promise.all([System.import("firebase/app")]);
+    if (process.env.RENDER !== "ssr") {
+        await Promise.all([System.import("firebase/app")]);
+    }
 
     this.required.firebase = <typeof FirebaseAppModule>require("firebase/app");
     require("firebase/firestore");

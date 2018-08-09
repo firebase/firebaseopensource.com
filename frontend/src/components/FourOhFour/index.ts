@@ -18,11 +18,19 @@ import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 
 import HeaderBar from "../HeaderBar";
 
+let template = "";
+if (process.env.RENDER == "ssr") {
+    template = require("fs").readFileSync(__dirname + "/template.html").toString();
+}
+
 @Component({
-  components: { HeaderBar }
+  components: { HeaderBar },
+  template
 })
 export default class FourOhFour extends Vue {
   name = "four-oh-four";
 }
 
-require("./template.html")(FourOhFour);
+if (process.env.RENDER !== "ssr") {
+    require("./template.html")(HeaderBar);
+}

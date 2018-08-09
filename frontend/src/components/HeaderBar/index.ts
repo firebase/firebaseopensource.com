@@ -18,7 +18,14 @@ import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
 
 type Tab = { link: string; text: string };
 
-@Component
+let template = "";
+if (process.env.RENDER == "ssr") {
+    template = require("fs").readFileSync(__dirname + "/template.html").toString();
+}
+
+@Component({
+    template
+})
 export default class HeaderBar extends Vue {
   name = "header-bar";
   headers = [{}, { spacer: true }];
@@ -54,4 +61,6 @@ export default class HeaderBar extends Vue {
   }
 }
 
-require("./template.html")(HeaderBar);
+if (process.env.RENDER !== "ssr") {
+    require("./template.html")(HeaderBar);
+}

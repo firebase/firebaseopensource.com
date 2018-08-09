@@ -22,6 +22,7 @@ import HeaderBar from "../HeaderBar";
 import { pickLogoLetter } from "../../utils";
 
 import { Config } from "../../types/config";
+import {Route} from "vue-router";
 
 type Category = {
   title: string;
@@ -42,11 +43,18 @@ const COLORS = [
   "#33AC71"
 ];
 
+
+let template = "";
+if (process.env.RENDER == "ssr") {
+    template = require("fs").readFileSync(__dirname + "/template.html").toString();
+}
+
 @Component({
-  components: { HeaderBar }
+  components: { HeaderBar },
+  template
 })
-export default class Projects extends Vue {
-  name = "projects";
+export default class Homepage extends Vue {
+  name = "homepage";
 
   categories: Category[] = [
     {
@@ -88,53 +96,64 @@ export default class Projects extends Vue {
   ];
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
+  $route: Route;
+
+  async load() {
+      this.fbt = await FirebaseSingleton.GetInstance();
+      await Promise.all(this.categories.map((category, categoryIndex) => {
+          return new Promise((resolve, reject) => {
+              this.cancels.push(
+                  this.fbt.fs
+                      .collection("configs")
+                      .where("blacklist", "==", false)
+                      .where("fork", "==", false)
+                      .orderBy(`platforms.${category.platform}`)
+                      .orderBy("stars", "desc")
+                      .orderBy("description")
+                      .onSnapshot(snapshot => {
+                          snapshot.docs.forEach((doc, docIndex) => {
+                              const config = doc.data() as Config;
+                              // console.log(config);
+                              config.letter = pickLogoLetter(config.name);
+                              config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
+
+                              const id = doc.id;
+                              config.org = id.split("::")[0];
+                              config.repo = id.split("::")[1];
+
+                              const words = config.description.split(" ");
+                              let sentence = words.slice(0, 10).join(" ");
+
+                              if (words.length > 15) {
+                                  sentence += "...";
+                              }
+
+                              config.description = sentence;
+
+                              if (category.featured.length < 6) {
+                                  category.featured.push(config);
+                              }
+
+                              category.projects.push(config);
+                          });
+                          resolve();
+                      })
+              );
+          });
+      }));
+
+      return this.categories;
+  }
 
   async created() {
-    document.querySelector("title").innerText = "Firebase Opensource";
+    this.load();
+    try {
+        document.querySelector("title").innerText = "Firebase Opensource";
+    } catch (err) {
+      console.warn("Cannot set page title.")
+    }
 
-    this.fbt = await FirebaseSingleton.GetInstance();
-
-    this.categories.forEach((category, categoryIndex) => {
-      this.cancels.push(
-        this.fbt.fs
-          .collection("configs")
-          .where("blacklist", "==", false)
-          .where("fork", "==", false)
-          .orderBy(`platforms.${category.platform}`)
-          .orderBy("stars", "desc")
-          .orderBy("description")
-          .onSnapshot(snapshot => {
-            snapshot.docs.forEach((doc, docIndex) => {
-              const config = doc.data() as Config;
-              config.letter = pickLogoLetter(config.name);
-              config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
-
-              const id = doc.id;
-              config.org = id.split("::")[0];
-              config.repo = id.split("::")[1];
-
-              const words = config.description.split(" ");
-              let sentence = words.slice(0, 10).join(" ");
-
-              if (words.length > 15) {
-                sentence += "...";
-              }
-
-              config.description = sentence;
-
-              if (category.featured.length < 6) {
-                category.featured.push(config);
-              }
-
-              category.projects.push(config);
-            });
-
-            setTimeout(() => ((window as any).renderComplete = true), 100);
-          })
-      );
-    });
-
-    if (this.$route.params.platform) {
+    if (this.$route && this.$route.params.platform) {
       (this.$refs
         .header as HeaderBar).subheader_tab_selection = this.$route.params.platform;
     }
@@ -161,4 +180,6 @@ export default class Projects extends Vue {
   }
 }
 
-require("./template.html")(Projects);
+if (process.env.RENDER !== "ssr") {
+    require("./template.html")(Homepage);
+}

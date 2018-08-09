@@ -54,7 +54,7 @@ const router = new VueRouter({
   routes
 });
 
-new Vue({
+export const app = new Vue({
   el: "#app",
   router,
   template: "<router-view></router-view>"

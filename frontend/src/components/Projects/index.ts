@@ -15,13 +15,14 @@
  */
 import Vue from "vue";
 import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
-import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+import { distanceInWordsToNow } from "date-fns";
 import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../HeaderBar";
 import FourOhFour from "../FourOhFour";
 
 import { Config } from "../../types/config";
+import {Route} from "vue-router";
 
 const Clipboard = require("clipboard");
 
@@ -34,8 +35,14 @@ type Section = {
 
 declare const hljs: any;
 
+let template = "";
+if (process.env.RENDER == "ssr") {
+    template = require("fs").readFileSync(__dirname + "/template.html").toString();
+}
+
 @Component({
-  components: { HeaderBar, FourOhFour }
+  components: { HeaderBar, FourOhFour },
+  template
 })
 export default class Projects extends Vue {
   name = "projects";
@@ -50,6 +57,7 @@ export default class Projects extends Vue {
   cancels: Function[] = [];
 
   subheader_tabs: any[] = [];
+  $route: Route;
 
   @Watch("$route.params", { deep: true })
   onRouteChanged(newParams: any, oldParams: any) {
@@ -62,24 +70,34 @@ export default class Projects extends Vue {
     this.config = {};
     this.sections = [];
     this.header = {};
-    this.DoLoadPage();
+    this.load();
   }
 
   async created() {
-    if (document.location.pathname.split("/").length == 4) {
-      document.location.pathname += "/";
+    try {
+        if (document.location.pathname.split("/").length == 4) {
+            document.location.pathname += "/";
+        }
+    } catch (err) {
+      console.log("Cannot fix URL")
     }
-    this.DoLoadPage();
+    this.load();
   }
 
-  async DoLoadPage() {
+  async load() {
     const fbt = await FirebaseSingleton.GetInstance();
 
     const blocked_sections = ["table of contents"];
 
+    // const org = this.$route.params.organization;
+    // const repo = this.$route.params.repository;
+    // const page = this.$route.params.page;
+      const org = "firebase";
+      const repo = "firebaseui-android";
+      const page: any = undefined;
+
     const id = [
-      this.$route.params.organization,
-      this.$route.params.repository
+      org, repo
     ].join("::");
 
     this.subheader_tabs = [
@@ -89,15 +107,11 @@ export default class Projects extends Vue {
       },
       {
         text: "Github",
-        link: `https://github.com/${this.$route.params.organization}/${
-          this.$route.params.repository
-        }`
+        link: `https://github.com/${org}/${repo}`
       }
     ];
 
     const repoDoc = fbt.fs.collection("content").doc(id);
-
-    const page = this.$route.params.page;
 
     let dataDoc;
     if (page) {
@@ -117,7 +131,7 @@ export default class Projects extends Vue {
     }
 
     const snapshot = await dataDoc.get();
-
+    console.log(snapshot.ref.path);
     if (!snapshot.exists) {
       this.not_found = true;
     }
@@ -141,34 +155,17 @@ export default class Projects extends Vue {
 
     this.config = configSnapshot.data() as Config;
     this.config.last_updated_from_now = distanceInWordsToNow(
-      new Date(this.config.last_updated)
-    );
+        new Date(this.config.last_updated)
+    ).replace("about", "");
     this.config.last_fetched_from_now = distanceInWordsToNow(
-      this.config.last_fetched.toDate()
+        this.config.last_fetched.toDate()
     );
+    this.config.repo = repo;
+    this.config.org = org;
 
-    this.cancels.push(
-      fbt.fs
-        .collection("configs")
-        .doc(id)
-        .onSnapshot(configSnapshot => {
-          this.config = configSnapshot.data() as Config;
-          this.config.last_updated_from_now = distanceInWordsToNow(
-            new Date(this.config.last_updated)
-          ).replace("about", "");
-          this.config.last_fetched_from_now = distanceInWordsToNow(
-            this.config.last_fetched.toDate()
-          );
-          this.config.repo = this.$route.params.repository;
-          this.config.org = this.$route.params.organization;
-
-          if (configSnapshot.exists && !this.not_found) {
-            this.found = true;
-          }
-
-          setTimeout(() => ((window as any).renderComplete = true), 100);
-        })
-    );
+    if (configSnapshot.exists && !this.not_found) {
+        this.found = true;
+    }
   }
 
   destroyed() {
@@ -180,7 +177,11 @@ export default class Projects extends Vue {
   }
 
   set page_title(page_title: string) {
-    document.querySelector("title").innerText = page_title;
+    try {
+        document.querySelector("title").innerText = page_title;
+    } catch (err) {
+      console.warn("Cannot set page title");
+    }
   }
 
   get page_title() {
@@ -196,4 +197,6 @@ export default class Projects extends Vue {
   }
 }
 
-require("./template.html")(Projects);
+if (process.env.RENDER !== "ssr") {
+    require("./template.html")(HeaderBar);
+}

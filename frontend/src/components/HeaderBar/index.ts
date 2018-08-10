@@ -23,13 +23,17 @@ export default class HeaderBar extends Vue {
   name = "header-bar";
   headers = [{}, { spacer: true }];
 
-  @Prop() spacer: boolean;
+  @Prop()
+  spacer: boolean;
 
-  @Prop() enable_subheader: boolean;
+  @Prop()
+  enable_subheader: boolean;
 
-  @Prop() subheader_title: string;
+  @Prop()
+  subheader_title: string;
 
-  @Prop() subheader_tabs: Tab[];
+  @Prop()
+  subheader_tabs: Tab[];
 
   subheader_tab_selection = "";
 

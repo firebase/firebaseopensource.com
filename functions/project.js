@@ -540,7 +540,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
         const newLink = "/projects/" + pathSegments.join("/") + "/";
 
         console.log(`[${repoId}] Replacing ${href} with ${newLink}.`);
-        el.attribs["href"] = newLink;
+        el.attribs["href"] = newLink.toLowerCase();
       }
     }
 

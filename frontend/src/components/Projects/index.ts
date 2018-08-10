@@ -8,7 +8,7 @@ import HeaderBar from "../../components/HeaderBar";
 import FourOhFour from "../../components/FourOhFour";
 
 import { Config } from "../../types/config";
-import {Route} from "vue-router";
+import { Route } from "vue-router";
 
 const Clipboard = require("clipboard");
 
@@ -22,31 +22,39 @@ type Section = {
 declare const hljs: any;
 
 @Component({
-  components: { HeaderBar, FourOhFour },
+  components: { HeaderBar, FourOhFour }
 })
 export default class Projects extends Vue {
   name = "projects";
   $route: Route;
 
-  @Prop() sections: Section[];
-  @Prop() header: Section;
-  @Prop() config: Config;
-  @Prop() is_subpage: Boolean;
-  @Prop() dropdown_selection: String;
-  @Prop() not_found: Boolean;
-  @Prop() found: Boolean;
-  @Prop() subheader_tabs: any[];
+  @Prop()
+  sections: Section[];
+  @Prop()
+  header: Section;
+  @Prop()
+  config: Config;
+  @Prop()
+  is_subpage: Boolean;
+  @Prop()
+  dropdown_selection: String;
+  @Prop()
+  not_found: Boolean;
+  @Prop()
+  found: Boolean;
+  @Prop()
+  subheader_tabs: any[];
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
 
   async created() {
     try {
-        if (document.location.pathname.split("/").length == 4) {
-            document.location.pathname += "/";
-        }
+      if (document.location.pathname.split("/").length == 4) {
+        document.location.pathname += "/";
+      }
     } catch (err) {
-      console.log("Cannot fix URL")
+      console.log("Cannot fix URL");
     }
   }
 
@@ -60,9 +68,7 @@ export default class Projects extends Vue {
 
     const blocked_sections = ["table of contents"];
 
-    const id = [
-      org, repo
-    ].join("::");
+    const id = [org, repo].join("::");
 
     result.subheader_tabs = [
       {
@@ -124,16 +130,16 @@ export default class Projects extends Vue {
     console.log("config", result.config);
 
     result.config.last_updated_from_now = distanceInWordsToNow(
-        new Date(result.config.last_updated)
+      new Date(result.config.last_updated)
     ).replace("about", "");
     result.config.last_fetched_from_now = distanceInWordsToNow(
-        result.config.last_fetched.toDate()
+      result.config.last_fetched.toDate()
     );
     result.config.repo = repo;
     result.config.org = org;
 
     if (configSnapshot.exists && !result.not_found) {
-        result.found = true;
+      result.found = true;
     }
 
     return result;
@@ -149,7 +155,7 @@ export default class Projects extends Vue {
 
   set page_title(page_title: string) {
     try {
-        document.querySelector("title").innerText = page_title;
+      document.querySelector("title").innerText = page_title;
     } catch (err) {
       console.warn("Cannot set page title");
     }

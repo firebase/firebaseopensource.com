@@ -22,7 +22,7 @@ import HeaderBar from "../HeaderBar";
 import { pickLogoLetter } from "../../utils";
 
 import { Config } from "../../types/config";
-import {Route} from "vue-router";
+import { Route } from "vue-router";
 
 type Category = {
   title: string;
@@ -60,98 +60,103 @@ export default class Homepage extends Vue {
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
 
-  @Prop() platform: string;
-  @Prop() categories: Category[];
+  @Prop()
+  platform: string;
+  @Prop()
+  categories: Category[];
 
-  static getCategories() : Category[] {
+  static getCategories(): Category[] {
     return [
-        {
-          title: "Android",
-          icon: "android",
-          platform: "android",
-          projects: [],
-          featured: []
-        },
-        {
-          title: "Web",
-          icon: "web",
-          platform: "web",
-          projects: [],
-          featured: []
-        },
-        {
-          title: "iOS",
-          icon: "phone_android",
-          platform: "ios",
-          projects: [],
-          featured: []
-        },
-        {
-          title: "Games",
-          icon: "gamepad",
-          platform: "games",
-          projects: [],
-          featured: []
-        }
-      ];
+      {
+        title: "Android",
+        icon: "android",
+        platform: "android",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "Web",
+        icon: "web",
+        platform: "web",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "iOS",
+        icon: "phone_android",
+        platform: "ios",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "Games",
+        icon: "gamepad",
+        platform: "games",
+        projects: [],
+        featured: []
+      }
+    ];
   }
 
   static async load() {
-      const fbt = await FirebaseSingleton.GetInstance();
-      const categories = this.getCategories();
-      // TODO use
-      const cancels = [] as any[];
-      await Promise.all(categories.map((category, categoryIndex) => {
-          return new Promise((resolve, reject) => {
-              cancels.push(
-                  fbt.fs
-                      .collection("configs")
-                      .where("blacklist", "==", false)
-                      .where("fork", "==", false)
-                      .orderBy(`platforms.${category.platform}`)
-                      .orderBy("stars", "desc")
-                      .orderBy("description")
-                      .onSnapshot((snapshot: any) => {
-                          snapshot.docs.forEach((doc: any, docIndex: any) => {
-                              const config = doc.data() as Config;
-                              config.letter = pickLogoLetter(config.name);
-                              config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
+    const fbt = await FirebaseSingleton.GetInstance();
+    const categories = this.getCategories();
+    // TODO use
+    const cancels = [] as any[];
+    await Promise.all(
+      categories.map((category, categoryIndex) => {
+        return new Promise((resolve, reject) => {
+          cancels.push(
+            fbt.fs
+              .collection("configs")
+              .where("blacklist", "==", false)
+              .where("fork", "==", false)
+              .orderBy(`platforms.${category.platform}`)
+              .orderBy("stars", "desc")
+              .orderBy("description")
+              .onSnapshot((snapshot: any) => {
+                snapshot.docs.forEach((doc: any, docIndex: any) => {
+                  const config = doc.data() as Config;
+                  config.letter = pickLogoLetter(config.name);
+                  config.color =
+                    COLORS[(docIndex + categoryIndex) % COLORS.length];
 
-                              const id = doc.id;
-                              config.org = id.split("::")[0];
-                              config.repo = id.split("::")[1];
+                  const id = doc.id;
+                  config.org = id.split("::")[0];
+                  config.repo = id.split("::")[1];
 
-                              const words = config.description.split(" ");
-                              let sentence = words.slice(0, 10).join(" ");
+                  const words = config.description.split(" ");
+                  let sentence = words.slice(0, 10).join(" ");
 
-                              if (words.length > 15) {
-                                  sentence += "...";
-                              }
+                  if (words.length > 15) {
+                    sentence += "...";
+                  }
 
-                              config.description = sentence;
+                  config.description = sentence;
 
-                              if (category.featured.length < 6) {
-                                  category.featured.push(config);
-                              }
+                  if (category.featured.length < 6) {
+                    category.featured.push(config);
+                  }
 
-                              category.projects.push(config);
-                          });
-                          resolve();
-                      })
-              );
-          });
-      }));
+                  category.projects.push(config);
+                });
+                resolve();
+              })
+          );
+        });
+      })
+    );
 
-      return {
-        categories
-      };
+    return {
+      categories
+    };
   }
 
   async mounted() {
     try {
-        document.querySelector("title").innerText = "Firebase Opensource";
+      document.querySelector("title").innerText = "Firebase Opensource";
     } catch (err) {
-      console.warn("Cannot set page title.")
+      console.warn("Cannot set page title.");
     }
 
     if (this.platform) {

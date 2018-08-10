@@ -1,0 +1,11 @@
+{
+    "name": "Firebase Open Source",
+    "platforms": [],
+    "content": "README.md",
+    "pages" : [
+        "docs/configure-repo.md"
+    ],
+    "related": [
+        "firebase/oss-bot"
+    ]
+}

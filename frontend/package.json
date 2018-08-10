@@ -6,9 +6,11 @@
   "private": true,
   "scripts": {
     "fmt": "prettier --write *.css src/**/**/**.scss src/**/**.scss src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
-    "dev": "concurrently -k --names 'FIREBASE,WEBPACK' 'firebase serve --only hosting' 'cross-env NODE_ENV=development webpack-dev-server --hot'",
+    "dev": "nuxt",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true",
+    "get-routes": "ts-node -O '{\"module\": \"commonjs\"}' src/scripts/routesList.ts",
+    "gen": "nuxt generate",
     "deploy": "npm run build && firebase --project=default deploy",
     "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting",
     "prerender": "ts-node prerender index.ts"
@@ -28,13 +30,15 @@
     "isomorphic-fetch": "^2.2.1",
     "jest": "^20.0.4",
     "jest-vue-preprocessor": "^1.1.0",
+    "nuxt": "^1.4.2",
     "rendertron": "^1.1.0",
     "rxjs": "^5.5.2",
     "sass-loader": "^6.0.6",
     "spawn-rx": "^2.0.12",
     "ts-node": "^3.3.0",
-    "vue": "^2.3.3",
-    "vue-router": "^3.0.1"
+    "vue": "2.5.17",
+    "vue-server-renderer": "2.5.17",
+    "vue-template-compiler": "2.5.17"
   },
   "devDependencies": {
     "@types/chai": "^4.0.3",
@@ -60,9 +64,6 @@
     "style-loader": "^0.18.2",
     "superstatic": "^6.0.0",
     "ts-loader": "^2.3.2",
-    "vue-template-compiler": "^2.4.2",
-    "vue-template-compiler-loader": "^1.0.4",
-    "vue-template-loader": "^0.3.1",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
   },

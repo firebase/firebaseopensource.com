@@ -5,14 +5,13 @@
             "mocha",
             "node"
         ],
+        "module": "es2015",
+        "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-        "module": "commonjs",
+        "experimentalDecorators": true,
         "target": "es6",
         "noImplicitAny": true,
-        "moduleResolution": "node",
         "sourceMap": true,
-        "experimentalDecorators": true,
-        "outDir": "dist",
         "baseUrl": ".",
         "paths": {
             "*": [
@@ -22,6 +21,7 @@
         }
     },
     "include": [
+        "pages/**/*",
         "src/**/*"
     ]
 }

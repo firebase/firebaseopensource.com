@@ -24,5 +24,3 @@ import HeaderBar from "../HeaderBar";
 export default class FourOhFour extends Vue {
   name = "four-oh-four";
 }
-
-require("./template.html")(FourOhFour);

@@ -455,6 +455,14 @@ Project.prototype.getProjectPagesContent = function(id, config) {
 };
 
 /**
+ * Change href to lowercase.
+ */
+Project.prototype.lowercaseLink = function(el) {
+  const newVal = el.attribs["href"].toLowerCase();
+  el.attribs["href"] = newVal;
+};
+
+/**
  * Sanitize relative links to be absolute.
  */
 Project.prototype.sanitizeRelativeLink = function(el, attrName, base) {
@@ -465,7 +473,7 @@ Project.prototype.sanitizeRelativeLink = function(el, attrName, base) {
 
     if (this._isRelativeLink(val)) {
       const newVal = urljoin(base, val);
-      el.attribs[attrName] = newVal;
+      el.attribs[attrName] = newVal.toLowerCase();
     }
   }
 };
@@ -540,7 +548,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
         const newLink = "/projects/" + pathSegments.join("/") + "/";
 
         console.log(`[${repoId}] Replacing ${href} with ${newLink}.`);
-        el.attribs["href"] = newLink;
+        el.attribs["href"] = newLink.toLowerCase();
       }
     }
 
@@ -548,7 +556,8 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
       // Check if the link is to a page within the repo
       const repoRelative = path.join(pageDir, href);
       if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
-        console.log(`[${repoId}] Preserving relative link ${repoRelative}.`);
+        console.log(`[${repoId}] Lowercasing relative link ${repoRelative}.`);
+        that.lowercaseLink(el);
       } else {
         that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
       }

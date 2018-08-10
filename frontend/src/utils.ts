@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const isTesting = process.env.NODE_ENV == "test";
+
+// TODO
+// export const isTesting = process.env.NODE_ENV == "test";
+const isTesting = false;
 
 function isLetter(c: string) {
   return c.toLowerCase() != c.toUpperCase();

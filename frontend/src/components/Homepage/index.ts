@@ -22,6 +22,7 @@ import HeaderBar from "../HeaderBar";
 import { pickLogoLetter } from "../../utils";
 
 import { Config } from "../../types/config";
+import { Route } from "vue-router";
 
 type Category = {
   title: string;
@@ -45,98 +46,121 @@ const COLORS = [
 @Component({
   components: { HeaderBar }
 })
-export default class Projects extends Vue {
-  name = "projects";
-
-  categories: Category[] = [
-    {
-      title: "Android",
-      icon: "android",
-      platform: "android",
-      projects: [],
-      featured: []
-    },
-    {
-      title: "Web",
-      icon: "web",
-      platform: "web",
-      projects: [],
-      featured: []
-    },
-    {
-      title: "iOS",
-      icon: "phone_android",
-      platform: "ios",
-      projects: [],
-      featured: []
-    },
-    {
-      title: "Games",
-      icon: "gamepad",
-      platform: "games",
-      projects: [],
-      featured: []
-    }
-  ];
+export default class Homepage extends Vue {
+  name = "homepage";
 
   subheader_tabs: any[] = [
-    { text: "All", link: "/platform/all" },
+    { text: "All", link: "/" },
     { text: "iOS", link: "/platform/ios" },
     { text: "Android", link: "/platform/android" },
     { text: "Web", link: "/platform/web" },
     { text: "Games", link: "/platform/games" }
   ];
+
   fbt: FirebaseSingleton;
   cancels: Function[] = [];
 
-  async created() {
-    document.querySelector("title").innerText = "Firebase Opensource";
+  @Prop()
+  platform: string;
+  @Prop()
+  categories: Category[];
 
-    this.fbt = await FirebaseSingleton.GetInstance();
+  static getCategories(): Category[] {
+    return [
+      {
+        title: "Android",
+        icon: "android",
+        platform: "android",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "Web",
+        icon: "web",
+        platform: "web",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "iOS",
+        icon: "phone_android",
+        platform: "ios",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "Games",
+        icon: "gamepad",
+        platform: "games",
+        projects: [],
+        featured: []
+      }
+    ];
+  }
 
-    this.categories.forEach((category, categoryIndex) => {
-      this.cancels.push(
-        this.fbt.fs
-          .collection("configs")
-          .where("blacklist", "==", false)
-          .where("fork", "==", false)
-          .orderBy(`platforms.${category.platform}`)
-          .orderBy("stars", "desc")
-          .orderBy("description")
-          .onSnapshot(snapshot => {
-            snapshot.docs.forEach((doc, docIndex) => {
-              const config = doc.data() as Config;
-              config.letter = pickLogoLetter(config.name);
-              config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
+  static async load() {
+    const fbt = await FirebaseSingleton.GetInstance();
+    const categories = this.getCategories();
+    // TODO use
+    const cancels = [] as any[];
+    await Promise.all(
+      categories.map((category, categoryIndex) => {
+        return new Promise((resolve, reject) => {
+          cancels.push(
+            fbt.fs
+              .collection("configs")
+              .where("blacklist", "==", false)
+              .where("fork", "==", false)
+              .orderBy(`platforms.${category.platform}`)
+              .orderBy("stars", "desc")
+              .orderBy("description")
+              .onSnapshot((snapshot: any) => {
+                snapshot.docs.forEach((doc: any, docIndex: any) => {
+                  const config = doc.data() as Config;
+                  config.letter = pickLogoLetter(config.name);
+                  config.color =
+                    COLORS[(docIndex + categoryIndex) % COLORS.length];
 
-              const id = doc.id;
-              config.org = id.split("::")[0];
-              config.repo = id.split("::")[1];
+                  const id = doc.id;
+                  config.org = id.split("::")[0];
+                  config.repo = id.split("::")[1];
 
-              const words = config.description.split(" ");
-              let sentence = words.slice(0, 10).join(" ");
+                  const words = config.description.split(" ");
+                  let sentence = words.slice(0, 10).join(" ");
 
-              if (words.length > 15) {
-                sentence += "...";
-              }
+                  if (words.length > 15) {
+                    sentence += "...";
+                  }
 
-              config.description = sentence;
+                  config.description = sentence;
 
-              if (category.featured.length < 6) {
-                category.featured.push(config);
-              }
+                  if (category.featured.length < 6) {
+                    category.featured.push(config);
+                  }
 
-              category.projects.push(config);
-            });
+                  category.projects.push(config);
+                });
+                resolve();
+              })
+          );
+        });
+      })
+    );
 
-            setTimeout(() => ((window as any).renderComplete = true), 100);
-          })
-      );
-    });
+    return {
+      categories
+    };
+  }
 
-    if (this.$route.params.platform) {
-      (this.$refs
-        .header as HeaderBar).subheader_tab_selection = this.$route.params.platform;
+  async mounted() {
+    try {
+      document.querySelector("title").innerText = "Firebase Opensource";
+    } catch (err) {
+      console.warn("Cannot set page title.");
+    }
+
+    if (this.platform) {
+      (this.$refs.header as HeaderBar).subheader_tab_selection = this.platform;
     }
   }
 
@@ -144,21 +168,11 @@ export default class Projects extends Vue {
     this.cancels.forEach(c => c());
   }
 
-  @Watch("$route.params.platform", { immediate: true })
-  onRouteParamPlatformChange(platform: string) {
-    if (!this.$refs.header) return;
-    (this.$refs.header as HeaderBar).subheader_tab_selection = platform;
-  }
-
   isSectionVisible(section: string) {
-    const header = this.$refs.header as HeaderBar;
+    if (!this.platform || this.platform === "all") {
+      return true;
+    }
 
-    return (
-      !header ||
-      header.subheader_tab_selection == "all" ||
-      header.subheader_tab_selection == section
-    );
+    return section === this.platform;
   }
 }
-
-require("./template.html")(Projects);

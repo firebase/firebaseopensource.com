@@ -152,8 +152,17 @@ export default class Projects extends Vue {
   get page_title() {
     return this.page_title;
   }
-
   mounted() {
+    // Make the URL always end in a slash, when appropriate.
+    // Without this, relative links may break.
+    try {	
+      if (document.location.pathname.split("/").length == 4) {	
+        document.location.pathname += "/";	
+      }	
+    } catch (err) {	
+      console.log("Cannot fix URL");	
+    }	
+
     document.querySelectorAll("pre code").forEach(function(el) {
       hljs.highlightBlock(el);
     });

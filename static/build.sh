@@ -6,4 +6,6 @@ git clone https://github.com/firebase/firebaseopensource.com
 cd firebaseopensource.com
 
 # Build and deploy
-make deploy-hosting
+make build-hosting
+cd frontend
+firebase --project="fir-oss" --token=$FIREBASE_TOKEN deploy --only hosting

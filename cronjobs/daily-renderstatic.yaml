@@ -11,18 +11,12 @@ spec:
           containers:
           - name: daily-renderstatic
             image: us.gcr.io/fir-oss/static-renderer:latest
-            volumeMounts:
-              - name: firebasetokenvol
-                mountPath: "/tmp/firebasetoken"
-                readOnly: true
-              - name: serviceaccountvol
-                mountPath: "/tmp/serviceaccount"
-                readOnly: true
+            # Create secret with
+            # kubectl create secret generic fbtoken --from-literal=fbtoken=(TOKENVALUE)
+            env:
+              - name: FIREBASE_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: fbtoken
+                    key: fbtoken
           restartPolicy: OnFailure
-          volumes:
-          - name: firebasetokenvol
-            secret:
-              secretName: firebasetoken
-          - name: serviceaccountvol
-            secret:
-              secretName: serviceaccount

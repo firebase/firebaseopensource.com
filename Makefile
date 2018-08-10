@@ -3,7 +3,7 @@ PROD_PROJECT="fir-oss"
 build-docker:
 	cd static \
 		&& docker build -t static-renderer . \
-		&& docker tag static-renderer us.gcr.io/fir-iss/static-renderer \
+		&& docker tag static-renderer us.gcr.io/fir-oss/static-renderer \
 		&& cd -
 
 deploy-docker: build-docker

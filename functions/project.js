@@ -560,7 +560,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
         .split("/")
         .filter(seg => seg.trim().length > 0);
 
-      if (pathSegments.length >= 2) {
+      if (pathSegments.length == 2) {
         const org = pathSegments[0];
         const repo = pathSegments[1];
 

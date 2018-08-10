@@ -1,9 +1,15 @@
 # firebaseopensource.com
 
-A landing page for open source Firebase projects.
+A directory of Firebase open source projects and their documentation.
 
-Example:
-https://firebaseopensource.com/projects/firebase/firebaseui-android/
+Projects listed on firebaseopensource.com (abbrev. fosdc) automatically get beautiful
+auto-generated landing pages:
+
+Example: https://firebaseopensource.com/projects/firebase/quickstart-android/
+<img src="docs/screenshot.png" width="600">
+
+Want to learn how to get your repo set up? Check out the
+[guide](configure-repo.md).
 
 
 ## Contributing

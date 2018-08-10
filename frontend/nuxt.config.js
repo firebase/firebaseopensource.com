@@ -1,3 +1,5 @@
+const routes = require("./routes.json").routes;
+
 module.exports = {
   mode: "universal",
   router: {
@@ -14,7 +16,10 @@ module.exports = {
       )
     }
   },
-  generate: require("./routes.json"),
+  generate: {
+    fallback: true,
+    routes: routes
+  },
   head: {
     meta: [
       {

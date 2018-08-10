@@ -19,3 +19,6 @@ prerender/**/*.html
 # Python
 appengine/env
 appengine/lib
+
+# Functions
+.runtimeconfig.json

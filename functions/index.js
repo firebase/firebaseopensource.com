@@ -41,6 +41,25 @@ exports.getProject = functions
   });
 
 /**
+ * Webhook version of {@link getProject}, useful for calling with `curl`.
+ * Expects an "id" url param for a project ID.
+ */
+exports.getProjectWebhook = functions
+  .runWith(RUNTIME_OPTS)
+  .https.onRequest(async (request, response) => {
+    const id = request.param("id");
+    project
+      .recursiveStoreProject(id)
+      .then(() => {
+        response.status(200).send(`Stored project ${id}.\n`);
+      })
+      .catch(e => {
+        console.warn(e);
+        response.status(500).send(`Failed to store project ${id}: ${e}.\n`);
+      });
+  });
+
+/**
  * Get the config and content for all projects.
  */
 exports.getAllProjects = functions
@@ -59,9 +78,9 @@ exports.getAllProjects = functions
 
     try {
       await Promise.all(promises);
-      response.status(200).send("Stored all projects!.");
+      response.status(200).send("Stored all projects!\n");
     } catch (e) {
       console.warn("Error:", e);
-      response.status(500).send("Failed to store all projects.");
+      response.status(500).send("Failed to store all projects.\n");
     }
   });

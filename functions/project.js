@@ -41,6 +41,7 @@ marked.setOptions({
 });
 
 const db = admin.firestore();
+db.settings({ timestampsInSnapshots: true });
 
 const ADDITIONAL_PROJECTS_URL = github.getRawContentUrl(
   "firebase",
@@ -499,6 +500,21 @@ Project.prototype._isRelativeLink = function(href) {
 };
 
 /**
+ * Determine if a project is listed on firebaseopensource.com
+ */
+Project.prototype._isIncludedProject = function(org, repo) {
+  if (org === "firebase") {
+    return true;
+  }
+
+  if (ADDITIONAL_PROJECTS.indexOf(`${org}::${repo}`) >= 0) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * Sanitize the content Html.
  */
 Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
@@ -537,14 +553,21 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
     }
 
     if (that._isGithubLink(href)) {
-      // Convert github.com/firebase/foo links to firebaseopensource links
-      // TODO: Support non-firebase projects
+      // Convert github.com/org/foo links to firebaseopensource links
       const hrefUrl = url.parse(href);
 
       const pathSegments = hrefUrl.pathname
         .split("/")
         .filter(seg => seg.trim().length > 0);
-      if (pathSegments.length == 2 && pathSegments[0] === "firebase") {
+
+      if (pathSegments.length >= 2) {
+        const org = pathSegments[0];
+        const repo = pathSegments[1];
+
+        if (!that._isIncludedProject(org, repo)) {
+          return;
+        }
+
         const newLink = "/projects/" + pathSegments.join("/") + "/";
 
         console.log(`[${repoId}] Replacing ${href} with ${newLink}.`);

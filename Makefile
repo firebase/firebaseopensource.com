@@ -31,8 +31,6 @@ build-hosting:
 		&& cd -
 
 deploy-hosting: build-hosting
-	cd frontend \
-		&& firebase --project=$(PROD_PROJECT) deploy --only hosting \
-		&& cd -
+	firebase --project=$(PROD_PROJECT) deploy --only hosting
 
 deploy: deploy-functions deploy-hosting

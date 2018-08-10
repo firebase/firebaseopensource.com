@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "frontend/",
+    "public": "frontend/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -8,20 +8,8 @@
     ],
     "rewrites": [
       {
-        "source": "/app/**",
-        "destination": "/app/index.html"
-      },
-      {
-      "source": "**", "function": "pageRenderer"
-      }
-    ],
-    "headers": [
-      {
-        "source" : "**",
-        "headers" : [ {
-          "key" : "Cache-Control",
-          "value" : "max-age=86500"
-        } ]
+        "source": "**",
+        "destination": "/404.html"
       }
     ]
   },

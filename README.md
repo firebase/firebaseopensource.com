@@ -9,7 +9,7 @@ Example: https://firebaseopensource.com/projects/firebase/quickstart-android/
 <img src="docs/screenshot.png" width="600">
 
 Want to learn how to get your repo set up? Check out the
-[guide](configure-repo.md).
+[guide](docs/configure-repo.md).
 
 
 ## Contributing

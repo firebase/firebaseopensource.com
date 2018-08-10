@@ -21,4 +21,4 @@ deploy-hosting: build-hosting
 		&& firebase --project=$(PROD_PROJECT) deploy --only hosting \
 		&& cd -
 
-deploy: deploy-functions deploy-app
+deploy: deploy-functions deploy-hosting

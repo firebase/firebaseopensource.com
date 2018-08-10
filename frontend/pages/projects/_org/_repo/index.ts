@@ -1,13 +1,5 @@
 import Projects from "../../../../src/components/Projects"
 
-// TODO: Define elsewhere
-type Section = {
-  content?: String;
-  name?: String;
-  id?: String;
-  ref?: String;
-};
-
 export default {
   components: {
     Projects

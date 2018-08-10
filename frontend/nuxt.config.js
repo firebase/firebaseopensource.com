@@ -7,7 +7,6 @@ module.exports = {
           path: "/projects/:org/:repo/:page(.+)",
           component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
         },
-        // TODO
         // {
         //   path: "/404",
         //   component: FourOhFour

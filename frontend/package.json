@@ -6,15 +6,13 @@
   "private": true,
   "scripts": {
     "fmt": "prettier --write *.css src/**/**/**.scss src/**/**.scss src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
-    "dev": "concurrently -k --names 'FIREBASE,WEBPACK' 'firebase serve --only hosting' 'cross-env NODE_ENV=development webpack-dev-server --hot'",
+    "dev": "nuxt",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "npm run fmt && jest test --no-cache || true",
+    "gen": "nuxt generate",
     "deploy": "npm run build && firebase --project=default deploy",
     "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting",
-    "prerender": "ts-node prerender index.ts",
-    "nuxt": "nuxt",
-    "nuxt-prod": "nuxt build && nuxt start",
-    "nuxt-gen": "nuxt generate"
+    "prerender": "ts-node prerender index.ts"
   },
   "dependencies": {
     "@types/fs-extra": "^4.0.5",

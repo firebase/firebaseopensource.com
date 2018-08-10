@@ -163,12 +163,6 @@ export default class Homepage extends Vue {
     this.cancels.forEach(c => c());
   }
 
-  // @Watch("$route.params.platform", { immediate: true })
-  // onRouteParamPlatformChange(platform: string) {
-  //   if (!this.$refs.header) return;
-  //   (this.$refs.header as HeaderBar).subheader_tab_selection = platform;
-  // }
-
   isSectionVisible(section: string) {
     if (!this.platform || this.platform === "all") {
       return true;

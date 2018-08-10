@@ -9,7 +9,7 @@ export default {
     console.log(`index:asyncData(${context.route.path})`);
 
     const data = await Homepage.load();
-    const platform = undefined as any;
+    const platform = "all";
 
     return {
       platform: platform,

@@ -12,7 +12,6 @@ import {Route} from "vue-router";
 
 const Clipboard = require("clipboard");
 
-// TODO: Move out
 type Section = {
   content?: String;
   name?: String;
@@ -40,20 +39,6 @@ export default class Projects extends Vue {
   @Prop() cancels: Function[];
   @Prop() subheader_tabs: any[];
 
-  // @Watch("$route.params", { deep: true })
-  // onRouteChanged(newParams: any, oldParams: any) {
-  //   if (
-  //     oldParams.repository == newParams.repository &&
-  //     oldParams.organization == newParams.organization
-  //   )
-  //     return;
-
-  //   this.config = {};
-  //   this.sections = [];
-  //   this.header = {};
-  //   // this.load();
-  // }
-
   async created() {
     try {
         if (document.location.pathname.split("/").length == 4) {
@@ -62,8 +47,6 @@ export default class Projects extends Vue {
     } catch (err) {
       console.log("Cannot fix URL")
     }
-
-    // this.load();
   }
 
   static async load(org: string, repo: string, page: string) {

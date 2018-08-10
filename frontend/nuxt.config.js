@@ -32,7 +32,7 @@ module.exports = {
       },
       {
         rel: "icon",
-        href: "/dist/logo-small.png"
+        href: "/logo-small.png"
       },
       {
         rel: "stylesheet",

@@ -16,7 +16,6 @@
 const functions = require("firebase-functions");
 const github = require("./github");
 const project = require("./project");
-const render = require("./render");
 const PubSub = require("@google-cloud/pubsub");
 
 const pubsubClient = new PubSub({

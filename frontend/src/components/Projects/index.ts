@@ -48,16 +48,6 @@ export default class Projects extends Vue {
   cancels: Function[];
   show_clone_cmd: Boolean = false;
 
-  async created() {
-    try {
-      if (document.location.pathname.split("/").length == 4) {
-        document.location.pathname += "/";
-      }
-    } catch (err) {
-      console.log("Cannot fix URL");
-    }
-  }
-
   static async load(org: string, repo: string, page: string) {
     console.log(`load(${org}, ${repo}, ${page})`);
     const result = {
@@ -102,7 +92,6 @@ export default class Projects extends Vue {
     }
 
     const snapshot = await dataDoc.get();
-    console.log(snapshot.ref.path);
     if (!snapshot.exists) {
       result.not_found = true;
     } else {
@@ -127,7 +116,6 @@ export default class Projects extends Vue {
       .get();
 
     result.config = configSnapshot.data() as Config;
-    console.log("config", result.config);
 
     result.config.last_updated_from_now = distanceInWordsToNow(
       new Date(result.config.last_updated)

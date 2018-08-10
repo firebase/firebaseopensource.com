@@ -53,7 +53,6 @@ export default class HeaderBar extends Vue {
   }
 
   setSubheaderTabSelection(tab: string) {
-    console.log(tab);
     Vue.set(this, "subheader_tab_selection", tab);
   }
 }

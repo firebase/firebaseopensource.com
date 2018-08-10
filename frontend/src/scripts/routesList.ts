@@ -50,7 +50,7 @@ export class RoutesList {
 RoutesList.getAll()
   .then((routes: string[]) => {
     const data = { routes };
-    console.log("Found: " + routes.length);
+    console.log(`Found ${routes.length} routes`);
     fs.writeFileSync("routes.json", JSON.stringify(data, undefined, 2));
   })
   .then(() => {

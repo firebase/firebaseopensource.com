@@ -1,0 +1,9 @@
+{
+  "routes": [
+    "/",
+    "/platform/android",
+    "/platform/ios",
+    "/projects/firebase/firebaseui-android/",
+    "/projects/firebase/quickstart-ios/"
+  ]
+}

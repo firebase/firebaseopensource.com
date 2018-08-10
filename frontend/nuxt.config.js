@@ -14,11 +14,7 @@ module.exports = {
       )
     }
   },
-  generate: {
-    routes: [
-      '/projects/firebase/firebaseui-android/'
-    ]
-  },
+  generate: require("./routes.json"),
   head: {
     meta: [
       {

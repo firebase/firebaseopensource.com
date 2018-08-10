@@ -2,7 +2,6 @@ import { FirebaseSingleton } from "../services/firebaseSingleton";
 import * as fs from "fs";
 
 export class RoutesList {
-
   static async getAll() {
     const fst = await FirebaseSingleton.GetInstance();
 
@@ -48,12 +47,13 @@ export class RoutesList {
   }
 }
 
-RoutesList.getAll().then((routes: string[]) => {
-  const data = { routes };
-  console.log("Found: " + routes.length);
-  fs.writeFileSync("routes.json", JSON.stringify(data, undefined, 2));
-}).then(() => {
-  console.log("Done.");
-  process.exit();
-})
-
+RoutesList.getAll()
+  .then((routes: string[]) => {
+    const data = { routes };
+    console.log("Found: " + routes.length);
+    fs.writeFileSync("routes.json", JSON.stringify(data, undefined, 2));
+  })
+  .then(() => {
+    console.log("Done.");
+    process.exit();
+  });

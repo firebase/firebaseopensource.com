@@ -35,9 +35,10 @@ export default class Projects extends Vue {
   @Prop() dropdown_selection: String;
   @Prop() not_found: Boolean;
   @Prop() found: Boolean;
-  @Prop() show_clone_cmd: Boolean;
-  @Prop() cancels: Function[];
   @Prop() subheader_tabs: any[];
+
+  cancels: Function[];
+  show_clone_cmd: Boolean = false;
 
   async created() {
     try {
@@ -90,6 +91,7 @@ export default class Projects extends Vue {
       dataDoc = repoDoc.collection("pages").doc(page_id);
       result.is_subpage = true;
     } else {
+      result.is_subpage = false;
       dataDoc = repoDoc;
     }
 
@@ -97,6 +99,8 @@ export default class Projects extends Vue {
     console.log(snapshot.ref.path);
     if (!snapshot.exists) {
       result.not_found = true;
+    } else {
+      result.not_found = false;
     }
     const data = snapshot.data();
 

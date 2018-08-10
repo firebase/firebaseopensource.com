@@ -69,4 +69,4 @@ links on FOSDC. This allows you to create deep and connected documentation.
 Publishing happens automatically every 24 hours. All pages are rendered as static HTML on a
 nightly basis to maximize performance.
 
-[additional-projects]: https://github.com/firebase/firebaseopensource.com/blob/master/config/additional_projects.json)
+[additional-projects]:https://github.com/firebase/firebaseopensource.com/blob/master/config/additional_projects.json

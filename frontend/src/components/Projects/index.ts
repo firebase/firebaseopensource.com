@@ -155,7 +155,7 @@ export default class Projects extends Vue {
     return this.page_title;
   }
 
-  updated() {
+  mounted() {
     document.querySelectorAll("pre code").forEach(function(el) {
       hljs.highlightBlock(el);
     });

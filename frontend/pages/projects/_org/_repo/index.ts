@@ -5,6 +5,14 @@ export default {
     Projects
   },
 
+  head() {
+    if (this.page_title) {
+      return {
+        title: this.page_title
+      }
+    }
+  },
+
   async asyncData(context: any) {
     console.log(`project:asyncData(${context.route.path})`);
 

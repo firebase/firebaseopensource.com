@@ -120,6 +120,13 @@
             cursor: pointer;
             opacity: 1;
           }
+
+          i.material-icons {
+            position: relative;
+            top: 1px;
+            left: 4px;
+            font-size: 14px;
+          }
         }
       }
     }

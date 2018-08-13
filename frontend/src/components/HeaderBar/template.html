@@ -28,6 +28,7 @@
                    :class="{selected: subheader_tab_selection == tab.text.toLowerCase()}"
                    :href="tab.link">
                 {{tab.text}}
+                <i v-if="tab.icon" class="material-icons">{{tab.icon}}</i>
               </a>
             </div>
             <div class="tab-spacer" v-if="!subheader_tabs"></div>

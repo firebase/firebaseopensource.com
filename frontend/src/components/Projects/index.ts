@@ -67,7 +67,8 @@ export default class Projects extends Vue {
       },
       {
         text: "Github",
-        link: `https://github.com/${org}/${repo}`
+        link: `https://github.com/${org}/${repo}`,
+        icon: 'open_in_new'
       }
     ];
 
@@ -155,13 +156,13 @@ export default class Projects extends Vue {
   mounted() {
     // Make the URL always end in a slash, when appropriate.
     // Without this, relative links may break.
-    try {	
-      if (document.location.pathname.split("/").length == 4) {	
-        document.location.pathname += "/";	
-      }	
-    } catch (err) {	
-      console.log("Cannot fix URL");	
-    }	
+    try {
+      if (document.location.pathname.split("/").length == 4) {
+        document.location.pathname += "/";
+      }
+    } catch (err) {
+      console.log("Cannot fix URL");
+    }
 
     document.querySelectorAll("pre code").forEach(function(el) {
       hljs.highlightBlock(el);

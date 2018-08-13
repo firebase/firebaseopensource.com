@@ -70,7 +70,7 @@
             "description description"
             "link link";
           grid-template-columns: 50px auto;
-          grid-template-rows: 60px 70px 20px;
+          grid-template-rows: 65px 70px 20px;
           padding: 20px 10px;
         }
         float: left;
@@ -81,8 +81,8 @@
       .logo-circle {
         grid-area: logo;
 
-        width: 50px;
-        height: 50px;
+        width: 55px;
+        height: 55px;
         background-color: #eee;
         border-radius: 100%;
         font-size: 30px;

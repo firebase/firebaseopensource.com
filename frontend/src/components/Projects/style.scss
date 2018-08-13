@@ -241,14 +241,19 @@
 
   .section {
     > .content {
-      padding-top: 12px;
-      padding-bottom: 12px;
+      padding: 0px 32px 24px 32px;
+    }
+
+    &.title-section {
+      > .content {
+        padding-top: 24px;
+      }
     }
 
     &.footer {
       margin-top: 10px;
-
-      .content {
+      > .content {
+        padding-top: 24px;
         text-align: center;
         color: #aaa;
         font-size: 0.8em;

@@ -153,6 +153,20 @@ export default class Projects extends Vue {
   get page_title() {
     return this.page_title;
   }
+
+  /**
+   * Format the name of a related project for display.
+   * Strips the "firebase/" from the name to save space, since
+   * the firebase context is implied on firebaseopensource.com
+   */
+  fmtRelated(project: string) {
+    if (project.indexOf("firebase/") >= 0) {
+      return project.substring("firebase/".length, project.length);
+    }
+
+    return project;
+  }
+
   mounted() {
     // Make the URL always end in a slash, when appropriate.
     // Without this, relative links may break.

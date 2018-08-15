@@ -54,6 +54,7 @@ export default class Homepage extends Vue {
     { text: "iOS", link: "/platform/ios" },
     { text: "Android", link: "/platform/android" },
     { text: "Web", link: "/platform/web" },
+    { text: "Admin", link: "/platform/admin" },
     { text: "Games", link: "/platform/games" }
   ];
 
@@ -85,6 +86,13 @@ export default class Homepage extends Vue {
         title: "iOS",
         icon: "phone_android",
         platform: "ios",
+        projects: [],
+        featured: []
+      },
+      {
+        title: "Admin",
+        icon: "lock",
+        platform: "admin",
         projects: [],
         featured: []
       },

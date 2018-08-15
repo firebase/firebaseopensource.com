@@ -65,7 +65,8 @@ function splitWords(name: string) {
 
 export function pickLogoLetter(name: string) {
   var fire = /[Ff]ire(base)?(-)?/;
-  var nameClean = name.replace(fire, "");
+  var nameClean = name
+    .replace(fire, "");
   var words = splitWords(nameClean);
   var firstLetter = words[0][0].toUpperCase();
 

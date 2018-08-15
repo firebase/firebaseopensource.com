@@ -601,7 +601,8 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
       "badge.fury.io",
       "gitter.im",
       "circleci.com",
-      "opencollective.com"
+      "opencollective.com",
+      "cirrus-ci.com"
     ];
 
     let isBadge = false;

@@ -17,6 +17,31 @@
       "collectionId": "configs",
       "fields": [
         {
+          "fieldPath": "blacklist",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.admin",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
           "fieldPath": "fork",
           "mode": "ASCENDING"
         },
@@ -272,6 +297,31 @@
         {
           "fieldPath": "stars",
           "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "description",
+          "mode": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionId": "configs",
+      "fields": [
+        {
+          "fieldPath": "blacklist",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "fork",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "platforms.games",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "stars",
+          "mode": "DESCENDING"
         },
         {
           "fieldPath": "description",

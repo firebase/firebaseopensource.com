@@ -11,7 +11,8 @@ export class RoutesList {
       "platform/ios",
       "platform/android",
       "platform/web",
-      "platform/games"
+      "platform/games",
+      "platform/admin"
     ];
 
     return fst.fs

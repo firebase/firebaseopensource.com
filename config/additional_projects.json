@@ -3,6 +3,7 @@
     "angular::angularfire2",
     "googlesamples::easypermissions",
     "tylermcginnis::re-base",
-    "prescottprue::react-redux-firebase"
+    "prescottprue::react-redux-firebase",
+    "invertase::react-native-firebase"
   ]
 }

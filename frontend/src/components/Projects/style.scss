@@ -6,7 +6,7 @@
     h1 {
       padding: 16px 0px 0px 0px;
       margin: 0px;
-      line-height: 1em;
+      line-height: 1.1em;
     }
 
     h2 {
@@ -50,11 +50,16 @@
     grid-template-areas:
       "left right"
       "content content";
+    grid-gap: 12px;
 
     min-height: 80px;
 
     > .header_content {
       grid-area: content;
+
+      p {
+        margin: 0px;
+      }
 
       &:first-of-type {
         margin-top: 0px;
@@ -67,6 +72,7 @@
         "left"
         "right"
         "content";
+      grid-gap: 0px;
     }
   }
 

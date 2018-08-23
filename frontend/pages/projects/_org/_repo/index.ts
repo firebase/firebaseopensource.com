@@ -11,6 +11,8 @@ export default {
         title: this.page_title
       }
     }
+
+    return {}
   },
 
   async asyncData(context: any) {

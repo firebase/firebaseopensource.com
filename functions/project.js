@@ -18,6 +18,7 @@ const cheerio = require("cheerio");
 const cjson = require("comment-json");
 const functions = require("firebase-functions");
 const github = require("./github");
+const log = require("./logger");
 const marked = require("marked");
 const path = require("path");
 const url = require("url");
@@ -101,10 +102,10 @@ Project.prototype.listAllProjectIds = async function() {
 };
 
 /**
- * Store a project and all of its subprojects.
+ * Store a project and all of its pages.
  */
 Project.prototype.recursiveStoreProject = function(id) {
-  console.log(`[${id}] recursiveStoreProject()`);
+  log.debug(id, "recursiveStoreProject()");
 
   const that = this;
   return this.loadGlobalConfig()
@@ -117,28 +118,10 @@ Project.prototype.recursiveStoreProject = function(id) {
       const storeContent = that.storeProjectContent(id, config);
 
       // Wait for both to complete then pass on config
-      return Promise.all([storeConfig, storeContent]).then(config);
-    })
-    .then(config => {
-      const promises = [];
-
-      // Recurse on each subproject
-      if (config.subprojects) {
-        config.subprojects.forEach(sub => {
-          console.log(`[${id}] Found subproject: ${sub}.`);
-
-          const slug = that.pathToSlug(sub);
-          const storeSubProject = that.recursiveStoreProject(`${id}::${slug}`);
-
-          promises.push(storeSubProject);
-        });
-      }
-
-      // Wait for all to complete
-      return Promise.all(promises);
+      return Promise.all([storeConfig, storeContent]);
     })
     .catch(e => {
-      console.warn(`[${id}] ERROR: recursiveStoreProject failed: ${e.stack}`);
+      log.error(id, "recursiveStoreProject failed", e);
     });
 };
 
@@ -200,11 +183,11 @@ Project.prototype.getProjectConfig = function(id) {
         });
       } else {
         // If the project has no config, make one up
-        console.log(`[${id}] WARN: Using default config.`);
+        log.debug(id, "WARN: Using default config.");
         return github
           .getRepoReadmeFile(idParsed.owner, idParsed.repo)
           .then(readme => {
-            console.log(`[${id}] README: ${readme}`);
+            log.debug(id, `README: ${readme}`);
             return {
               name: idParsed.repo,
               type: "library",
@@ -314,7 +297,7 @@ Project.prototype.storeProjectConfig = function(id, config) {
   // Add server timestamp
   data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
 
-  console.log(`[${id}] Storing at /configs/${docId}`);
+  log.debug(id, `Storing at /configs/${docId}`);
   const configProm = db
     .collection("configs")
     .doc(docId)
@@ -339,7 +322,7 @@ Project.prototype.storeProjectContent = function(id, config) {
       // Set all pages in subcollection
       return that.getProjectPagesContent(id, config).then(content => {
         if (!content || !content.pages) {
-          return;
+          return Promise.resolve();
         }
 
         const batch = db.batch();
@@ -348,9 +331,7 @@ Project.prototype.storeProjectContent = function(id, config) {
           const slug = that.pathToSlug(page.name).toString();
           const ref = contentRef.collection("pages").doc(slug);
 
-          console.log(
-            `[${id}] Storing ${page.name} content at path ${ref.path}`
-          );
+          log.debug(id, `Storing ${page.name} content at path ${ref.path}`);
           batch.set(ref, page.content);
         });
 
@@ -414,12 +395,12 @@ Project.prototype.filterProjectSections = function(sections) {
  * Get the content for all pages of a project.
  */
 Project.prototype.getProjectPagesContent = function(id, config) {
-  if (!config.pages) {
-    console.log(`[${id}] Project has no extra pages.`);
+  if (!config.pages || config.pages.length == 0) {
+    log.debug(id, `Project has no extra pages.`);
     return Promise.resolve({});
   }
 
-  console.log(`[${id}] Getting page content for extra pages.`);
+  log.debug(id, `Getting page content for extra pages.`);
 
   const promises = [];
   const pages = [];
@@ -428,7 +409,7 @@ Project.prototype.getProjectPagesContent = function(id, config) {
   const that = this;
   config.pages.forEach(page => {
     const pageUrl = that.getPageUrl(id, page);
-    console.log(`[${id}] Rendering page: ${pageUrl}`);
+    log.debug(id, `Rendering page: ${pageUrl}`);
 
     const pagePromise = github
       .getContent(pageUrl)
@@ -570,7 +551,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
 
         const newLink = "/projects/" + pathSegments.join("/") + "/";
 
-        console.log(`[${repoId}] Replacing ${href} with ${newLink}.`);
+        log.debug(repoId, `Replacing ${href} with ${newLink}.`);
         el.attribs["href"] = newLink.toLowerCase();
       }
     }
@@ -579,7 +560,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
       // Check if the link is to a page within the repo
       const repoRelative = path.join(pageDir, href);
       if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
-        console.log(`[${repoId}] Lowercasing relative link ${repoRelative}.`);
+        log.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
         that.lowercaseLink(el);
       } else {
         that.sanitizeRelativeLink(el, "href", renderedBaseUrl);

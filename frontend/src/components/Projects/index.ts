@@ -29,6 +29,8 @@ export default class Projects extends Vue {
   $route: Route;
 
   @Prop()
+  page_title: String;
+  @Prop()
   sections: Section[];
   @Prop()
   header: Section;
@@ -73,6 +75,7 @@ export default class Projects extends Vue {
     ];
 
     const repoDoc = fbt.fs.collection("content").doc(id);
+    const configDoc = fbt.fs.collection("configs").doc(id);
 
     let dataDoc;
     if (page) {
@@ -92,6 +95,7 @@ export default class Projects extends Vue {
       dataDoc = repoDoc;
     }
 
+    // Load conetnt
     const snapshot = await dataDoc.get();
     if (!snapshot.exists) {
       result.not_found = true;
@@ -100,9 +104,27 @@ export default class Projects extends Vue {
     }
     const data = snapshot.data();
 
-    result.header = data.header as Section;
-    result.page_title = data.header.name;
+    // Load config
+    const configSnap = await configDoc.get();
+    if (configSnap.exists && !result.not_found) {
+      result.found = true;
+    }
+    result.config = configSnap.data() as Config;
+
+    // Choose the page name depending on available info:
+    // Option 0 - title of the header section
+    // Option 1 - the name from the config.
+    // Option 2 - the repo name
+    if (data.header.name) {
+      result.page_title = data.header.name;
+    } else if (result.config.name) {
+      result.page_title = result.config.name
+    } else {
+      result.page_title = repo;
+    }
+
     const sections = snapshot.data().sections as Section[];
+    result.header = data.header as Section;
 
     sections.forEach(section => {
       if (blocked_sections.indexOf(section.name.toLowerCase()) != -1) return;
@@ -110,13 +132,6 @@ export default class Projects extends Vue {
       section.ref = "#" + section.id;
       result.sections.push(section);
     });
-
-    const configSnapshot = await fbt.fs
-      .collection("configs")
-      .doc(id)
-      .get();
-
-    result.config = configSnapshot.data() as Config;
 
     result.config.last_updated_from_now = distanceInWordsToNow(
       new Date(result.config.last_updated)
@@ -127,10 +142,6 @@ export default class Projects extends Vue {
     result.config.repo = repo;
     result.config.org = org;
 
-    if (configSnapshot.exists && !result.not_found) {
-      result.found = true;
-    }
-
     return result;
   }
 
@@ -140,18 +151,6 @@ export default class Projects extends Vue {
 
   static as_id(text: String) {
     return text.toLowerCase().replace(" ", "_");
-  }
-
-  set page_title(page_title: string) {
-    try {
-      document.querySelector("title").innerText = page_title;
-    } catch (err) {
-      console.warn("Cannot set page title");
-    }
-  }
-
-  get page_title() {
-    return this.page_title;
   }
 
   /**

@@ -111,6 +111,8 @@ Github.prototype.readAllPages = function(url, results) {
       } else {
         return newResults;
       }
+    } else {
+      return newResults;
     }
   });
 };

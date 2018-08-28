@@ -14,7 +14,7 @@
       font-size: 24px;
       line-height: 32px;
       color: #212121;
-      border-bottom: 1px solid #ebebeb;
+      border-bottom: 1px solid $gray;
     }
 
     h3 {
@@ -37,6 +37,20 @@
       line-height: 24px;
       color: #212121;
     }
+  }
+
+  hr {
+    height: .25em;
+    padding: 0;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    background-color: $gray;
+    border: 0;
+  }
+
+  hr:last-child {
+    margin-top: 24px;
+    margin-bottom: 0px;
   }
 
   ul {

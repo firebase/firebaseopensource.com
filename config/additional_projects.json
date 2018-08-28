@@ -4,6 +4,7 @@
     "googlesamples::easypermissions",
     "tylermcginnis::re-base",
     "prescottprue::react-redux-firebase",
-    "invertase::react-native-firebase"
+    "invertase::react-native-firebase",
+    "invertase::react-native-firebase-starter"
   ]
 }

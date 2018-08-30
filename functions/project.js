@@ -594,16 +594,16 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
     });
 
     if (isBadge) {
-      // Remove badges
-      $(el).remove();
+      // Mark Badges
+      $(el).addClass('img-badge');
     } else {
       // Add the image-parent class to the parent
       $(el)
         .parent()
         .addClass("img-parent");
-
-      that.sanitizeRelativeLink(el, "src", rawBaseUrl);
     }
+
+    that.sanitizeRelativeLink(el, "src", rawBaseUrl);
   });
 
   return $.html();

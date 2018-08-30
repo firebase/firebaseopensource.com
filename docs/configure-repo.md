@@ -48,7 +48,7 @@ All configuration is performed by adding a file to your repository at the path
 ### Subpages
 
 If your repository has multiple pages of Markdown documentation you would like to
-display on FOSDC, add a refernece to each one in the `pages` field of your configuration:
+display on FOSDC, add a reference to each one in the `pages` field of your configuration:
 
 ```javascript
 {

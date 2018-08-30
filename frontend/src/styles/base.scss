@@ -76,6 +76,10 @@ tr {
   }
 }
 
+img[alt] {
+  margin: 16px 0px;
+}
+
 .img-parent {
   padding: 20px 0px;
 }
@@ -84,7 +88,7 @@ tr {
   max-width: 100%;
 }
 
-.img-badge {
+img.img-badge {
   margin: 0;
 }
 
@@ -170,10 +174,6 @@ li {
       cursor: pointer;
     }
   }
-}
-
-img[alt] {
-  margin: 16px 0px;
 }
 
 table {

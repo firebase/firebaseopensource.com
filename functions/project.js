@@ -595,7 +595,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
 
     if (isBadge) {
       // Mark Badges
-      $(el).addClass('img-badge');
+      $(el).addClass("img-badge");
     } else {
       // Add the image-parent class to the parent
       $(el)

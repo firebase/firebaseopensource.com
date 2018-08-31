@@ -34,6 +34,41 @@
     top: -1px;
   }
 
+  #welcome_card {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: min-content 1fr;
+
+    // In phone layout, hide the image
+    @media (max-width: $phone) {
+      grid-template-columns: 100%;
+      grid-gap: 0px;
+
+      img {
+        margin: 0;
+        display: none;
+      }
+
+      h1 {
+        padding-top: 0px;
+      }
+    }
+
+    .body {
+      color: #757575;
+    }
+
+    .image {
+      display: flex;
+      align-items: center;
+    }
+  
+    img {
+      margin: auto;
+      height: 200px;
+    }
+  }
+
   .projects {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

@@ -36,24 +36,35 @@
 
   #welcome_card {
     display: grid;
-    grid-gap: 20px;
+    grid-gap: 16px;
     grid-template-columns: min-content 1fr;
 
-    // In tablet layout, two projects per row
+    // In phone layout, hide the image
     @media (max-width: $phone) {
       grid-template-columns: 100%;
+      grid-gap: 0px;
 
       img {
+        margin: 0;
         display: none;
+      }
+
+      h1 {
+        padding-top: 0px;
       }
     }
 
     .body {
-      vertical-align: middle;
       color: #757575;
+    }
+
+    .image {
+      display: flex;
+      align-items: center;
     }
   
     img {
+      margin: auto;
       height: 200px;
     }
   }

@@ -6,13 +6,36 @@ export default {
   },
 
   head() {
+    const head = {
+      meta: [
+        {
+          property: 'og:image',
+          content: 'https://firebaseopensource.com/logo-small.png'
+        },
+        {
+          property: 'og:site_name',
+          content: 'Firebase Open Source'
+        },
+        {
+          property: 'og:type',
+          content: 'object'
+        },
+        {
+          property: 'og:description',
+          content: 'Check out this project on firebaseopensource.com!'
+        },
+      ]
+    } as any
+
     if (this.page_title) {
-      return {
-        title: this.page_title
-      }
+      head.title = this.page_title
+      head.meta.push({
+        property: 'og:title',
+        content: this.page_title
+      });
     }
 
-    return {}
+    return head;
   },
 
   async asyncData(context: any) {

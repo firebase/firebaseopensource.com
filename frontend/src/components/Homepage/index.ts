@@ -106,11 +106,17 @@ export default class Homepage extends Vue {
     ];
   }
 
-  static async load() {
+  static async load(platform: string) {
     const fbt = await FirebaseSingleton.GetInstance();
     const categories = this.getCategories();
     // TODO use
     const cancels = [] as any[];
+
+    let limit = 6;
+    if (platform && platform !== 'all') {
+      limit = 100;
+    }
+
     await Promise.all(
       categories.map((category, categoryIndex) => {
         return new Promise((resolve, reject) => {
@@ -122,6 +128,7 @@ export default class Homepage extends Vue {
               .orderBy(`platforms.${category.platform}`)
               .orderBy("stars", "desc")
               .orderBy("description")
+              .limit(limit)
               .onSnapshot((snapshot: any) => {
                 snapshot.docs.forEach((doc: any, docIndex: any) => {
                   const config = doc.data() as Config;
@@ -161,15 +168,6 @@ export default class Homepage extends Vue {
   }
 
   async mounted() {
-    try {
-      document.querySelector("title").innerText = "Firebase Opensource";
-    } catch (err) {
-      console.warn("Cannot set page title.");
-    }
-
-    if (this.platform) {
-      (this.$refs.header as HeaderBar).subheader_tab_selection = this.platform;
-    }
   }
 
   destroyed() {
@@ -182,5 +180,9 @@ export default class Homepage extends Vue {
     }
 
     return section === this.platform;
+  }
+
+  showingAllPlatforms() {
+    return this.platform === 'all';
   }
 }

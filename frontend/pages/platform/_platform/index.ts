@@ -5,11 +5,17 @@ export default {
     Homepage
   },
 
+  head() {
+    return {
+      title: "Firebase Open Source"
+    }
+  },
+
   async asyncData(context: any) {
     console.log(`platform:asyncData(${context.route.path})`);
 
-    const data = await Homepage.load();
     const platform = context.params.platform;
+    const data = await Homepage.load(platform);
 
     return {
       platform: platform,

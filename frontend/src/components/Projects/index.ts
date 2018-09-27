@@ -19,6 +19,29 @@ type Section = {
   ref?: String;
 };
 
+class SidebarSection {
+  title: String = "";
+  expanded: Boolean = false;
+  pages: SelectableLink[] = []
+
+  constructor(title: String, pages: SelectableLink[], expanded = false) {
+    this.title = title;
+    this.pages = pages;
+    this.expanded = expanded;
+  }
+}
+
+class SelectableLink {
+  title: String = ""
+  href: String = ""
+  selected: Boolean = false
+
+  constructor(title: String, href: String) {
+    this.title = title;
+    this.href = href;
+  }
+}
+
 declare const hljs: any;
 
 @Component({
@@ -49,6 +72,23 @@ export default class Projects extends Vue {
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
+
+  sidebar = {
+    sections: [
+      new SidebarSection("Project", [
+        new SelectableLink("Home", "#"),
+      ], true),
+      new SidebarSection("Open Source", [
+        new SelectableLink("Home", "#"),
+        new SelectableLink("Android", "#"),
+      ]),
+      new SidebarSection("Firebase", [
+        new SelectableLink("Docs", "#"),
+        new SelectableLink("Console", "#"),
+        new SelectableLink("Blog", "#"),
+      ]),
+    ]
+  }
 
   static async load(org: string, repo: string, page: string) {
     console.log(`load(${org}, ${repo}, ${page})`);

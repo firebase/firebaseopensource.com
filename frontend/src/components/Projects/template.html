@@ -7,7 +7,7 @@
     <div class="col_gutter">
       <ul class="sidebar shadow_all">
 
-        <li class="sidebar-section" v-for="section in sidebar.sections">
+        <li class="sidebar-section" v-for="section in sidebar">
           <div class="header" v-on:click="section.expanded = !section.expanded">
             <span class="title">{{section.title}}</span>
             <i class="material-icons" v-if="section.expanded">expand_less</i>
@@ -16,8 +16,8 @@
 
           <ul v-if="section.expanded" class="subsection">
             <li v-for="page in section.pages">
-              <a v-href="page.href" 
-                 v.bind:class="{ selected: page.selected }">{{page.title}}</a>
+              <a :href="page.href" 
+                 v-bind:class="{ selected: page.selected }">{{page.title}}</a>
             </li>
           </ul>
         </li>

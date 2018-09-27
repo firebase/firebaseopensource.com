@@ -36,9 +36,10 @@ class SelectableLink {
   href: String = ""
   selected: Boolean = false
 
-  constructor(title: String, href: String) {
+  constructor(title: String, href: String, selected = false) {
     this.title = title;
     this.href = href;
+    this.selected = selected;
   }
 }
 
@@ -69,26 +70,11 @@ export default class Projects extends Vue {
   found: Boolean;
   @Prop()
   subheader_tabs: any[];
+  @Prop()
+  sidebar: SidebarSection[]
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
-
-  sidebar = {
-    sections: [
-      new SidebarSection("Project", [
-        new SelectableLink("Home", "#"),
-      ], true),
-      new SidebarSection("Open Source", [
-        new SelectableLink("Home", "#"),
-        new SelectableLink("Android", "#"),
-      ]),
-      new SidebarSection("Firebase", [
-        new SelectableLink("Docs", "#"),
-        new SelectableLink("Console", "#"),
-        new SelectableLink("Blog", "#"),
-      ]),
-    ]
-  }
 
   static async load(org: string, repo: string, page: string) {
     console.log(`load(${org}, ${repo}, ${page})`);
@@ -181,6 +167,37 @@ export default class Projects extends Vue {
     );
     result.config.repo = repo;
     result.config.org = org;
+
+    // Load up the sidebar
+    // TODO: What if we're on a subpage!
+    const projectSidebar = new SidebarSection("Project", [
+      new SelectableLink("Home", "#", true),
+    ], true);
+
+    if (result.config.pages) {
+      Object.keys(result.config.pages).forEach((page: string) => {
+        let pageName = page;
+        pageName = pageName.replace("/readme.md", "")
+        pageName = pageName.replace(".md", "");
+
+        projectSidebar.pages.push(
+          new SelectableLink(pageName, page)
+        )
+      });
+    }
+
+    // TODO: Const
+    const ossSidebar = new SidebarSection("Open Source", [
+      new SelectableLink("Home", "#"),
+      new SelectableLink("Android", "#"),
+    ]);
+    const firebaseSidebar = new SidebarSection("Firebase", [
+      new SelectableLink("Docs", "#"),
+      new SelectableLink("Console", "#"),
+      new SelectableLink("Blog", "#"),
+    ]);
+
+    result.sidebar = [projectSidebar, ossSidebar, firebaseSidebar];
 
     return result;
   }

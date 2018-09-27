@@ -113,7 +113,7 @@ export default class Homepage extends Vue {
     const cancels = [] as any[];
 
     let limit = 6;
-    if (platform && platform !== 'all') {
+    if (platform && platform !== "all") {
       limit = 100;
     }
 
@@ -167,8 +167,7 @@ export default class Homepage extends Vue {
     };
   }
 
-  async mounted() {
-  }
+  async mounted() {}
 
   destroyed() {
     this.cancels.forEach(c => c());
@@ -183,6 +182,6 @@ export default class Homepage extends Vue {
   }
 
   showingAllPlatforms() {
-    return this.platform === 'all';
+    return this.platform === "all";
   }
 }

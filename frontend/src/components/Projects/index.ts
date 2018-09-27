@@ -22,7 +22,7 @@ type Section = {
 class SidebarSection {
   title: String = "";
   expanded: Boolean = false;
-  pages: SelectableLink[] = []
+  pages: SelectableLink[] = [];
 
   constructor(title: String, pages: SelectableLink[], expanded = false) {
     this.title = title;
@@ -32,9 +32,9 @@ class SidebarSection {
 }
 
 class SelectableLink {
-  title: String = ""
-  href: String = ""
-  selected: Boolean = false
+  title: String = "";
+  href: String = "";
+  selected: Boolean = false;
 
   constructor(title: String, href: String, selected = false) {
     this.title = title;
@@ -71,7 +71,7 @@ export default class Projects extends Vue {
   @Prop()
   subheader_tabs: any[];
   @Prop()
-  sidebar: SidebarSection[]
+  sidebar: SidebarSection[];
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
@@ -96,7 +96,7 @@ export default class Projects extends Vue {
       {
         text: "Github",
         link: `https://github.com/${org}/${repo}`,
-        icon: 'open_in_new'
+        icon: "open_in_new"
       }
     ];
 
@@ -144,7 +144,7 @@ export default class Projects extends Vue {
     if (data.header.name) {
       result.page_title = data.header.name;
     } else if (result.config.name) {
-      result.page_title = result.config.name
+      result.page_title = result.config.name;
     } else {
       result.page_title = repo;
     }
@@ -170,31 +170,41 @@ export default class Projects extends Vue {
 
     // Load up the sidebar
     // TODO: What if we're on a subpage!
-    const projectSidebar = new SidebarSection("Project", [
-      new SelectableLink("Home", "#", true),
-    ], true);
+    const projectPath = `/projects/${result.config.org}/${
+      result.config.repo
+      }`.toLowerCase();
+
+    const projectSidebar = new SidebarSection(
+      "Project",
+      [new SelectableLink("Home", projectPath, !result.is_subpage)],
+      true,
+    );
 
     if (result.config.pages) {
-      Object.keys(result.config.pages).forEach((page: string) => {
-        let pageName = page;
-        pageName = pageName.replace("/readme.md", "")
+
+
+      Object.keys(result.config.pages).forEach((pagePath: string) => {
+        let pageName = pagePath;
+        pageName = pageName.replace("/readme.md", "");
         pageName = pageName.replace(".md", "");
 
+        const selected = (page == pagePath);
         projectSidebar.pages.push(
-          new SelectableLink(pageName, page)
-        )
+          new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
+        );
       });
     }
 
     // TODO: Const
+    // TODO: Make these links real!
     const ossSidebar = new SidebarSection("Open Source", [
       new SelectableLink("Home", "#"),
-      new SelectableLink("Android", "#"),
+      new SelectableLink("Android", "#")
     ]);
     const firebaseSidebar = new SidebarSection("Firebase", [
       new SelectableLink("Docs", "#"),
       new SelectableLink("Console", "#"),
-      new SelectableLink("Blog", "#"),
+      new SelectableLink("Blog", "#")
     ]);
 
     result.sidebar = [projectSidebar, ossSidebar, firebaseSidebar];

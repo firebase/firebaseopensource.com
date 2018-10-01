@@ -17,6 +17,7 @@
           <ul v-if="section.expanded" class="subsection">
             <li v-for="page in section.pages">
               <a :href="page.href" 
+                 :target="page.outbound ? '_blank' : ''"
                  v-bind:class="{ selected: page.selected }">{{page.title}}</a>
             </li>
           </ul>

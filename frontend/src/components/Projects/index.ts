@@ -35,15 +35,54 @@ class SelectableLink {
   title: String = "";
   href: String = "";
   selected: Boolean = false;
+  outbound: Boolean = false;
 
-  constructor(title: String, href: String, selected = false) {
+  constructor(title: String, href: String, selected = false, outbound = false) {
     this.title = title;
     this.href = href;
     this.selected = selected;
+    this.outbound = outbound;
   }
 }
 
 declare const hljs: any;
+
+const OSS_SIDEBAR = new SidebarSection("Open Source", [
+  new SelectableLink("Home", "/"),
+  new SelectableLink(
+    "Add Project",
+    "https://github.com/firebase/firebaseopensource.com/issues/new/choose",
+    false,
+    true
+  )
+]);
+
+const FIREBASE_SIDEBAR = new SidebarSection("Firebase", [
+  new SelectableLink(
+    "Docs",
+    "https://firebase.google.com/docs/",
+    false,
+    true
+  ),
+  new SelectableLink(
+    "Console",
+    "https://console.firebase.google.com/",
+    false,
+    true
+  ),
+  new SelectableLink(
+    "Blog",
+    "https://firebase.googleblog.com/",
+    false,
+    true
+  ),
+  new SelectableLink(
+    "YouTube",
+    "https://www.youtube.com/user/Firebase",
+    false,
+    true
+  )
+]);
 
 @Component({
   components: { HeaderBar, FourOhFour }
@@ -169,45 +208,31 @@ export default class Projects extends Vue {
     result.config.org = org;
 
     // Load up the sidebar
-    // TODO: What if we're on a subpage!
     const projectPath = `/projects/${result.config.org}/${
       result.config.repo
-      }`.toLowerCase();
+    }`.toLowerCase();
 
     const projectSidebar = new SidebarSection(
       "Project",
       [new SelectableLink("Home", projectPath, !result.is_subpage)],
-      true,
+      true
     );
 
+    // TODO: Support custom page names in the JSON config
     if (result.config.pages) {
-
-
       Object.keys(result.config.pages).forEach((pagePath: string) => {
         let pageName = pagePath;
         pageName = pageName.replace("/readme.md", "");
         pageName = pageName.replace(".md", "");
 
-        const selected = (page == pagePath);
+        const selected = page == pagePath;
         projectSidebar.pages.push(
           new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
         );
       });
     }
 
-    // TODO: Const
-    // TODO: Make these links real!
-    const ossSidebar = new SidebarSection("Open Source", [
-      new SelectableLink("Home", "#"),
-      new SelectableLink("Android", "#")
-    ]);
-    const firebaseSidebar = new SidebarSection("Firebase", [
-      new SelectableLink("Docs", "#"),
-      new SelectableLink("Console", "#"),
-      new SelectableLink("Blog", "#")
-    ]);
-
-    result.sidebar = [projectSidebar, ossSidebar, firebaseSidebar];
+    result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
 
     return result;
   }

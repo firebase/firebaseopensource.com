@@ -6,11 +6,9 @@
   // TODO: Hide in mobile
   .sidebar {
     float: right;
-    width: 244px;
+    width: $sidebar-width;
     background: #ffffff;
     margin-top: 30px;
-    margin-left: 16px;
-    margin-right: 16px;
     list-style-type: none;
     padding: 0px;
 
@@ -156,7 +154,7 @@
     > .header_content {
       grid-area: content;
 
-      p {
+      p:last-of-type {
         margin: 0px;
       }
 

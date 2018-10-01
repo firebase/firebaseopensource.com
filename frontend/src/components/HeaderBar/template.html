@@ -20,8 +20,9 @@
           </div>
           <div class="col_gutter"></div>
         </header>
-        <div class="subheader" v-if="enable_subheader">
-          <div class="content">
+        <div class="subheader content_grid" v-if="enable_subheader">
+          <div class="col_gutter"></div>
+          <div class="content col_main">
             <h2 v-if="subheader_title">{{subheader_title}}</h2>
             <div class="tabs">
               <a class="tab" v-for="tab in subheader_tabs"
@@ -33,6 +34,7 @@
             </div>
             <div class="tab-spacer" v-if="!subheader_tabs"></div>
           </div>
+          <div class="col_gutter"></div>
         </div>
     </div>
   </div>

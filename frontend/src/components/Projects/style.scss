@@ -2,6 +2,91 @@
 @import "../../styles/variables.scss";
 
 #projects {
+  // TODO: Make the margin-top unbreakable
+  // TODO: Hide in mobile
+  .sidebar {
+    float: right;
+    width: 244px;
+    background: #ffffff;
+    margin-top: 30px;
+    margin-left: 16px;
+    margin-right: 16px;
+    list-style-type: none;
+    padding: 0px;
+
+    .sidebar-section.collapsed {
+      .subsection {
+        display: none;
+      }
+    }
+
+    .sidebar-section {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      margin: 0px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #cfd8dc;
+
+      .header {
+        user-select: none;
+      }
+
+      .header:hover {
+        cursor: pointer;
+      }
+
+      .title {
+        padding-left: 16px;
+        font-size: 13px;
+        line-height: 16px;
+        color: #757575;
+        font-weight: bold;
+        width: 100%;
+      }
+
+      i.material-icons {
+        position: relative;
+        float: right;
+        padding-top: 4px;
+        padding-right: 12px;
+        font-size: 24px;
+        color: #949494;
+      }
+    }
+
+    .subsection {
+      list-style-type: none;
+      font-size: 13px;
+      line-height: 16px;
+
+      padding-top: 8px;
+      padding-left: 16px;
+
+      li {
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+
+      a {
+        color: #212121;
+      }
+
+      a:hover {
+        color: #039be5;
+        cursor: pointer;
+      }
+
+      a.selected {
+        color: #039be5;
+        font-weight: bold;
+      }
+    }
+
+    .sidebar-section:last-of-type {
+      border-bottom: 0px;
+    }
+  }
+
   .section {
     h1 {
       padding: 16px 0px 0px 0px;
@@ -40,7 +125,7 @@
   }
 
   hr {
-    height: .25em;
+    height: 0.25em;
     padding: 0;
     margin-top: 12px;
     margin-bottom: 12px;

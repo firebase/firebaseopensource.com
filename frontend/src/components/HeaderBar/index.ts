@@ -37,5 +37,4 @@ export default class HeaderBar extends Vue {
 
   @Prop()
   subheader_tab_selection: string;
-  
 }

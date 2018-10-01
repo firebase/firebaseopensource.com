@@ -19,7 +19,70 @@ type Section = {
   ref?: String;
 };
 
+class SidebarSection {
+  title: String = "";
+  expanded: Boolean = false;
+  pages: SelectableLink[] = [];
+
+  constructor(title: String, pages: SelectableLink[], expanded = false) {
+    this.title = title;
+    this.pages = pages;
+    this.expanded = expanded;
+  }
+}
+
+class SelectableLink {
+  title: String = "";
+  href: String = "";
+  selected: Boolean = false;
+  outbound: Boolean = false;
+
+  constructor(title: String, href: String, selected = false, outbound = false) {
+    this.title = title;
+    this.href = href;
+    this.selected = selected;
+    this.outbound = outbound;
+  }
+}
+
 declare const hljs: any;
+
+const OSS_SIDEBAR = new SidebarSection("Open Source", [
+  new SelectableLink("Home", "/"),
+  new SelectableLink(
+    "Add Project",
+    "https://github.com/firebase/firebaseopensource.com/issues/new/choose",
+    false,
+    true
+  )
+]);
+
+const FIREBASE_SIDEBAR = new SidebarSection("Firebase", [
+  new SelectableLink(
+    "Docs",
+    "https://firebase.google.com/docs/",
+    false,
+    true
+  ),
+  new SelectableLink(
+    "Console",
+    "https://console.firebase.google.com/",
+    false,
+    true
+  ),
+  new SelectableLink(
+    "Blog",
+    "https://firebase.googleblog.com/",
+    false,
+    true
+  ),
+  new SelectableLink(
+    "YouTube",
+    "https://www.youtube.com/user/Firebase",
+    false,
+    true
+  )
+]);
 
 @Component({
   components: { HeaderBar, FourOhFour }
@@ -46,6 +109,8 @@ export default class Projects extends Vue {
   found: Boolean;
   @Prop()
   subheader_tabs: any[];
+  @Prop()
+  sidebar: SidebarSection[];
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
@@ -70,7 +135,7 @@ export default class Projects extends Vue {
       {
         text: "Github",
         link: `https://github.com/${org}/${repo}`,
-        icon: 'open_in_new'
+        icon: "open_in_new"
       }
     ];
 
@@ -118,7 +183,7 @@ export default class Projects extends Vue {
     if (data.header.name) {
       result.page_title = data.header.name;
     } else if (result.config.name) {
-      result.page_title = result.config.name
+      result.page_title = result.config.name;
     } else {
       result.page_title = repo;
     }
@@ -141,6 +206,33 @@ export default class Projects extends Vue {
     );
     result.config.repo = repo;
     result.config.org = org;
+
+    // Load up the sidebar
+    const projectPath = `/projects/${result.config.org}/${
+      result.config.repo
+    }`.toLowerCase();
+
+    const projectSidebar = new SidebarSection(
+      "Project",
+      [new SelectableLink("Home", projectPath, !result.is_subpage)],
+      true
+    );
+
+    // TODO: Support custom page names in the JSON config
+    if (result.config.pages) {
+      Object.keys(result.config.pages).forEach((pagePath: string) => {
+        let pageName = pagePath;
+        pageName = pageName.replace("/readme.md", "");
+        pageName = pageName.replace(".md", "");
+
+        const selected = page == pagePath;
+        projectSidebar.pages.push(
+          new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
+        );
+      });
+    }
+
+    result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
 
     return result;
   }

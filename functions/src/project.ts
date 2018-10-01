@@ -17,13 +17,14 @@ import { Github } from "./github";
 import { Logger } from "./logger";
 import { ProjectConfig, PageContent, PageSection, ProjectPage } from "./types";
 
-const admin = require("firebase-admin");
-const cheerio = require("cheerio");
+import * as cheerio from "cheerio";
+import * as admin from "firebase-admin";
+import * as functions from "firebase-functions";
+import * as path from "path";
+import * as url from "url";
+
 const cjson = require("comment-json");
-const functions = require("firebase-functions");
 const marked = require("marked");
-const path = require("path");
-const url = require("url");
 const urljoin = require("url-join");
 
 const github = new Github();
@@ -315,35 +316,32 @@ export class Project {
   /**
    * Fetch a project's content and put it into Firestore.
    */
-  storeProjectContent(id: string, config: ProjectConfig) {
+  async storeProjectContent(id: string, config: ProjectConfig): Promise<any> {
     var that = this;
     const contentRef = db.collection("content").doc(this.normalizeId(id));
 
-    return this.getProjectContent(id, config)
-      .then(sections => {
-        // Set main content
-        return contentRef.set(sections);
-      })
-      .then(() => {
-        // Set all pages in subcollection
-        return that.getProjectPagesContent(id, config).then(content => {
-          if (!content || !content.pages) {
-            return Promise.resolve();
-          }
+    const sections = await this.getProjectContent(id, config);
 
-          const batch = db.batch();
+    // Set main content
+    await contentRef.set(sections);
 
-          content.pages.forEach((page: ProjectPage) => {
-            const slug = that.pathToSlug(page.name).toString();
-            const ref = contentRef.collection("pages").doc(slug);
+    // Set all pages in subcollection
+    const content = await this.getProjectPagesContent(id, config);
+    if (!content || content.length == 0) {
+      return;
+    }
 
-            log.debug(id, `Storing ${page.name} content at path ${ref.path}`);
-            batch.set(ref, page.content);
-          });
+    const batch = db.batch();
 
-          return batch.commit();
-        });
-      });
+    content.forEach((page: ProjectPage) => {
+      const slug = that.pathToSlug(page.name).toString();
+      const ref = contentRef.collection("pages").doc(slug);
+
+      log.debug(id, `Storing ${page.name} content at path ${ref.path}`);
+      batch.set(ref, page.content);
+    });
+
+    return batch.commit();
   }
 
   /**
@@ -400,15 +398,18 @@ export class Project {
   /**
    * Get the content for all pages of a project.
    */
-  getProjectPagesContent(id: string, config: ProjectConfig): Promise<any> {
+  getProjectPagesContent(
+    id: string,
+    config: ProjectConfig
+  ): Promise<ProjectPage[]> {
     if (!config.pages || Object.keys(config.pages).length == 0) {
       log.debug(id, `Project has no extra pages.`);
-      return Promise.resolve({});
+      return Promise.resolve([]);
     }
 
     log.debug(id, `Getting page content for extra pages.`);
 
-    const promises: any[] = [];
+    const promises: Promise<void>[] = [];
     const pages: ProjectPage[] = [];
 
     // Loop through pages, get content for each
@@ -436,16 +437,14 @@ export class Project {
     });
 
     return Promise.all(promises).then(() => {
-      return {
-        pages
-      };
+      return pages;
     });
   }
 
   /**
    * Change href to lowercase.
    */
-  lowercaseLink(el: any) {
+  lowercaseLink(el: CheerioElement) {
     const newVal = el.attribs["href"].toLowerCase();
     el.attribs["href"] = newVal;
   }
@@ -453,7 +452,7 @@ export class Project {
   /**
    * Sanitize relative links to be absolute.
    */
-  sanitizeRelativeLink(el: any, attrName: string, base: string) {
+  sanitizeRelativeLink(el: CheerioElement, attrName: string, base: string) {
     const val = el.attribs[attrName];
 
     if (val) {
@@ -533,12 +532,11 @@ export class Project {
     );
     const rawBaseUrl = urljoin(this.getRawContentBaseUrl(repoId), pageDir);
 
-    const $ = cheerio.load(html);
-    const sections = [];
+    const $: CheerioStatic = cheerio.load(html);
 
     // Resolve all relative links to github
     const that = this;
-    $("a").each((_: any, el: any) => {
+    $("a").each((_: number, el: CheerioElement) => {
       const href = el.attribs["href"];
       if (!href) {
         return;
@@ -580,7 +578,7 @@ export class Project {
     });
 
     // Resolve all relative images, add class to parent
-    $("img").each((_: any, el: any) => {
+    $("img").each((_: number, el: CheerioElement) => {
       const src = el.attribs["src"];
       if (!src) {
         return;
@@ -630,7 +628,7 @@ export class Project {
     let $headerChildren = $("div", "<div></div>");
 
     let $h1 = $("h1").first();
-    $h1.nextUntil("h2").each((_: any, el: any) => {
+    $h1.nextUntil("h2").each((_: number, el: any) => {
       $headerChildren = $headerChildren.append(el);
     });
 
@@ -639,12 +637,12 @@ export class Project {
       content: $headerChildren.html()
     };
 
-    $("h2").each((_: any, el: any) => {
+    $("h2").each((_: number, el: CheerioElement) => {
       let $sibchils = $("div", "<div></div>");
 
       $(el)
         .nextUntil("h2")
-        .each((_: any, el: any) => {
+        .each((_: number, el: any) => {
           $sibchils = $sibchils.append(el);
         });
 

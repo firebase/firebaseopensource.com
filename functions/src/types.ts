@@ -26,3 +26,10 @@ export interface PageSection {
   name: string;
   content: string;
 }
+
+export interface RepoMetadata {
+  description: string;
+  fork: boolean;
+  stars: number;
+  last_updated: any;
+}

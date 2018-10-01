@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { RepoMetadata } from "./types";
 import { Config } from "./config";
 import * as request from "request-promise-native";
 const parselh = require("parse-link-header");
@@ -67,7 +68,7 @@ export class Github {
   /**
    * Get metadata for a github repo.
    */
-  getRepoMetadata(org: string, repo: string): Promise<any> {
+  getRepoMetadata(org: string, repo: string): Promise<RepoMetadata> {
     const url = `https://api.github.com/repos/${org}/${repo}`;
 
     return request(url, _GH_OPTIONS_STANDARD).then(repo => {

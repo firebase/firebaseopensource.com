@@ -265,6 +265,11 @@
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.6.tgz#1eb26c040e3a84205b1008ad55c800e5e8a94e34"
   integrity sha512-CBk7KTZt3FhPsEkYioG6kuCIpWISw+YI8o+3op4+NXwTpvAPxE1ES8+PY8zfaK2L98b1z5oq03UHa4VYpeUxnw==
 
+"@types/cheerio@^0.22.9":
+  version "0.22.9"
+  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.9.tgz#b5990152604c2ada749b7f88cab3476f21f39d7b"
+  integrity sha512-q6LuBI0t5u04f0Q4/R+cGBqIbZMtJkVvCSF+nTfFBBdQqQvJR/mNHeWjRkszyLl7oyf2rDoKUYMEjTw5AV0hiw==
+
 "@types/cors@^2.8.1":
   version "2.8.4"
   resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.4.tgz#50991a759a29c0b89492751008c6af7a7c8267b0"
@@ -375,6 +380,13 @@
   version "8.10.23"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.23.tgz#e5ccfdafff42af5397c29669b6d7d65f7d629a00"
   integrity sha512-aEp5ZTLr4mYhR9S85cJ+sEYkcsgFY10N1Si5m49iTAVzanZXOwp/pgw6ibFLKXxpflqm71aSWZCRtnTXXO56gA==
+
+"@types/request-promise-native@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@types/request-promise-native/-/request-promise-native-1.0.15.tgz#5b3369fc6aaf9e7fef7b6b688aef4c5759623e16"
+  integrity sha512-uYPjTChD9TpjlvbBjNpZfNc64TBejBS52u7pbxhQLnlxw+5Em7wLb6DU2wdJVhJ2Mou7v50N0qgL4Gia5mmRYg==
+  dependencies:
+    "@types/request" "*"
 
 "@types/request@*", "@types/request@^2.47.0", "@types/request@^2.47.1":
   version "2.47.1"

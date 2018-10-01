@@ -21,7 +21,7 @@
     "node": "8"
   },
   "scripts": {
-    "build": "npm run fmt",
+    "build": "npm run fmt && tsc",
     "fmt": "prettier --write src/*.ts src/test/*.ts"
   },
   "private": true,

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import { Project } from "./project";
+import * as functions from "firebase-functions";
 
-const functions = require("firebase-functions");
 const PubSub = require("@google-cloud/pubsub");
 
 const project = new Project();
@@ -26,7 +26,7 @@ const pubsubClient = new PubSub({
 
 const RUNTIME_OPTS = {
   timeoutSeconds: 540,
-  memory: "2GB"
+  memory: "2GB" as "2GB"
 };
 
 /**
@@ -37,7 +37,7 @@ const RUNTIME_OPTS = {
 exports.getProject = functions
   .runWith(RUNTIME_OPTS)
   .pubsub.topic("get-project")
-  .onPublish((message: any) => {
+  .onPublish(message => {
     const id = message.json.id;
     return project.recursiveStoreProject(id);
   });
@@ -48,7 +48,7 @@ exports.getProject = functions
  */
 exports.getProjectWebhook = functions
   .runWith(RUNTIME_OPTS)
-  .https.onRequest(async (request: any, response: any) => {
+  .https.onRequest(async (request, response) => {
     const id = request.param("id");
     project
       .recursiveStoreProject(id)
@@ -66,11 +66,11 @@ exports.getProjectWebhook = functions
  */
 exports.getAllProjects = functions
   .runWith(RUNTIME_OPTS)
-  .https.onRequest(async (request: any, response: any) => {
+  .https.onRequest(async (request, response) => {
     let allIds = await project.listAllProjectIds();
 
     const publisher = pubsubClient.topic("get-project").publisher();
-    const promises: any[] = [];
+    const promises: Promise<any>[] = [];
 
     allIds.forEach((id: string) => {
       const data = { id };

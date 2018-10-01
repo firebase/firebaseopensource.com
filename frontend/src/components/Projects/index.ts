@@ -218,18 +218,42 @@ export default class Projects extends Vue {
       true
     );
 
-    // TODO: Support custom page names in the JSON config
     if (result.config.pages) {
+      const subpages: SelectableLink[] = [];
       Object.keys(result.config.pages).forEach((pagePath: string) => {
-        let pageName = pagePath;
-        pageName = pageName.replace("/readme.md", "");
-        pageName = pageName.replace(".md", "");
+        let pageName;
+        const val = result.config.pages[pagePath]
 
-        const selected = page == pagePath;
-        projectSidebar.pages.push(
+        // The pages config can either look like:
+        // { "path.md": true }
+        // OR
+        // { "path.md": "TITLE" }
+        if (typeof val  === 'string') {
+          pageName = val;
+        } else {
+          pageName = pagePath;
+          pageName = pageName.replace("/readme.md", "");
+          pageName = pageName.replace(".md", "");
+        }
+
+        const selected = (page == pagePath);
+        subpages.push(
           new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
         );
       });
+
+      // Sort the pages by their title (alphabetically)
+      subpages.sort((a, b) => {
+        if (a.title > b.title) {
+          return 1;
+        } else if (a.title == b.title) {
+          return 0;
+        } else {
+          return -1;
+        }
+      });
+
+      projectSidebar.pages = projectSidebar.pages.concat(subpages);''
     }
 
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];

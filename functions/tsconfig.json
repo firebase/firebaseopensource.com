@@ -18,9 +18,10 @@
                 "node_modules/*",
                 "src/types/*"
             ]
-        }
+        },
+        "outDir": "dist"
     },
     "include": [
-        "src/**/*"
+        "src/**/*", "src/test/**/*"
     ]
 }

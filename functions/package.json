@@ -22,13 +22,15 @@
   },
   "scripts": {
     "build": "npm run fmt",
-    "fmt": "prettier --write *.js test/*.js"
+    "fmt": "prettier --write src/*.ts src/test/*.ts"
   },
   "private": true,
   "devDependencies": {
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.11.3",
+    "@types/request": "^2.47.1",
+    "@types/request-promise-native": "^1.0.15",
     "prettier": "^1.8.2",
     "typescript": "^3.1.1"
   }

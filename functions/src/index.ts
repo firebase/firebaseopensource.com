@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const functions = require("firebase-functions");
+import * as functions from "firebase-functions";
 const github = require("./github");
 const project = require("./project");
 const PubSub = require("@google-cloud/pubsub");
@@ -35,7 +35,7 @@ const RUNTIME_OPTS = {
 exports.getProject = functions
   .runWith(RUNTIME_OPTS)
   .pubsub.topic("get-project")
-  .onPublish(message => {
+  .onPublish((message: any) => {
     const id = message.json.id;
     return project.recursiveStoreProject(id);
   });
@@ -65,12 +65,12 @@ exports.getProjectWebhook = functions
 exports.getAllProjects = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
-    allIds = await project.listAllProjectIds();
+    let allIds = await project.listAllProjectIds();
 
     const publisher = pubsubClient.topic("get-project").publisher();
-    const promises = [];
+    const promises: any[] = [];
 
-    allIds.forEach(id => {
+    allIds.forEach((id: string) => {
       const data = { id };
       const dataBuffer = Buffer.from(JSON.stringify(data));
       promises.push(publisher.publish(dataBuffer));

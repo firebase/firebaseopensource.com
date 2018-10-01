@@ -8,6 +8,11 @@ $gray: #ebebeb;
 
 $shadow: rgba(0, 0, 0, 0.2);
 
-$max-content-width: 1080px;
+// Sizes to trigger media queries
 $tablet: 1400px;
 $phone: 720px;
+
+$max-content-width: 1080px;
+$gutter-padding: 16px;
+$sidebar-width: 220px;
+$gutter-width: $sidebar-width + $gutter-padding + $gutter-padding;

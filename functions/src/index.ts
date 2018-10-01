@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const functions = require("firebase-functions");
-const github = require("./github");
-const project = require("./project");
+import { Project } from "./project";
+import * as functions from "firebase-functions";
+
 const PubSub = require("@google-cloud/pubsub");
+
+const project = new Project();
 
 const pubsubClient = new PubSub({
   projectId: process.env.GCLOUD_PROJECT
@@ -24,7 +26,7 @@ const pubsubClient = new PubSub({
 
 const RUNTIME_OPTS = {
   timeoutSeconds: 540,
-  memory: "2GB"
+  memory: "2GB" as "2GB"
 };
 
 /**
@@ -65,12 +67,12 @@ exports.getProjectWebhook = functions
 exports.getAllProjects = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
-    allIds = await project.listAllProjectIds();
+    let allIds = await project.listAllProjectIds();
 
     const publisher = pubsubClient.topic("get-project").publisher();
-    const promises = [];
+    const promises: Promise<any>[] = [];
 
-    allIds.forEach(id => {
+    allIds.forEach((id: string) => {
       const data = { id };
       const dataBuffer = Buffer.from(JSON.stringify(data));
       promises.push(publisher.publish(dataBuffer));

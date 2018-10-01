@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "lib": ["es6"],
+        "types": [
+            "chai",
+            "mocha",
+            "node"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*",
+                "src/types/*"
+            ]
+        },
+        "outDir": "lib"
+    },
+    "include": [
+        "src/**/*", "src/test/**/*"
+    ]
+}

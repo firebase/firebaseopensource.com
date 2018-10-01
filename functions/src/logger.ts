@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Logger = function() {};
 
-Logger.prototype.debug = function(tag, msg) {
-  console.log(`[${tag}] ${msg}`);
-};
+export class Logger {
+  debug(tag: string, msg: string) {
+    console.log(`[${tag}] ${msg}`);
+  }
 
-Logger.prototype.error = function(tag, msg, e) {
-  console.warn(`[${tag}] ERROR: ${msg}`, e);
-};
-
-module.exports = new Logger();
+  error(tag: string, msg: string, e: any) {
+    console.warn(`[${tag}] ERROR: ${msg}`, e);
+  }
+}

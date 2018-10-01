@@ -1,6 +1,7 @@
 {
   "name": "firebaseopensource",
   "description": "firebaseopensource.com",
+  "main": "lib/index.js",
   "dependencies": {
     "@google-cloud/pubsub": "^0.19.0",
     "cheerio": "1.0.0-rc.1",
@@ -21,11 +22,18 @@
     "node": "8"
   },
   "scripts": {
-    "build": "npm run fmt",
-    "fmt": "prettier --write *.js test/*.js"
+    "build": "npm run fmt && tsc",
+    "fmt": "prettier --write src/*.ts src/test/*.ts"
   },
   "private": true,
   "devDependencies": {
-    "prettier": "^1.8.2"
+    "@types/chai": "^4.1.6",
+    "@types/cheerio": "^0.22.9",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.11.3",
+    "@types/request": "^2.47.1",
+    "@types/request-promise-native": "^1.0.15",
+    "prettier": "^1.8.2",
+    "typescript": "^3.1.1"
   }
 }

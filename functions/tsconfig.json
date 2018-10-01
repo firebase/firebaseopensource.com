@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "types": [
+            "chai",
+            "mocha",
+            "node"
+        ],
+        "module": "es2015",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*",
+                "src/types/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

@@ -224,6 +224,9 @@ Project.prototype.getProjectConfig = function(id) {
 
           return config;
         });
+    })
+    .then(config => {
+      return that.arraysToMaps(config);
     });
 };
 
@@ -291,7 +294,7 @@ Project.prototype.getPageUrl = function(id, page) {
  * Fetch a project config and put it into Firestore.
  */
 Project.prototype.storeProjectConfig = function(id, config) {
-  const data = this.arraysToMaps(config);
+  const data = config;
   const docId = this.normalizeId(id);
 
   // Add server timestamp
@@ -395,7 +398,7 @@ Project.prototype.filterProjectSections = function(sections) {
  * Get the content for all pages of a project.
  */
 Project.prototype.getProjectPagesContent = function(id, config) {
-  if (!config.pages || config.pages.length == 0) {
+  if (!config.pages || Object.keys(config.pages).length == 0) {
     log.debug(id, `Project has no extra pages.`);
     return Promise.resolve({});
   }
@@ -407,7 +410,7 @@ Project.prototype.getProjectPagesContent = function(id, config) {
 
   // Loop through pages, get content for each
   const that = this;
-  config.pages.forEach(page => {
+  Object.keys(config.pages).forEach(page => {
     const pageUrl = that.getPageUrl(id, page);
     log.debug(id, `Rendering page: ${pageUrl}`);
 
@@ -559,7 +562,7 @@ Project.prototype.sanitizeHtml = function(repoId, page, config, html) {
     if (that._isRelativeLink(href)) {
       // Check if the link is to a page within the repo
       const repoRelative = path.join(pageDir, href);
-      if (config.pages && config.pages.indexOf(repoRelative) >= 0) {
+      if (config.pages && config.pages[repoRelative]) {
         log.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
         that.lowercaseLink(el);
       } else {

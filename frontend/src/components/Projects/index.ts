@@ -219,6 +219,7 @@ export default class Projects extends Vue {
     );
 
     if (result.config.pages) {
+      const subpages: SelectableLink[] = [];
       Object.keys(result.config.pages).forEach((pagePath: string) => {
         let pageName;
         const val = result.config.pages[pagePath]
@@ -236,10 +237,23 @@ export default class Projects extends Vue {
         }
 
         const selected = (page == pagePath);
-        projectSidebar.pages.push(
+        subpages.push(
           new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
         );
       });
+
+      // Sort the pages by their title (alphabetically)
+      subpages.sort((a, b) => {
+        if (a.title > b.title) {
+          return 1;
+        } else if (a.title == b.title) {
+          return 0;
+        } else {
+          return -1;
+        }
+      });
+
+      projectSidebar.pages = projectSidebar.pages.concat(subpages);''
     }
 
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];

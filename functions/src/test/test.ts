@@ -18,7 +18,9 @@
 //
 // To run:
 // GCLOUD_PROJECT="fir-oss" github_token="<YOUR_GITHUB_TOKEN>" node test/test.js
-const project = require("../project");
+import { Project } from "../project";
+
+const project = new Project();
 
 const ids = [
   "samtstern::BotTest",

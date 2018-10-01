@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const config = require("./config");
-const request = require("request-promise-native");
+import { Config } from "./config";
+import * as request from "request-promise-native";
 const parselh = require("parse-link-header");
+
+const config = new Config();
 
 const _GH_OPTIONS_STANDARD = {
   headers: {
@@ -126,7 +128,7 @@ export class Github {
    * Get raw content from Github.
    * URL should be a raw.githubusercontent page.
    */
-  getContent(url: string): Promise<string> {
+  getContent(url: string) {
     return request(url, _GH_OPTIONS_CONTENT_GET);
   }
 
@@ -144,5 +146,3 @@ export class Github {
       });
   }
 }
-
-module.exports = new Github();

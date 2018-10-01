@@ -15,7 +15,7 @@
  */
 import * as functions from "firebase-functions";
 
-class Config {
+export class Config {
   /**
    * Get a config key, either from the env or from local.
    */
@@ -38,5 +38,3 @@ class Config {
     return val;
   }
 }
-
-module.exports = new Config();

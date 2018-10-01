@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-class Logger {
+export class Logger {
   debug(tag: string, msg: string) {
     console.log(`[${tag}] ${msg}`);
   }
@@ -23,5 +23,3 @@ class Logger {
     console.warn(`[${tag}] ERROR: ${msg}`, e);
   }
 }
-
-module.exports = new Logger();

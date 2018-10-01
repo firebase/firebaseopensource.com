@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Github } from "./github";
+import { Logger } from "./logger";
+import { ProjectConfig, PageContent, PageSection, ProjectPage } from "./types";
+
 const admin = require("firebase-admin");
 const cheerio = require("cheerio");
 const cjson = require("comment-json");
 const functions = require("firebase-functions");
-const github = require("./github");
-const log = require("./logger");
 const marked = require("marked");
 const path = require("path");
 const url = require("url");
 const urljoin = require("url-join");
+
+const github = new Github();
+const log = new Logger();
 
 // Initialize the Admin SDK with the right credentials for the environment
 try {
@@ -62,7 +67,7 @@ const FEATURED_BLACKLIST_PROJECTS_URL = github.getRawContentUrl(
 let ADDITIONAL_PROJECTS: string[] = [];
 let FEATURED_BLACKLIST_PROJECTS: string[] = [];
 
-class Project {
+export class Project {
   /**
    * Load globally relevant blacklists and whitelists.
    */
@@ -141,7 +146,7 @@ class Project {
    * Guess the platforms for a project.
    */
   inferPlatforms(id: string) {
-    const platforms = {
+    const platforms: any = {
       ios: ["ios", "objc", "swift", "apple"],
       android: ["android", "kotlin"],
       web: ["web", "js", "angular", "react"],
@@ -151,7 +156,7 @@ class Project {
     const result: any = {};
 
     for (let key in platforms) {
-      const keywords = platforms[key];
+      const keywords = platforms[key] as string[];
       keywords.forEach(keyword => {
         if (id.indexOf(keyword) >= 0) {
           result[key] = true;
@@ -275,7 +280,7 @@ class Project {
   /**
    * Get the URL to the content for a particular project ID.
    */
-  getContentUrl(id: string, config) {
+  getContentUrl(id: string, config: ProjectConfig) {
     // Path to content, relative to the project
     const contentPath = config.content;
     return urljoin(this.getRawContentBaseUrl(id), contentPath);
@@ -291,7 +296,7 @@ class Project {
   /**
    * Fetch a project config and put it into Firestore.
    */
-  storeProjectConfig(id: string, config) {
+  storeProjectConfig(id: string, config: ProjectConfig) {
     const data = config;
     const docId = this.normalizeId(id);
 
@@ -310,7 +315,7 @@ class Project {
   /**
    * Fetch a project's content and put it into Firestore.
    */
-  storeProjectContent(id: string, config) {
+  storeProjectContent(id: string, config: ProjectConfig) {
     var that = this;
     const contentRef = db.collection("content").doc(this.normalizeId(id));
 
@@ -328,7 +333,7 @@ class Project {
 
           const batch = db.batch();
 
-          content.pages.forEach(page => {
+          content.pages.forEach((page: ProjectPage) => {
             const slug = that.pathToSlug(page.name).toString();
             const ref = contentRef.collection("pages").doc(slug);
 
@@ -344,7 +349,7 @@ class Project {
   /**
    * Fetch a project's content.
    */
-  getProjectContent(id: string, config) {
+  getProjectContent(id: string, config: ProjectConfig) {
     const url = this.getContentUrl(id, config);
 
     var that = this;
@@ -368,7 +373,7 @@ class Project {
   /**
    * Filter sections that are not useful when rendered.
    */
-  filterProjectSections(sections) {
+  filterProjectSections(sections: PageSection[]) {
     const blacklist = [
       "license",
       "licensing",
@@ -395,7 +400,7 @@ class Project {
   /**
    * Get the content for all pages of a project.
    */
-  getProjectPagesContent(id: string, config) {
+  getProjectPagesContent(id: string, config: ProjectConfig): Promise<any> {
     if (!config.pages || Object.keys(config.pages).length == 0) {
       log.debug(id, `Project has no extra pages.`);
       return Promise.resolve({});
@@ -404,7 +409,7 @@ class Project {
     log.debug(id, `Getting page content for extra pages.`);
 
     const promises: any[] = [];
-    const pages = [];
+    const pages: ProjectPage[] = [];
 
     // Loop through pages, get content for each
     const that = this;
@@ -440,7 +445,7 @@ class Project {
   /**
    * Change href to lowercase.
    */
-  lowercaseLink(el) {
+  lowercaseLink(el: any) {
     const newVal = el.attribs["href"].toLowerCase();
     el.attribs["href"] = newVal;
   }
@@ -448,7 +453,7 @@ class Project {
   /**
    * Sanitize relative links to be absolute.
    */
-  sanitizeRelativeLink(el, attrName, base) {
+  sanitizeRelativeLink(el: any, attrName: string, base: string) {
     const val = el.attribs[attrName];
 
     if (val) {
@@ -499,7 +504,12 @@ class Project {
   /**
    * Sanitize the content Html.
    */
-  sanitizeHtml(repoId: string, page: string, config, html) {
+  sanitizeHtml(
+    repoId: string,
+    page: string,
+    config: ProjectConfig,
+    html: string
+  ) {
     // Links
     // * Links to page content files should go to our page
     // * Links to source files should go to github
@@ -528,7 +538,7 @@ class Project {
 
     // Resolve all relative links to github
     const that = this;
-    $("a").each((_, el) => {
+    $("a").each((_: any, el: any) => {
       const href = el.attribs["href"];
       if (!href) {
         return;
@@ -540,7 +550,7 @@ class Project {
 
         const pathSegments = hrefUrl.pathname
           .split("/")
-          .filter(seg => seg.trim().length > 0);
+          .filter((seg: string) => seg.trim().length > 0);
 
         if (pathSegments.length == 2) {
           const org = pathSegments[0];
@@ -570,7 +580,7 @@ class Project {
     });
 
     // Resolve all relative images, add class to parent
-    $("img").each((_, el) => {
+    $("img").each((_: any, el: any) => {
       const src = el.attribs["src"];
       if (!src) {
         return;
@@ -613,28 +623,28 @@ class Project {
   /**
    * Turn HTML into a sections objects.
    */
-  htmlToSections(html: string) {
+  htmlToSections(html: string): PageContent {
     const $ = cheerio.load(html);
-    const sections = [];
+    const sections: PageSection[] = [];
 
     let $headerChildren = $("div", "<div></div>");
 
     let $h1 = $("h1").first();
-    $h1.nextUntil("h2").each((_, el) => {
+    $h1.nextUntil("h2").each((_: any, el: any) => {
       $headerChildren = $headerChildren.append(el);
     });
 
-    const header = {
+    const header: PageSection = {
       name: $h1.text(),
       content: $headerChildren.html()
     };
 
-    $("h2").each((_, el) => {
+    $("h2").each((_: any, el: any) => {
       let $sibchils = $("div", "<div></div>");
 
       $(el)
         .nextUntil("h2")
-        .each((_, el) => {
+        .each((_: any, el: any) => {
           $sibchils = $sibchils.append(el);
         });
 
@@ -706,5 +716,3 @@ class Project {
     };
   }
 }
-
-module.exports = new Project();

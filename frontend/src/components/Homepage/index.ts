@@ -50,12 +50,12 @@ export default class Homepage extends Vue {
   name = "homepage";
 
   subheader_tabs: any[] = [
-    { text: "All", link: "/" },
-    { text: "iOS", link: "/platform/ios" },
-    { text: "Android", link: "/platform/android" },
-    { text: "Web", link: "/platform/web" },
-    { text: "Admin", link: "/platform/admin" },
-    { text: "Games", link: "/platform/games" }
+    { title: "All", href: "/" },
+    { title: "iOS", href: "/platform/ios" },
+    { title: "Android", href: "/platform/android" },
+    { title: "Web", href: "/platform/web" },
+    { title: "Admin", href: "/platform/admin" },
+    { title: "Games", href: "/platform/games" }
   ];
 
   fbt: FirebaseSingleton;

@@ -244,25 +244,18 @@ export default class Projects extends Vue {
       projectSidebar.pages = projectSidebar.pages.concat(subpages);
     }
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
-
-    result.config.tabs = [
-      {
-        title: "Hey",
-        link: "https://google.com"
-      }
-    ];
-
+    
     // Tabs are in this format:
     // tabs: [
     //  {
-    //    text: text,
-    //    link: link
+    //    title: text,
+    //    href: href
     //  }
     // ]
     if (result.config.tabs) {
       result.config.tabs.forEach((tab: any) => {
         result.subheader_tabs.push(
-          new SelectableLink(tab.title, tab.link, false, true)
+          new SelectableLink(tab.title, tab.href, false, true)
         );
       });
     }

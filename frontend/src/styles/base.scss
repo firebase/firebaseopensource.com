@@ -118,7 +118,10 @@ li {
 
 .content_grid {
   display: grid;
-  grid-template-columns: minmax($gutter-width, 1fr) minmax(min-content, $max-content-width) minmax($gutter-width, 1fr);
+  grid-template-columns: minmax($gutter-width, 1fr) minmax(
+      min-content,
+      $max-content-width
+    ) minmax($gutter-width, 1fr);
 }
 
 .page {

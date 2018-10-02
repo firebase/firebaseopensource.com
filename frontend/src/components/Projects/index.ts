@@ -58,24 +58,14 @@ const OSS_SIDEBAR = new SidebarSection("Open Source", [
 ]);
 
 const FIREBASE_SIDEBAR = new SidebarSection("Firebase", [
-  new SelectableLink(
-    "Docs",
-    "https://firebase.google.com/docs/",
-    false,
-    true
-  ),
+  new SelectableLink("Docs", "https://firebase.google.com/docs/", false, true),
   new SelectableLink(
     "Console",
     "https://console.firebase.google.com/",
     false,
     true
   ),
-  new SelectableLink(
-    "Blog",
-    "https://firebase.googleblog.com/",
-    false,
-    true
-  ),
+  new SelectableLink("Blog", "https://firebase.googleblog.com/", false, true),
   new SelectableLink(
     "YouTube",
     "https://www.youtube.com/user/Firebase",
@@ -128,15 +118,13 @@ export default class Projects extends Vue {
     const id = [org, repo].join("::");
 
     result.subheader_tabs = [
-      {
-        text: "Guides",
-        link: "#"
-      },
-      {
-        text: "Github",
-        link: `https://github.com/${org}/${repo}`,
-        icon: "open_in_new"
-      }
+      new SelectableLink("Guides", "#", false, false),
+      new SelectableLink(
+        "GitHub",
+        `https://github.com/${org}/${repo}`,
+        false,
+        true
+      )
     ];
 
     const repoDoc = fbt.fs.collection("content").doc(id);
@@ -222,13 +210,13 @@ export default class Projects extends Vue {
       const subpages: SelectableLink[] = [];
       Object.keys(result.config.pages).forEach((pagePath: string) => {
         let pageName;
-        const val = result.config.pages[pagePath]
+        const val = result.config.pages[pagePath];
 
         // The pages config can either look like:
         // { "path.md": true }
         // OR
         // { "path.md": "TITLE" }
-        if (typeof val  === 'string') {
+        if (typeof val === "string") {
           pageName = val;
         } else {
           pageName = pagePath;
@@ -236,7 +224,7 @@ export default class Projects extends Vue {
           pageName = pageName.replace(".md", "");
         }
 
-        const selected = (page == pagePath);
+        const selected = page == pagePath;
         subpages.push(
           new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
         );
@@ -253,10 +241,24 @@ export default class Projects extends Vue {
         }
       });
 
-      projectSidebar.pages = projectSidebar.pages.concat(subpages);''
+      projectSidebar.pages = projectSidebar.pages.concat(subpages);
     }
-
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
+    
+    // Tabs are in this format:
+    // tabs: [
+    //  {
+    //    title: text,
+    //    href: href
+    //  }
+    // ]
+    if (result.config.tabs) {
+      result.config.tabs.forEach((tab: any) => {
+        result.subheader_tabs.push(
+          new SelectableLink(tab.title, tab.href, false, true)
+        );
+      });
+    }
 
     return result;
   }

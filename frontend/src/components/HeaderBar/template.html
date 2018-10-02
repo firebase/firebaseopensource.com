@@ -26,10 +26,11 @@
             <h2 v-if="subheader_title">{{subheader_title}}</h2>
             <div class="tabs">
               <a class="tab" v-for="tab in subheader_tabs"
-                   :class="{selected: subheader_tab_selection == tab.text.toLowerCase()}"
-                   :href="tab.link">
-                {{tab.text}}
-                <i v-if="tab.icon" class="material-icons">{{tab.icon}}</i>
+                   :class="{selected: subheader_tab_selection == tab.title.toLowerCase()}"
+                   :target="tab.outbound ? '_blank' : ''"
+                   :href="tab.href">
+                {{tab.title}}
+                <i v-if="tab.outbound" class="material-icons">open_in_new</i>
               </a>
             </div>
             <div class="tab-spacer" v-if="!subheader_tabs"></div>

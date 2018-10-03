@@ -22,6 +22,7 @@ import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as path from "path";
 import * as url from "url";
+import { ObjectBuilder } from "firebase-functions/lib/providers/storage";
 
 const cjson = require("comment-json");
 const marked = require("marked");
@@ -175,7 +176,7 @@ export class Project {
     const url = this.getConfigUrl(id);
     const idParsed = this.parseProjectId(id);
 
-    const that = this;
+    const that: Project = this;
     return this.checkConfigExists(id)
       .then((exists: boolean) => {
         if (exists) {
@@ -230,7 +231,7 @@ export class Project {
           });
       })
       .then(config => {
-        return that.arraysToMaps(config);
+        return that.sanitizeForStorage(config);
       });
   }
 
@@ -656,6 +657,38 @@ export class Project {
       header,
       sections
     };
+  }
+
+  /**
+   * Sanitize a config for storage:
+   *   - Convert all arrays to map<string,boolean>
+   *   - Lowercase all map keys.
+   */
+  sanitizeForStorage(obj: any) {
+    let result = obj;
+    result = this.arraysToMaps(result);
+    result = this.lowercaseMapKeys(result);
+
+    return result;
+  }
+
+  /**
+   * For a given object, change all of the keys (recursively) to be lower case.
+   */
+  lowercaseMapKeys(obj: any) {
+    if (obj.constructor !== Object) {
+      return obj;
+    }
+
+    const newObj: any = {};
+    Object.keys(obj).forEach((key: string) => {
+      const val = obj[key];
+      const lowerKey = key.toLowerCase();
+
+      newObj[lowerKey] = this.lowercaseMapKeys(val);
+    });
+
+    return newObj;
   }
 
   /**

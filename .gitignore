@@ -5,6 +5,7 @@ functions/lib/
 npm-debug.log
 yarn-error.log
 firebase-debug.log
+.firebase
 
 # Prerendered files
 prerender/**/*.html

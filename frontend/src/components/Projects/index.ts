@@ -116,9 +116,12 @@ export default class Projects extends Vue {
     const blocked_sections = ["table of contents"];
 
     const id = [org, repo].join("::");
+    // Load up the sidebar
+    const projectPath = `/projects/${org}/${repo}`.toLowerCase();
+
 
     result.subheader_tabs = [
-      new SelectableLink("Guides", "#", false, false),
+      new SelectableLink("Guides", projectPath, false, false),
       new SelectableLink(
         "GitHub",
         `https://github.com/${org}/${repo}`,
@@ -194,11 +197,6 @@ export default class Projects extends Vue {
     );
     result.config.repo = repo;
     result.config.org = org;
-
-    // Load up the sidebar
-    const projectPath = `/projects/${result.config.org}/${
-      result.config.repo
-    }`.toLowerCase();
 
     const projectSidebar = new SidebarSection(
       "Project",

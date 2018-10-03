@@ -660,14 +660,21 @@ export class Project {
   }
 
   /**
-   * Sanitize a config for storage:
-   *   - Convert all arrays to map<string,boolean>
-   *   - Lowercase all map keys.
+   * Sanitize a config for storage in Firestore.
    */
   sanitizeForStorage(obj: any) {
     let result = obj;
-    result = this.arraysToMaps(result);
-    result = this.lowercaseMapKeys(result);
+
+    try {
+      result = this.arraysToMaps(result);
+
+      // TODO: Doing this does not work, because GitHub's content
+      // API is not case insensitive.
+      // result = this.lowercaseMapKeys(result);
+    } catch (e) {
+      console.warn("Could not sanitize: " + JSON.stringify(obj), e);
+      throw e;
+    }
 
     return result;
   }
@@ -676,19 +683,28 @@ export class Project {
    * For a given object, change all of the keys (recursively) to be lower case.
    */
   lowercaseMapKeys(obj: any) {
-    if (obj.constructor !== Object) {
-      return obj;
+    if (obj.constructor === Array) {
+      // Array, convert each member
+      const newArr: any[] = [];
+      obj.forEach((item: any) => {
+        newArr.push(this.lowercaseMapKeys(item));
+      });
+
+      return newArr;
+    } else if (obj.constructor === Object) {
+      // JSON object, convert each member.
+      const newObj: any = {};
+      Object.keys(obj).forEach((key: string) => {
+        const val = obj[key];
+        const lowerKey = key.toLowerCase();
+
+        newObj[lowerKey] = this.lowercaseMapKeys(val);
+      });
+
+      return newObj;
     }
 
-    const newObj: any = {};
-    Object.keys(obj).forEach((key: string) => {
-      const val = obj[key];
-      const lowerKey = key.toLowerCase();
-
-      newObj[lowerKey] = this.lowercaseMapKeys(val);
-    });
-
-    return newObj;
+    return obj;
   }
 
   /**
@@ -702,11 +718,10 @@ export class Project {
 
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) {
-        if (obj[key] && obj[key].constructor === Array) {
-          const arr = obj[key];
+        const arr = obj[key];
+        if (arr && arr.constructor === Array && arr[0].constructor === String) {
           const map: any = {};
-
-          arr.forEach((item: string) => {
+          arr.forEach((item: any) => {
             const itemKey = item.toLowerCase();
             map[itemKey] = true;
           });

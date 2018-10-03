@@ -47,6 +47,10 @@ class SelectableLink {
 
 declare const hljs: any;
 
+const BLOCKED_SECTIONS = [
+  "table of contents"
+];
+
 const OSS_SIDEBAR = new SidebarSection("Open Source", [
   new SelectableLink("Home", "/"),
   new SelectableLink(
@@ -113,12 +117,10 @@ export default class Projects extends Vue {
 
     const fbt = await FirebaseSingleton.GetInstance();
 
-    const blocked_sections = ["table of contents"];
-
     const id = [org, repo].join("::");
-    // Load up the sidebar
-    const projectPath = `/projects/${org}/${repo}`.toLowerCase();
 
+    const projectPath = `/projects/${org}/${repo}`.toLowerCase();
+    const pagePath = `${projectPath}/${page}`.toLowerCase();
 
     result.subheader_tabs = [
       new SelectableLink("Guides", projectPath, false, false),
@@ -165,7 +167,10 @@ export default class Projects extends Vue {
     if (configSnap.exists && !result.not_found) {
       result.found = true;
     }
+
     result.config = configSnap.data() as Config;
+    result.config.repo = repo;
+    result.config.org = org;
 
     // Choose the page name depending on available info:
     // Option 0 - title of the header section
@@ -183,7 +188,9 @@ export default class Projects extends Vue {
     result.header = data.header as Section;
 
     sections.forEach(section => {
-      if (blocked_sections.indexOf(section.name.toLowerCase()) != -1) return;
+      if (BLOCKED_SECTIONS.indexOf(section.name.toLowerCase()) >= 0) {
+        return;
+      } 
       section.id = this.as_id(section.name);
       section.ref = "#" + section.id;
       result.sections.push(section);
@@ -195,8 +202,6 @@ export default class Projects extends Vue {
     result.config.last_fetched_from_now = distanceInWordsToNow(
       result.config.last_fetched.toDate()
     );
-    result.config.repo = repo;
-    result.config.org = org;
 
     const projectSidebar = new SidebarSection(
       "Project",
@@ -206,25 +211,25 @@ export default class Projects extends Vue {
 
     if (result.config.pages) {
       const subpages: SelectableLink[] = [];
-      Object.keys(result.config.pages).forEach((pagePath: string) => {
-        let pageName;
-        const val = result.config.pages[pagePath];
-
+      Object.keys(result.config.pages).forEach((subPath: string) => {
         // The pages config can either look like:
         // { "path.md": true }
         // OR
         // { "path.md": "TITLE" }
+        let pageName;
+        const val = result.config.pages[subPath];
         if (typeof val === "string") {
           pageName = val;
         } else {
-          pageName = pagePath;
+          pageName = subPath;
           pageName = pageName.replace("/readme.md", "");
           pageName = pageName.replace(".md", "");
         }
 
-        const selected = page == pagePath;
+        const selected = (page && (page.toLowerCase() === subPath.toLowerCase()));
+        const href = `${projectPath}/${subPath}`.toLowerCase();
         subpages.push(
-          new SelectableLink(pageName, `${projectPath}/${pagePath}`, selected)
+          new SelectableLink(pageName, href, selected)
         );
       });
 

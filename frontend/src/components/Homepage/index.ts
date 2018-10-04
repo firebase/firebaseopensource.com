@@ -21,6 +21,7 @@ import HeaderBar from "../HeaderBar";
 
 import { pickLogoLetter } from "../../utils";
 
+import { Util } from "../../../../shared/util";
 import { Config } from "../../types/config";
 import { Route } from "vue-router";
 
@@ -137,8 +138,9 @@ export default class Homepage extends Vue {
                     COLORS[(docIndex + categoryIndex) % COLORS.length];
 
                   const id = doc.id;
-                  config.org = id.split("::")[0];
-                  config.repo = id.split("::")[1];
+                  const parsedId = Util.parseProjectId(id);
+                  config.org = parsedId.owner;
+                  config.repo = parsedId.repo;
 
                   const words = config.description.split(" ");
                   let sentence = words.slice(0, 10).join(" ");

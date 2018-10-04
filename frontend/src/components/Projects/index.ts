@@ -47,9 +47,7 @@ class SelectableLink {
 
 declare const hljs: any;
 
-const BLOCKED_SECTIONS = [
-  "table of contents"
-];
+const BLOCKED_SECTIONS = ["table of contents"];
 
 const OSS_SIDEBAR = new SidebarSection("Open Source", [
   new SelectableLink("Home", "/"),
@@ -190,7 +188,7 @@ export default class Projects extends Vue {
     sections.forEach(section => {
       if (BLOCKED_SECTIONS.indexOf(section.name.toLowerCase()) >= 0) {
         return;
-      } 
+      }
       section.id = this.as_id(section.name);
       section.ref = "#" + section.id;
       result.sections.push(section);
@@ -226,11 +224,9 @@ export default class Projects extends Vue {
           pageName = pageName.replace(".md", "");
         }
 
-        const selected = (page && (page.toLowerCase() === subPath.toLowerCase()));
+        const selected = page && page.toLowerCase() === subPath.toLowerCase();
         const href = `${projectPath}/${subPath}`.toLowerCase();
-        subpages.push(
-          new SelectableLink(pageName, href, selected)
-        );
+        subpages.push(new SelectableLink(pageName, href, selected));
       });
 
       // Sort the pages by their title (alphabetically)
@@ -247,7 +243,7 @@ export default class Projects extends Vue {
       projectSidebar.pages = projectSidebar.pages.concat(subpages);
     }
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
-    
+
     // Tabs are in this format:
     // tabs: [
     //  {

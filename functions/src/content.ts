@@ -1,8 +1,8 @@
 import { Config } from "./config";
 import { Github } from "./github";
 import { Logger } from "./logger";
-import { Util } from "./util";
-import { ProjectConfig, PageContent, PageSection } from "./types";
+import { Util } from "../../shared/util";
+import { ProjectConfig, PageContent, PageSection } from "../../shared/types";
 
 import * as cheerio from "cheerio";
 import * as path from "path";

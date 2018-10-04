@@ -17,8 +17,8 @@ import { Config } from "./config";
 import { Content } from "./content";
 import { Github } from "./github";
 import { Logger } from "./logger";
-import { Util } from "./util";
-import { ProjectConfig, PageContent, PageSection, ProjectPage } from "./types";
+import { Util } from "../../shared/util";
+import { ProjectConfig, PageSection, ProjectPage } from "../../shared/types";
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
@@ -53,8 +53,11 @@ export class Project {
       return this.pathToSlug(repo);
     });
 
-    Logger.debug('listAllProjectIds', `Number of base projects: ${ids.length}`);
-    Logger.debug('listAllProjectIds', `Additional Projects: ${Config.ADDITIONAL_PROJECTS}`);
+    Logger.debug("listAllProjectIds", `Number of base projects: ${ids.length}`);
+    Logger.debug(
+      "listAllProjectIds",
+      `Additional Projects: ${Config.ADDITIONAL_PROJECTS}`
+    );
     const allIds = ids.concat(Config.ADDITIONAL_PROJECTS);
     return allIds;
   };

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Util } from "./util";
-import { ProjectConfig, RepoMetadata } from "./types";
+import { Util } from "../../shared/util";
+import { ProjectConfig, RepoMetadata } from "../../shared/types";
 import * as request from "request-promise-native";
 
 const parselh = require("parse-link-header");

@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Config } from "./config";
+import { Content } from "./content";
 import { Github } from "./github";
 import { Logger } from "./logger";
+import { Util } from "./util";
 import { ProjectConfig, PageContent, PageSection, ProjectPage } from "./types";
 
 import * as cheerio from "cheerio";
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import * as path from "path";
-import * as url from "url";
-import { ObjectBuilder } from "firebase-functions/lib/providers/storage";
 
 const cjson = require("comment-json");
 const marked = require("marked");
-const urljoin = require("url-join");
 
-const github = new Github();
+const content = new Content();
+const github = new Github(Config.get("github.token"));
 const log = new Logger();
 
 // Initialize the Admin SDK with the right credentials for the environment
@@ -51,45 +51,7 @@ marked.setOptions({
 const db = admin.firestore();
 db.settings({ timestampsInSnapshots: true });
 
-const ADDITIONAL_PROJECTS_URL = github.getRawContentUrl(
-  "firebase",
-  "firebaseopensource.com",
-  "config/additional_projects.json"
-);
-
-const FEATURED_BLACKLIST_PROJECTS_URL = github.getRawContentUrl(
-  "firebase",
-  "firebaseopensource.com",
-  "config/feature_blacklist_projects.json"
-);
-
-/**
- * Global lists, see loadGlobalConfig()
- */
-let ADDITIONAL_PROJECTS: string[] = [];
-let FEATURED_BLACKLIST_PROJECTS: string[] = [];
-
 export class Project {
-  /**
-   * Load globally relevant blacklists and whitelists.
-   */
-  loadGlobalConfig = async function() {
-    if (
-      ADDITIONAL_PROJECTS.length > 0 &&
-      FEATURED_BLACKLIST_PROJECTS.length > 0
-    ) {
-      return;
-    }
-
-    const additionalData = await github.getContent(ADDITIONAL_PROJECTS_URL);
-    ADDITIONAL_PROJECTS = JSON.parse(additionalData).projects;
-
-    const blacklistData = await github.getContent(
-      FEATURED_BLACKLIST_PROJECTS_URL
-    );
-    FEATURED_BLACKLIST_PROJECTS = JSON.parse(blacklistData).projects;
-  };
-
   /**
    * Get a list of all project IDs, useful for fan-out project storing.
    */
@@ -102,7 +64,7 @@ export class Project {
       return this.pathToSlug(repo);
     });
 
-    const allIds = ids.concat(ADDITIONAL_PROJECTS);
+    const allIds = ids.concat(Config.ADDITIONAL_PROJECTS);
     return allIds;
   };
 
@@ -113,7 +75,7 @@ export class Project {
     log.debug(id, "recursiveStoreProject()");
 
     const that = this;
-    return this.loadGlobalConfig()
+    return Config.loadGlobalConfig()
       .then(() => {
         return that.getProjectConfig(id);
       })
@@ -173,8 +135,8 @@ export class Project {
    * Get the configuration for a project at a certain path.
    */
   getProjectConfig(id: string) {
-    const url = this.getConfigUrl(id);
-    const idParsed = this.parseProjectId(id);
+    const url = Github.getConfigUrl(id);
+    const idParsed = Util.parseProjectId(id);
 
     const that: Project = this;
     return this.checkConfigExists(id)
@@ -208,7 +170,7 @@ export class Project {
         }
 
         // Consult the feature blacklist
-        if (FEATURED_BLACKLIST_PROJECTS.indexOf(id) >= 0) {
+        if (Config.FEATURED_BLACKLIST_PROJECTS.indexOf(id) >= 0) {
           config.blacklist = true;
         } else {
           config.blacklist = false;
@@ -239,60 +201,8 @@ export class Project {
    * Check if the config exists for a given project.
    */
   checkConfigExists(id: string) {
-    const url = this.getConfigUrl(id);
+    const url = Github.getConfigUrl(id);
     return github.pageExists(url);
-  }
-
-  /**
-   * Get the githubusercontent base URL for a repo.
-   */
-  getRawContentBaseUrl(id: string) {
-    // Parse the ID into pieces
-    const idObj = this.parseProjectId(id);
-
-    // Get the URL to the root folder
-    const pathPrefix = idObj.path ? idObj.path + "/" : "";
-
-    return github.getRawContentUrl(idObj.owner, idObj.repo, pathPrefix);
-  }
-
-  /**
-   * Get the base github URL for a project.
-   */
-  getRenderedContentBaseUrl(id: string) {
-    // Parse the ID into pieces
-    const idObj = this.parseProjectId(id);
-
-    // Get the URL to the root folder
-    const pathPrefix = idObj.path ? idObj.path + "/" : "";
-    const url = `https://github.com/${idObj.owner}/${idObj.repo}/tree/master/${
-      pathPrefix
-    }`;
-
-    return url;
-  }
-
-  /**
-   * Get the URL to the config for a particular project ID.
-   */
-  getConfigUrl(id: string) {
-    return urljoin(this.getRawContentBaseUrl(id), ".opensource/project.json");
-  }
-
-  /**
-   * Get the URL to the content for a particular project ID.
-   */
-  getContentUrl(id: string, config: ProjectConfig) {
-    // Path to content, relative to the project
-    const contentPath = config.content;
-    return urljoin(this.getRawContentBaseUrl(id), contentPath);
-  }
-
-  /**
-   * Get the URL for the raw content for a page.
-   */
-  getPageUrl(id: string, page: string) {
-    return urljoin(this.getRawContentBaseUrl(id), page);
   }
 
   /**
@@ -353,7 +263,7 @@ export class Project {
    * Fetch a project's content.
    */
   getProjectContent(id: string, config: ProjectConfig) {
-    const url = this.getContentUrl(id, config);
+    const url = Github.getContentUrl(id, config);
 
     var that = this;
     return github
@@ -362,7 +272,7 @@ export class Project {
         return marked(data);
       })
       .then(html => {
-        return that.sanitizeHtml(id, undefined, config, html);
+        return content.sanitizeHtml(id, undefined, config, html);
       })
       .then(html => {
         return that.htmlToSections(html);
@@ -420,7 +330,7 @@ export class Project {
     // Loop through pages, get content for each
     const that = this;
     Object.keys(config.pages).forEach(page => {
-      const pageUrl = that.getPageUrl(id, page);
+      const pageUrl = Github.getPageUrl(id, page);
       log.debug(id, `Rendering page: ${pageUrl}`);
 
       const pagePromise = github
@@ -429,7 +339,7 @@ export class Project {
           return marked(data);
         })
         .then(html => {
-          return that.sanitizeHtml(id, page, config, html);
+          return content.sanitizeHtml(id, page, config, html);
         })
         .then(html => {
           pages.push({
@@ -455,42 +365,6 @@ export class Project {
   }
 
   /**
-   * Sanitize relative links to be absolute.
-   */
-  sanitizeRelativeLink(el: CheerioElement, attrName: string, base: string) {
-    const val = el.attribs[attrName];
-
-    if (val) {
-      const valUrl = url.parse(val);
-
-      if (this._isRelativeLink(val)) {
-        const newVal = urljoin(base, val);
-        el.attribs[attrName] = newVal.toLowerCase();
-      }
-    }
-  }
-
-  /**
-   * Determine if a link is to github.com
-   */
-  _isGithubLink(href: string) {
-    const hrefUrl = url.parse(href);
-    return (
-      hrefUrl.hostname && hrefUrl.pathname && href.indexOf("github.com") >= 0
-    );
-  }
-
-  /**
-   * Determine if a link is relative.
-   */
-  _isRelativeLink(href: string) {
-    const hrefUrl = url.parse(href);
-
-    // Relative link has a pathname but not a host
-    return !hrefUrl.host && hrefUrl.pathname;
-  }
-
-  /**
    * Determine if a project is listed on firebaseopensource.com
    */
   _isIncludedProject(org: string, repo: string) {
@@ -498,129 +372,11 @@ export class Project {
       return true;
     }
 
-    if (ADDITIONAL_PROJECTS.indexOf(`${org}::${repo}`) >= 0) {
+    if (Config.ADDITIONAL_PROJECTS.indexOf(`${org}::${repo}`) >= 0) {
       return true;
     }
 
     return false;
-  }
-
-  /**
-   * Sanitize the content Html.
-   */
-  sanitizeHtml(
-    repoId: string,
-    page: string,
-    config: ProjectConfig,
-    html: string
-  ) {
-    // Links
-    // * Links to page content files should go to our page
-    // * Links to source files should go to github
-    //
-    // Images
-    // * Images and other things should be made into githubusercontent links
-    // * Remove badges
-
-    let pageDir = "";
-    if (page) {
-      const lastSlash = page.lastIndexOf("/");
-      pageDir = page.substring(0, lastSlash);
-      if (lastSlash >= 0) {
-        pageDir = page.substring(0, lastSlash);
-      }
-    }
-
-    const renderedBaseUrl = urljoin(
-      this.getRenderedContentBaseUrl(repoId),
-      pageDir
-    );
-    const rawBaseUrl = urljoin(this.getRawContentBaseUrl(repoId), pageDir);
-
-    const $: CheerioStatic = cheerio.load(html);
-
-    // Resolve all relative links to github
-    const that = this;
-    $("a").each((_: number, el: CheerioElement) => {
-      const href = el.attribs["href"];
-      if (!href) {
-        return;
-      }
-
-      if (that._isGithubLink(href)) {
-        // Convert github.com/org/foo links to firebaseopensource links
-        const hrefUrl = url.parse(href);
-
-        const pathSegments = hrefUrl.pathname
-          .split("/")
-          .filter((seg: string) => seg.trim().length > 0);
-
-        if (pathSegments.length == 2) {
-          const org = pathSegments[0];
-          const repo = pathSegments[1];
-
-          if (!that._isIncludedProject(org, repo)) {
-            return;
-          }
-
-          const newLink = "/projects/" + pathSegments.join("/") + "/";
-
-          log.debug(repoId, `Replacing ${href} with ${newLink}.`);
-          el.attribs["href"] = newLink.toLowerCase();
-        }
-      }
-
-      if (that._isRelativeLink(href)) {
-        // Check if the link is to a page within the repo
-        const repoRelative = path.join(pageDir, href);
-        if (config.pages && config.pages[repoRelative]) {
-          log.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
-          that.lowercaseLink(el);
-        } else {
-          that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
-        }
-      }
-    });
-
-    // Resolve all relative images, add class to parent
-    $("img").each((_: number, el: CheerioElement) => {
-      const src = el.attribs["src"];
-      if (!src) {
-        return;
-      }
-
-      const badgeKeywords = [
-        "travis-ci.org",
-        "shields.io",
-        "coveralls.io",
-        "badge.fury.io",
-        "gitter.im",
-        "circleci.com",
-        "opencollective.com",
-        "cirrus-ci.com"
-      ];
-
-      let isBadge = false;
-      badgeKeywords.forEach(word => {
-        if (src.indexOf(word) >= 0) {
-          isBadge = true;
-        }
-      });
-
-      if (isBadge) {
-        // Mark Badges
-        $(el).addClass("img-badge");
-      } else {
-        // Add the image-parent class to the parent
-        $(el)
-          .parent()
-          .addClass("img-parent");
-      }
-
-      that.sanitizeRelativeLink(el, "src", rawBaseUrl);
-    });
-
-    return $.html();
   }
 
   /**
@@ -751,31 +507,5 @@ export class Project {
     });
 
     return newobj;
-  }
-
-  /**
-   * Parse a project ID slug into {owner,repo,path}.
-   */
-  parseProjectId(id: string) {
-    const sections = id.split("::");
-
-    if (sections.length < 2) {
-      throw `Invalid project id: ${id}`;
-    }
-
-    const owner = sections[0];
-    const repo = sections[1];
-
-    let path = undefined;
-    if (sections.length > 2) {
-      const pathSections = sections.slice(2, sections.length);
-      path = pathSections.join("/");
-    }
-
-    return {
-      owner,
-      repo,
-      path
-    };
   }
 }

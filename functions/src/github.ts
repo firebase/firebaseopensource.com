@@ -13,45 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { RepoMetadata } from "./types";
-import { Config } from "./config";
+import { Util } from "./util";
+import { ProjectConfig, RepoMetadata } from "./types";
 import * as request from "request-promise-native";
+
 const parselh = require("parse-link-header");
-
-const config = new Config();
-
-const _GH_OPTIONS_STANDARD = {
-  headers: {
-    "user-agent": "node.js",
-    Authorization: `token ${config.get("github.token")}`
-  },
-  json: true
-};
-
-const _GH_OPTIONS_FULL = {
-  headers: {
-    "user-agent": "node.js",
-    Authorization: `token ${config.get("github.token")}`
-  },
-  json: true,
-  resolveWithFullResponse: true
-};
-
-const _GH_CONTENT_HEADERS = {
-  "Cache-Control": "max-age=0",
-  Authorization: `token ${config.get("github.token")}`
-};
-
-const _GH_OPTIONS_CONTENT_GET = {
-  headers: _GH_CONTENT_HEADERS
-};
-
-const _GH_OPTIONS_CONTENT_HEAD = {
-  method: "HEAD",
-  headers: _GH_CONTENT_HEADERS
-};
+const urljoin = require("url-join");
 
 export class Github {
+  token: string;
+
+  constructor(token: string) {
+    this.token = token;
+  }
+
+  /**
+   * Get the URL to the config for a particular project ID.
+   */
+  static getConfigUrl(id: string) {
+    return urljoin(Github.getRawContentBaseUrl(id), ".opensource/project.json");
+  }
+
+  /**
+   * Get the URL to the content for a particular project ID.
+   */
+  static getContentUrl(id: string, config: ProjectConfig) {
+    // Path to content, relative to the project
+    const contentPath = config.content;
+    return urljoin(Github.getRawContentBaseUrl(id), contentPath);
+  }
+
+  /**
+   * Get the URL for the raw content for a page.
+   */
+  static getPageUrl(id: string, page: string) {
+    return urljoin(Github.getRawContentBaseUrl(id), page);
+  }
+
+  /**
+   * Get the raw.githubusercontent URL for a file
+   */
+  static getRawContentUrl(owner: string, repo: string, path: string): string {
+    return `https://raw.githubusercontent.com/${owner}/${repo}/master/${path}`;
+  }
+
+  /**
+   * Get the githubusercontent base URL for a repo.
+   */
+  static getRawContentBaseUrl(id: string) {
+    // Parse the ID into pieces
+    const idObj = Util.parseProjectId(id);
+
+    // Get the URL to the root folder
+    const pathPrefix = idObj.path ? idObj.path + "/" : "";
+
+    return Github.getRawContentUrl(idObj.owner, idObj.repo, pathPrefix);
+  }
+
   /**
    * List the full name of all repos of a github org.
    */
@@ -71,7 +89,7 @@ export class Github {
   getRepoMetadata(org: string, repo: string): Promise<RepoMetadata> {
     const url = `https://api.github.com/repos/${org}/${repo}`;
 
-    return request(url, _GH_OPTIONS_STANDARD).then(repo => {
+    return request(url, this.getStandardOptions()).then(repo => {
       return {
         description: repo.description,
         fork: repo.fork,
@@ -87,7 +105,7 @@ export class Github {
   getRepoReadmeFile(org: string, repo: string): Promise<string> {
     const url = `https://api.github.com/repos/${org}/${repo}/readme`;
 
-    return request(url, _GH_OPTIONS_STANDARD).then(resp => {
+    return request(url, this.getStandardOptions()).then(resp => {
       return resp.path;
     });
   }
@@ -99,7 +117,7 @@ export class Github {
     const res = results ? results : [];
 
     var that = this;
-    return request(url, _GH_OPTIONS_FULL).then(response => {
+    return request(url, this.getFullOptions()).then(response => {
       const data = response.body;
       const headers = response.headers;
 
@@ -119,18 +137,11 @@ export class Github {
   }
 
   /**
-   * Get the raw.githubusercontent URL for a file
-   */
-  getRawContentUrl(owner: string, repo: string, path: string): string {
-    return `https://raw.githubusercontent.com/${owner}/${repo}/master/${path}`;
-  }
-
-  /**
    * Get raw content from Github.
    * URL should be a raw.githubusercontent page.
    */
   getContent(url: string) {
-    return request(url, _GH_OPTIONS_CONTENT_GET);
+    return request(url, this.getContentGetOptions());
   }
 
   /**
@@ -138,12 +149,62 @@ export class Github {
    * URL should be a raw.githubusercontent page.
    */
   pageExists(url: string): Promise<boolean> {
-    return request(url, _GH_OPTIONS_CONTENT_HEAD)
+    return request(url, this.getContentHeadOptions())
       .then(() => {
         return true;
       })
       .catch(() => {
         return false;
       });
+  }
+
+  private getStandardOptions() {
+    const _GH_OPTIONS_STANDARD = {
+      headers: {
+        "user-agent": "node.js",
+        Authorization: `token ${this.token}`
+      },
+      json: true
+    };
+    return _GH_OPTIONS_STANDARD;
+  }
+
+  private getFullOptions() {
+    const _GH_OPTIONS_FULL = {
+      headers: {
+        "user-agent": "node.js",
+        Authorization: `token ${this.token}`
+      },
+      json: true,
+      resolveWithFullResponse: true
+    };
+
+    return _GH_OPTIONS_FULL;
+  }
+
+  private getContentHeaders() {
+    const _GH_CONTENT_HEADERS = {
+      "Cache-Control": "max-age=0",
+      Authorization: `token ${this.token}`
+    };
+
+    return _GH_CONTENT_HEADERS;
+  }
+
+  private getContentHeadOptions() {
+    const _GH_OPTIONS_CONTENT_HEAD = {
+      method: "HEAD",
+      headers: this.getContentHeaders
+    };
+
+    return _GH_OPTIONS_CONTENT_HEAD;
+  }
+
+  private getContentGetOptions() {
+    const _GH_OPTIONS_CONTENT_GET = {
+      headers: this.getContentHeaders()
+    };
+
+    return _GH_OPTIONS_CONTENT_GET;
   }
 }

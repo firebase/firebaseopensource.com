@@ -46,11 +46,11 @@ export class Project {
    */
   listAllProjectIds = async function() {
     // Loads ADDITIONAL_PROJECTS
-    await this.loadGlobalConfig();
+    await Config.loadGlobalConfig();
 
     const repos = await github.listAllRepos("firebase");
     const ids = repos.map(repo => {
-      return this.pathToSlug(repo);
+      return Util.pathToSlug(repo);
     });
 
     Logger.debug("listAllProjectIds", `Number of base projects: ${ids.length}`);
@@ -68,15 +68,14 @@ export class Project {
   recursiveStoreProject(id: string) {
     Logger.debug(id, "recursiveStoreProject()");
 
-    const that = this;
     return Config.loadGlobalConfig()
       .then(() => {
-        return that.getProjectConfig(id);
+        return this.getProjectConfig(id);
       })
       .then(config => {
         // Store this project's config and content
-        const storeConfig = that.storeProjectConfig(id, config);
-        const storeContent = that.storeProjectContent(id, config);
+        const storeConfig = this.storeProjectConfig(id, config);
+        const storeContent = this.storeProjectContent(id, config);
 
         // Wait for both to complete then pass on config
         return Promise.all([storeConfig, storeContent]);
@@ -118,7 +117,6 @@ export class Project {
     const url = Github.getConfigUrl(id);
     const idParsed = Util.parseProjectId(id);
 
-    const that: Project = this;
     return this.checkConfigExists(id)
       .then((exists: boolean) => {
         if (exists) {
@@ -146,7 +144,7 @@ export class Project {
       .then(config => {
         // Add inferred platforms
         if (!config.platforms) {
-          config.platforms = that.inferPlatforms(id);
+          config.platforms = this.inferPlatforms(id);
         }
 
         // Consult the feature blacklist
@@ -173,7 +171,7 @@ export class Project {
           });
       })
       .then(config => {
-        return that.sanitizeForStorage(config);
+        return this.sanitizeForStorage(config);
       });
   }
 
@@ -209,7 +207,6 @@ export class Project {
    * Fetch a project's content and put it into Firestore.
    */
   async storeProjectContent(id: string, config: ProjectConfig): Promise<any> {
-    var that = this;
     const contentRef = db.collection("content").doc(Util.normalizeId(id));
 
     const sections = await this.getProjectContent(id, config);
@@ -298,7 +295,6 @@ export class Project {
     const pages: ProjectPage[] = [];
 
     // Loop through pages, get content for each
-    const that = this;
     Object.keys(config.pages).forEach(page => {
       const pageUrl = Github.getPageUrl(id, page);
       Logger.debug(id, `Rendering page: ${pageUrl}`);

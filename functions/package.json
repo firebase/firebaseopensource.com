@@ -1,7 +1,7 @@
 {
   "name": "firebaseopensource",
   "description": "firebaseopensource.com",
-  "main": "lib/index.js",
+  "main": "lib/functions/src/index.js",
   "dependencies": {
     "@google-cloud/pubsub": "^0.19.0",
     "cheerio": "1.0.0-rc.1",

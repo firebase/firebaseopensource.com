@@ -2,7 +2,7 @@ import { Config } from "./config";
 import { Github } from "./github";
 import { Logger } from "./logger";
 import { Util } from "./util";
-import { ProjectConfig } from "./types";
+import { ProjectConfig, PageContent, PageSection } from "./types";
 
 import * as cheerio from "cheerio";
 import * as path from "path";
@@ -10,9 +10,37 @@ import * as url from "url";
 
 const urljoin = require("url-join");
 
+// Initialize marked with options
+const marked = require("marked");
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false
+});
+
 const log = new Logger();
 
 export class Content {
+  /**
+   * Runs a processing chain including:
+   *   - Converting markfown to HTML
+   *   - Sanitizing the HTML
+   *   - Converting HTML to sections
+   */
+  processMarkdown(
+    data: string,
+    repoId: string,
+    page: string | undefined,
+    config: ProjectConfig
+  ): PageContent {
+    const html: string = marked(data);
+    const sanitizedHtml = this.sanitizeHtml(repoId, page, config, html);
+    const sections = this.htmlToSections(sanitizedHtml);
+
+    return sections;
+  }
+
   /**
    * Sanitize the content Html.
    */
@@ -21,7 +49,7 @@ export class Content {
     page: string,
     config: ProjectConfig,
     html: string
-  ) {
+  ): string {
     // Links
     // * Links to page content files should go to our page
     // * Links to source files should go to github
@@ -129,6 +157,46 @@ export class Content {
     });
 
     return $.html();
+  }
+
+  /**
+   * Turn HTML into a sections objects.
+   */
+  htmlToSections(html: string): PageContent {
+    const $ = cheerio.load(html);
+    const sections: PageSection[] = [];
+
+    let $headerChildren = $("div", "<div></div>");
+
+    let $h1 = $("h1").first();
+    $h1.nextUntil("h2").each((_: number, el: any) => {
+      $headerChildren = $headerChildren.append(el);
+    });
+
+    const header: PageSection = {
+      name: $h1.text(),
+      content: $headerChildren.html()
+    };
+
+    $("h2").each((_: number, el: CheerioElement) => {
+      let $sibchils = $("div", "<div></div>");
+
+      $(el)
+        .nextUntil("h2")
+        .each((_: number, el: any) => {
+          $sibchils = $sibchils.append(el);
+        });
+
+      sections.push({
+        name: $(el).text(),
+        content: $sibchils.html()
+      });
+    });
+
+    return {
+      header,
+      sections
+    };
   }
 
   /**

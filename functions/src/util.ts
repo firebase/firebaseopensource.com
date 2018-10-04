@@ -1,5 +1,19 @@
 export class Util {
   /**
+   * Make sure all IDs have the same casing, etc.f
+   */
+  static normalizeId(id: string): string {
+    return id.toLowerCase();
+  }
+
+  /**
+   * Convert a path with slashes to a slug.
+   */
+  static pathToSlug(path: string): string {
+    return this.normalizeId(path.replace(/\//g, "::"));
+  }
+
+  /**
    * Parse a project ID slug into {owner,repo,path}.
    */
   static parseProjectId(id: string) {

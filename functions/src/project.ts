@@ -20,12 +20,10 @@ import { Logger } from "./logger";
 import { Util } from "./util";
 import { ProjectConfig, PageContent, PageSection, ProjectPage } from "./types";
 
-import * as cheerio from "cheerio";
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 
 const cjson = require("comment-json");
-const marked = require("marked");
 
 const content = new Content();
 const github = new Github(Config.get("github.token"));
@@ -39,14 +37,6 @@ try {
     credential: admin.credential.applicationDefault()
   });
 }
-
-// Initialize marked with options
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false
-});
 
 const db = admin.firestore();
 db.settings({ timestampsInSnapshots: true });
@@ -90,20 +80,6 @@ export class Project {
       .catch(e => {
         log.error(id, "recursiveStoreProject failed", e);
       });
-  }
-
-  /**
-   * Make sure all IDs have the same casing, etc.f
-   */
-  normalizeId(id: string) {
-    return id.toLowerCase();
-  }
-
-  /**
-   * Convert a path with slashes to a slug.
-   */
-  pathToSlug(path: string) {
-    return this.normalizeId(path.replace(/\//g, "::"));
   }
 
   /**
@@ -210,7 +186,7 @@ export class Project {
    */
   storeProjectConfig(id: string, config: ProjectConfig) {
     const data = config;
-    const docId = this.normalizeId(id);
+    const docId = Util.normalizeId(id);
 
     // Add server timestamp
     data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
@@ -230,7 +206,7 @@ export class Project {
    */
   async storeProjectContent(id: string, config: ProjectConfig): Promise<any> {
     var that = this;
-    const contentRef = db.collection("content").doc(this.normalizeId(id));
+    const contentRef = db.collection("content").doc(Util.normalizeId(id));
 
     const sections = await this.getProjectContent(id, config);
 
@@ -246,10 +222,7 @@ export class Project {
     const batch = db.batch();
 
     content.forEach((page: ProjectPage) => {
-      const slug = that
-        .pathToSlug(page.name)
-        .toString()
-        .toLowerCase();
+      const slug = Util.pathToSlug(page.name);
       const ref = contentRef.collection("pages").doc(slug);
 
       log.debug(id, `Storing ${page.name} content at path ${ref.path}`);
@@ -265,20 +238,13 @@ export class Project {
   getProjectContent(id: string, config: ProjectConfig) {
     const url = Github.getContentUrl(id, config);
 
-    var that = this;
     return github
       .getContent(url)
       .then(data => {
-        return marked(data);
-      })
-      .then(html => {
-        return content.sanitizeHtml(id, undefined, config, html);
-      })
-      .then(html => {
-        return that.htmlToSections(html);
+        return content.processMarkdown(data, id, undefined, config);
       })
       .then(content => {
-        content.sections = that.filterProjectSections(content.sections);
+        content.sections = this.filterProjectSections(content.sections);
         return content;
       });
   }
@@ -336,15 +302,12 @@ export class Project {
       const pagePromise = github
         .getContent(pageUrl)
         .then(data => {
-          return marked(data);
+          return content.processMarkdown(data, id, page, config);
         })
-        .then(html => {
-          return content.sanitizeHtml(id, page, config, html);
-        })
-        .then(html => {
+        .then(sections => {
           pages.push({
             name: page,
-            content: that.htmlToSections(html)
+            content: sections
           });
         });
 
@@ -354,69 +317,6 @@ export class Project {
     return Promise.all(promises).then(() => {
       return pages;
     });
-  }
-
-  /**
-   * Change href to lowercase.
-   */
-  lowercaseLink(el: CheerioElement) {
-    const newVal = el.attribs["href"].toLowerCase();
-    el.attribs["href"] = newVal;
-  }
-
-  /**
-   * Determine if a project is listed on firebaseopensource.com
-   */
-  _isIncludedProject(org: string, repo: string) {
-    if (org === "firebase") {
-      return true;
-    }
-
-    if (Config.ADDITIONAL_PROJECTS.indexOf(`${org}::${repo}`) >= 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Turn HTML into a sections objects.
-   */
-  htmlToSections(html: string): PageContent {
-    const $ = cheerio.load(html);
-    const sections: PageSection[] = [];
-
-    let $headerChildren = $("div", "<div></div>");
-
-    let $h1 = $("h1").first();
-    $h1.nextUntil("h2").each((_: number, el: any) => {
-      $headerChildren = $headerChildren.append(el);
-    });
-
-    const header: PageSection = {
-      name: $h1.text(),
-      content: $headerChildren.html()
-    };
-
-    $("h2").each((_: number, el: CheerioElement) => {
-      let $sibchils = $("div", "<div></div>");
-
-      $(el)
-        .nextUntil("h2")
-        .each((_: number, el: any) => {
-          $sibchils = $sibchils.append(el);
-        });
-
-      sections.push({
-        name: $(el).text(),
-        content: $sibchils.html()
-      });
-    });
-
-    return {
-      header,
-      sections
-    };
   }
 
   /**

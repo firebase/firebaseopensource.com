@@ -221,7 +221,7 @@ export default class Projects extends Vue {
         if (typeof val === "string") {
           pageName = val;
         } else {
-          pageName = subPath;
+          pageName = subPath.toLowerCase();
           pageName = pageName.replace("/readme.md", "");
           pageName = pageName.replace(".md", "");
         }

@@ -135,7 +135,7 @@ export default class Projects extends Vue {
     const repoDoc = fbt.fs.collection("content").doc(id);
     const configDoc = fbt.fs.collection("configs").doc(id);
 
-    let dataDoc;
+    let pageContentDoc;
     if (page) {
       let page_id = page
         .split("/")
@@ -146,15 +146,15 @@ export default class Projects extends Vue {
         page_id += ".md";
       }
 
-      dataDoc = repoDoc.collection("pages").doc(page_id);
+      pageContentDoc = repoDoc.collection("pages").doc(page_id);
       result.is_subpage = true;
     } else {
       result.is_subpage = false;
-      dataDoc = repoDoc;
+      pageContentDoc = repoDoc;
     }
 
     // Load conetnt
-    const snapshot = await dataDoc.get();
+    const snapshot = await pageContentDoc.get();
     if (!snapshot.exists) {
       result.not_found = true;
     } else {

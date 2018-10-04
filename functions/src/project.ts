@@ -306,6 +306,7 @@ export class Project {
     data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
 
     log.debug(id, `Storing at /configs/${docId}`);
+    log.debug(id, "Config: " + JSON.stringify(config));
     const configProm = db
       .collection("configs")
       .doc(docId)
@@ -335,7 +336,10 @@ export class Project {
     const batch = db.batch();
 
     content.forEach((page: ProjectPage) => {
-      const slug = that.pathToSlug(page.name).toString();
+      const slug = that
+        .pathToSlug(page.name)
+        .toString()
+        .toLowerCase();
       const ref = contentRef.collection("pages").doc(slug);
 
       log.debug(id, `Storing ${page.name} content at path ${ref.path}`);
@@ -666,7 +670,7 @@ export class Project {
     let result = obj;
 
     try {
-      result = this.arraysToMaps(result);
+      result = this.arraysToMaps(result, ["platforms", "related"]);
 
       // TODO: Doing this does not work, because GitHub's content
       // API is not case insensitive.
@@ -713,33 +717,38 @@ export class Project {
    *
    * Assumes no nested arrays.
    */
-  arraysToMaps(obj: any) {
+  arraysToMaps(obj: any, lowercase: string[] = []) {
     const newobj: any = {};
 
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const arr = obj[key];
+    Object.keys(obj).forEach(key => {
+      const arr = obj[key];
 
-        // Only sanitize if it's a non-empty
-        // array of strings.
-        if (
-          arr &&
-          arr.constructor === Array &&
-          arr.length > 0 &&
-          arr[0].constructor === String
-        ) {
-          const map: any = {};
-          arr.forEach((item: any) => {
-            const itemKey = item.toLowerCase();
-            map[itemKey] = true;
-          });
+      // Only sanitize if it's a non-empty
+      // array of strings.
+      if (
+        arr &&
+        arr.constructor === Array &&
+        arr.length > 0 &&
+        arr[0].constructor === String
+      ) {
+        const map: any = {};
+        arr.forEach((item: any) => {
+          // If requested, lowercase the item
+          let itemKey;
+          if (lowercase.indexOf(key) >= 0) {
+            itemKey = item.toLowerCase();
+          } else {
+            itemKey = item;
+          }
 
-          newobj[key] = map;
-        } else {
-          newobj[key] = obj[key];
-        }
+          map[itemKey] = true;
+        });
+
+        newobj[key] = map;
+      } else {
+        newobj[key] = obj[key];
       }
-    }
+    });
 
     return newobj;
   }

@@ -101,7 +101,7 @@ export class Content {
 
           const newLink = "/projects/" + pathSegments.join("/") + "/";
 
-          log.debug(repoId, `Replacing ${href} with ${newLink}.`);
+          Logger.debug(repoId, `Replacing ${href} with ${newLink}.`);
           el.attribs["href"] = newLink.toLowerCase();
         }
       }
@@ -110,7 +110,7 @@ export class Content {
         // Check if the link is to a page within the repo
         const repoRelative = path.join(pageDir, href);
         if (config.pages && config.pages[repoRelative]) {
-          log.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
+          Logger.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
           that.lowercaseLink(el);
         } else {
           that.sanitizeRelativeLink(el, "href", renderedBaseUrl);

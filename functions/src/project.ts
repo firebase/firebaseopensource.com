@@ -27,7 +27,6 @@ const cjson = require("comment-json");
 
 const content = new Content();
 const github = new Github(Config.get("github.token"));
-const log = new Logger();
 
 // Initialize the Admin SDK with the right credentials for the environment
 try {
@@ -54,6 +53,8 @@ export class Project {
       return this.pathToSlug(repo);
     });
 
+    Logger.debug('listAllProjectIds', `Number of base projects: ${ids.length}`);
+    Logger.debug('listAllProjectIds', `Additional Projects: ${Config.ADDITIONAL_PROJECTS}`);
     const allIds = ids.concat(Config.ADDITIONAL_PROJECTS);
     return allIds;
   };
@@ -62,7 +63,7 @@ export class Project {
    * Store a project and all of its pages.
    */
   recursiveStoreProject(id: string) {
-    log.debug(id, "recursiveStoreProject()");
+    Logger.debug(id, "recursiveStoreProject()");
 
     const that = this;
     return Config.loadGlobalConfig()
@@ -78,7 +79,7 @@ export class Project {
         return Promise.all([storeConfig, storeContent]);
       })
       .catch(e => {
-        log.error(id, "recursiveStoreProject failed", e);
+        Logger.error(id, "recursiveStoreProject failed", e);
       });
   }
 
@@ -126,11 +127,11 @@ export class Project {
           });
         } else {
           // If the project has no config, make one up
-          log.debug(id, "WARN: Using default config.");
+          Logger.debug(id, "WARN: Using default config.");
           return github
             .getRepoReadmeFile(idParsed.owner, idParsed.repo)
             .then((readme: string) => {
-              log.debug(id, `README: ${readme}`);
+              Logger.debug(id, `README: ${readme}`);
               return {
                 name: idParsed.repo,
                 type: "library",
@@ -191,8 +192,8 @@ export class Project {
     // Add server timestamp
     data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
 
-    log.debug(id, `Storing at /configs/${docId}`);
-    log.debug(id, "Config: " + JSON.stringify(config));
+    Logger.debug(id, `Storing at /configs/${docId}`);
+    Logger.debug(id, "Config: " + JSON.stringify(config));
     const configProm = db
       .collection("configs")
       .doc(docId)
@@ -225,7 +226,7 @@ export class Project {
       const slug = Util.pathToSlug(page.name);
       const ref = contentRef.collection("pages").doc(slug);
 
-      log.debug(id, `Storing ${page.name} content at path ${ref.path}`);
+      Logger.debug(id, `Storing ${page.name} content at path ${ref.path}`);
       batch.set(ref, page.content);
     });
 
@@ -284,11 +285,11 @@ export class Project {
     config: ProjectConfig
   ): Promise<ProjectPage[]> {
     if (!config.pages || Object.keys(config.pages).length == 0) {
-      log.debug(id, `Project has no extra pages.`);
+      Logger.debug(id, `Project has no extra pages.`);
       return Promise.resolve([]);
     }
 
-    log.debug(id, `Getting page content for extra pages.`);
+    Logger.debug(id, `Getting page content for extra pages.`);
 
     const promises: Promise<void>[] = [];
     const pages: ProjectPage[] = [];
@@ -297,7 +298,7 @@ export class Project {
     const that = this;
     Object.keys(config.pages).forEach(page => {
       const pageUrl = Github.getPageUrl(id, page);
-      log.debug(id, `Rendering page: ${pageUrl}`);
+      Logger.debug(id, `Rendering page: ${pageUrl}`);
 
       const pagePromise = github
         .getContent(pageUrl)

@@ -22,6 +22,7 @@
     "node": "8"
   },
   "scripts": {
+    "dev": "npm run build && firebase functions:config:get > .runtimeconfig.json && firebase serve --only functions",
     "build": "npm run fmt && tsc",
     "fmt": "prettier --write src/*.ts src/test/*.ts"
   },

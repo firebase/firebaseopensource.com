@@ -15,11 +15,11 @@
  */
 
 export class Logger {
-  debug(tag: string, msg: string) {
+  static debug(tag: string, msg: string) {
     console.log(`[${tag}] ${msg}`);
   }
 
-  error(tag: string, msg: string, e: any) {
+  static error(tag: string, msg: string, e: any) {
     console.warn(`[${tag}] ERROR: ${msg}`, e);
   }
 }

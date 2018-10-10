@@ -58,10 +58,10 @@ display on FOSDC, add a reference to each one in the `pages` field of your confi
 ```javascript
 {
 
-    "pages": [
+    "pages": {
         "docs/page_one.md": "Page One Title",
         "docs/folder/page_two.md": "Page Two Title"
-    ]
+    }
 
 }
 ```

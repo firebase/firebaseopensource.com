@@ -19,7 +19,62 @@ type Section = {
   ref?: String;
 };
 
+class SidebarSection {
+  title: String = "";
+  expanded: Boolean = false;
+  pages: SelectableLink[] = [];
+
+  constructor(title: String, pages: SelectableLink[], expanded = false) {
+    this.title = title;
+    this.pages = pages;
+    this.expanded = expanded;
+  }
+}
+
+class SelectableLink {
+  title: String = "";
+  href: String = "";
+  selected: Boolean = false;
+  outbound: Boolean = false;
+
+  constructor(title: String, href: String, selected = false, outbound = false) {
+    this.title = title;
+    this.href = href;
+    this.selected = selected;
+    this.outbound = outbound;
+  }
+}
+
 declare const hljs: any;
+
+const BLOCKED_SECTIONS = ["table of contents"];
+
+const OSS_SIDEBAR = new SidebarSection("Open Source", [
+  new SelectableLink("Home", "/"),
+  new SelectableLink(
+    "Add Project",
+    "https://github.com/firebase/firebaseopensource.com/issues/new/choose",
+    false,
+    true
+  )
+]);
+
+const FIREBASE_SIDEBAR = new SidebarSection("Firebase", [
+  new SelectableLink("Docs", "https://firebase.google.com/docs/", false, true),
+  new SelectableLink(
+    "Console",
+    "https://console.firebase.google.com/",
+    false,
+    true
+  ),
+  new SelectableLink("Blog", "https://firebase.googleblog.com/", false, true),
+  new SelectableLink(
+    "YouTube",
+    "https://www.youtube.com/user/Firebase",
+    false,
+    true
+  )
+]);
 
 @Component({
   components: { HeaderBar, FourOhFour }
@@ -46,6 +101,8 @@ export default class Projects extends Vue {
   found: Boolean;
   @Prop()
   subheader_tabs: any[];
+  @Prop()
+  sidebar: SidebarSection[];
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
@@ -58,26 +115,25 @@ export default class Projects extends Vue {
 
     const fbt = await FirebaseSingleton.GetInstance();
 
-    const blocked_sections = ["table of contents"];
-
     const id = [org, repo].join("::");
 
+    const projectPath = `/projects/${org}/${repo}`.toLowerCase();
+    const pagePath = `${projectPath}/${page}`.toLowerCase();
+
     result.subheader_tabs = [
-      {
-        text: "Guides",
-        link: "#"
-      },
-      {
-        text: "Github",
-        link: `https://github.com/${org}/${repo}`,
-        icon: 'open_in_new'
-      }
+      new SelectableLink("Guides", projectPath, false, false),
+      new SelectableLink(
+        "GitHub",
+        `https://github.com/${org}/${repo}`,
+        false,
+        true
+      )
     ];
 
     const repoDoc = fbt.fs.collection("content").doc(id);
     const configDoc = fbt.fs.collection("configs").doc(id);
 
-    let dataDoc;
+    let pageContentDoc;
     if (page) {
       let page_id = page
         .split("/")
@@ -88,15 +144,15 @@ export default class Projects extends Vue {
         page_id += ".md";
       }
 
-      dataDoc = repoDoc.collection("pages").doc(page_id);
+      pageContentDoc = repoDoc.collection("pages").doc(page_id);
       result.is_subpage = true;
     } else {
       result.is_subpage = false;
-      dataDoc = repoDoc;
+      pageContentDoc = repoDoc;
     }
 
     // Load conetnt
-    const snapshot = await dataDoc.get();
+    const snapshot = await pageContentDoc.get();
     if (!snapshot.exists) {
       result.not_found = true;
     } else {
@@ -109,7 +165,10 @@ export default class Projects extends Vue {
     if (configSnap.exists && !result.not_found) {
       result.found = true;
     }
+
     result.config = configSnap.data() as Config;
+    result.config.repo = repo;
+    result.config.org = org;
 
     // Choose the page name depending on available info:
     // Option 0 - title of the header section
@@ -118,7 +177,7 @@ export default class Projects extends Vue {
     if (data.header.name) {
       result.page_title = data.header.name;
     } else if (result.config.name) {
-      result.page_title = result.config.name
+      result.page_title = result.config.name;
     } else {
       result.page_title = repo;
     }
@@ -127,7 +186,9 @@ export default class Projects extends Vue {
     result.header = data.header as Section;
 
     sections.forEach(section => {
-      if (blocked_sections.indexOf(section.name.toLowerCase()) != -1) return;
+      if (BLOCKED_SECTIONS.indexOf(section.name.toLowerCase()) >= 0) {
+        return;
+      }
       section.id = this.as_id(section.name);
       section.ref = "#" + section.id;
       result.sections.push(section);
@@ -139,8 +200,64 @@ export default class Projects extends Vue {
     result.config.last_fetched_from_now = distanceInWordsToNow(
       result.config.last_fetched.toDate()
     );
-    result.config.repo = repo;
-    result.config.org = org;
+
+    const projectSidebar = new SidebarSection(
+      "Project",
+      [new SelectableLink("Home", projectPath, !result.is_subpage)],
+      true
+    );
+
+    if (result.config.pages) {
+      const subpages: SelectableLink[] = [];
+      Object.keys(result.config.pages).forEach((subPath: string) => {
+        // The pages config can either look like:
+        // { "path.md": true }
+        // OR
+        // { "path.md": "TITLE" }
+        let pageName;
+        const val = result.config.pages[subPath];
+        if (typeof val === "string") {
+          pageName = val;
+        } else {
+          pageName = subPath.toLowerCase();
+          pageName = pageName.replace("/readme.md", "");
+          pageName = pageName.replace(".md", "");
+        }
+
+        const selected = page && page.toLowerCase() === subPath.toLowerCase();
+        const href = `${projectPath}/${subPath}`.toLowerCase();
+        subpages.push(new SelectableLink(pageName, href, selected));
+      });
+
+      // Sort the pages by their title (alphabetically)
+      subpages.sort((a, b) => {
+        if (a.title > b.title) {
+          return 1;
+        } else if (a.title == b.title) {
+          return 0;
+        } else {
+          return -1;
+        }
+      });
+
+      projectSidebar.pages = projectSidebar.pages.concat(subpages);
+    }
+    result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
+
+    // Tabs are in this format:
+    // tabs: [
+    //  {
+    //    title: text,
+    //    href: href
+    //  }
+    // ]
+    if (result.config.tabs) {
+      result.config.tabs.forEach((tab: any) => {
+        result.subheader_tabs.push(
+          new SelectableLink(tab.title, tab.href, false, true)
+        );
+      });
+    }
 
     return result;
   }

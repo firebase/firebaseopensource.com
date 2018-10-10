@@ -21,6 +21,7 @@ import HeaderBar from "../HeaderBar";
 
 import { pickLogoLetter } from "../../utils";
 
+import { Util } from "../../../../shared/util";
 import { Config } from "../../types/config";
 import { Route } from "vue-router";
 
@@ -50,12 +51,12 @@ export default class Homepage extends Vue {
   name = "homepage";
 
   subheader_tabs: any[] = [
-    { text: "All", link: "/" },
-    { text: "iOS", link: "/platform/ios" },
-    { text: "Android", link: "/platform/android" },
-    { text: "Web", link: "/platform/web" },
-    { text: "Admin", link: "/platform/admin" },
-    { text: "Games", link: "/platform/games" }
+    { title: "All", href: "/" },
+    { title: "iOS", href: "/platform/ios" },
+    { title: "Android", href: "/platform/android" },
+    { title: "Web", href: "/platform/web" },
+    { title: "Admin", href: "/platform/admin" },
+    { title: "Games", href: "/platform/games" }
   ];
 
   fbt: FirebaseSingleton;
@@ -106,11 +107,17 @@ export default class Homepage extends Vue {
     ];
   }
 
-  static async load() {
+  static async load(platform: string) {
     const fbt = await FirebaseSingleton.GetInstance();
     const categories = this.getCategories();
     // TODO use
     const cancels = [] as any[];
+
+    let limit = 6;
+    if (platform && platform !== "all") {
+      limit = 100;
+    }
+
     await Promise.all(
       categories.map((category, categoryIndex) => {
         return new Promise((resolve, reject) => {
@@ -122,6 +129,7 @@ export default class Homepage extends Vue {
               .orderBy(`platforms.${category.platform}`)
               .orderBy("stars", "desc")
               .orderBy("description")
+              .limit(limit)
               .onSnapshot((snapshot: any) => {
                 snapshot.docs.forEach((doc: any, docIndex: any) => {
                   const config = doc.data() as Config;
@@ -130,8 +138,9 @@ export default class Homepage extends Vue {
                     COLORS[(docIndex + categoryIndex) % COLORS.length];
 
                   const id = doc.id;
-                  config.org = id.split("::")[0];
-                  config.repo = id.split("::")[1];
+                  const parsedId = Util.parseProjectId(id);
+                  config.org = parsedId.owner;
+                  config.repo = parsedId.repo;
 
                   const words = config.description.split(" ");
                   let sentence = words.slice(0, 10).join(" ");
@@ -160,17 +169,7 @@ export default class Homepage extends Vue {
     };
   }
 
-  async mounted() {
-    try {
-      document.querySelector("title").innerText = "Firebase Opensource";
-    } catch (err) {
-      console.warn("Cannot set page title.");
-    }
-
-    if (this.platform) {
-      (this.$refs.header as HeaderBar).subheader_tab_selection = this.platform;
-    }
-  }
+  async mounted() {}
 
   destroyed() {
     this.cancels.forEach(c => c());
@@ -182,5 +181,9 @@ export default class Homepage extends Vue {
     }
 
     return section === this.platform;
+  }
+
+  showingAllPlatforms() {
+    return this.platform === "all";
   }
 }

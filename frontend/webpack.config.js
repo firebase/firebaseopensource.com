@@ -17,7 +17,7 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/main.ts",
+  entry: "./pages/index.ts",
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",

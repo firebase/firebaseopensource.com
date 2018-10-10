@@ -1,9 +1,11 @@
 .DS_Store
 node_modules/
 dist/
+functions/lib/
 npm-debug.log
 yarn-error.log
 firebase-debug.log
+.firebase
 
 # Prerendered files
 prerender/**/*.html

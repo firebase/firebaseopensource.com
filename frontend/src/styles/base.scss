@@ -118,7 +118,9 @@ li {
 
 .content_grid {
   display: grid;
-  grid-template-columns: 1fr minmax(min-content, $max-content-width) 1fr;
+  grid-template-columns:
+    minmax($gutter-width, 1fr) minmax(min-content, $max-content-width)
+    minmax($gutter-width, 1fr);
 }
 
 .page {
@@ -131,9 +133,20 @@ li {
   min-height: 10px;
 }
 
+.col_gutter {
+  padding-left: $gutter-padding;
+  padding-right: $gutter-padding;
+}
+
 @media (max-width: $tablet) {
+  .content_grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(min-content, $max-content-width) 1fr;
+  }
+
   .col_gutter {
     width: 0;
+    padding: 0;
   }
 
   .col_main {
@@ -211,7 +224,7 @@ table {
 }
 
 .shadow_all {
-  box-shadow: 0 0 5px $shadow;
+  box-shadow: 0 0 2px $shadow;
 }
 
 .section {

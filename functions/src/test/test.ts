@@ -18,7 +18,10 @@
 //
 // To run:
 // GCLOUD_PROJECT="fir-oss" github_token="<YOUR_GITHUB_TOKEN>" node test/test.js
-const project = require("../project");
+import { Config } from "../config";
+import { Project } from "../project";
+
+const project = new Project();
 
 const ids = [
   "samtstern::BotTest",
@@ -33,7 +36,7 @@ const ids = [
   "googlesamples::easypermissions"
 ];
 
-project.loadGlobalConfig().then(() => {
+Config.loadGlobalConfig().then(() => {
   ids.forEach(id => {
     return project.recursiveStoreProject(id).catch(err => {
       console.warn(err);

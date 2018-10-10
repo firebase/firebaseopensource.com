@@ -93,6 +93,11 @@
 
       .tabs {
         overflow: auto;
+
+        .tab:first-of-type {
+          padding-left: 0px;
+        }
+
         .tab {
           float: left;
           border-bottom: 3px solid $blue;

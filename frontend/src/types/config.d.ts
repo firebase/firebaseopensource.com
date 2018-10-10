@@ -27,6 +27,7 @@ export interface Subprojects {
   storage: boolean;
 }
 
+// TODO: Unify this config type.
 export interface Config {
   content?: string;
   last_updated?: string;

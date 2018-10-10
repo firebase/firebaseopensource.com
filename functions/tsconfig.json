@@ -1,16 +1,18 @@
 {
     "compilerOptions": {
+        "lib": ["es6"],
         "types": [
             "chai",
             "mocha",
             "node"
         ],
-        "module": "es2015",
+        "module": "commonjs",
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true,
         "target": "es6",
         "noImplicitAny": true,
+        "noImplicitReturns": true,
         "sourceMap": true,
         "baseUrl": ".",
         "paths": {
@@ -18,11 +20,12 @@
                 "node_modules/*",
                 "src/types/*"
             ]
-        }
+        },
+        "outDir": "lib"
     },
     "include": [
-        "pages/**/*",
-        "src/**/*",
+        "src/**/*", 
+        "src/test/**/*", 
         "../shared/**/*"
     ]
 }

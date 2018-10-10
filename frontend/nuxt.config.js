@@ -14,13 +14,10 @@ module.exports = {
     fallback: true,
     routes: routes
   },
-  modules: [
-    "~/modules/typescript.js",
-    "@nuxtjs/sitemap"  
-  ],
+  modules: ["~/modules/typescript.js", "@nuxtjs/sitemap"],
   sitemap: {
-    path: '/sitemap.xml',
-    hostname: 'https://firebaseopensource.com',
+    path: "/sitemap.xml",
+    hostname: "https://firebaseopensource.com",
     cacheTime: 1000 * 60 * 60 * 24,
     generate: true,
     routes: routes

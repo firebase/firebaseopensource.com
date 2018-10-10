@@ -4,7 +4,28 @@
 
   <four-oh-four v-if="not_found"></four-oh-four>
   <div class="page content_grid" v-if="found">
-    <div class="col_gutter"></div>
+    <div class="col_gutter">
+      <ul class="sidebar shadow_all">
+
+        <li class="sidebar-section" v-for="section in sidebar">
+          <div class="header" v-on:click="section.expanded = !section.expanded">
+            <span class="title">{{section.title}}</span>
+            <i class="material-icons" v-if="section.expanded">expand_less</i>
+            <i class="material-icons" v-if="!section.expanded">expand_more</i>
+          </div>
+
+          <ul v-if="section.expanded" class="subsection">
+            <li v-for="page in section.pages">
+              <a :href="page.href" 
+                 :target="page.outbound ? '_blank' : ''"
+                 v-bind:class="{ selected: page.selected }">{{page.title}}</a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+
+    </div>
     <div class="sections col_main">
 
     <!-- Title section -->

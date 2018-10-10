@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import Vue from "vue";
-import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 
 type Tab = { link: string; text: string };
 
@@ -35,24 +35,6 @@ export default class HeaderBar extends Vue {
   @Prop()
   subheader_tabs: Tab[];
 
-  subheader_tab_selection = "";
-
-  @Watch("subheader_tabs", { immediate: true })
-  onSubheaderTabsChange() {
-    if (this.subheader_tabs && this.subheader_tabs.length) {
-      this.setSubheaderTabSelection(this.subheader_tabs[0].text.toLowerCase());
-    }
-  }
-
-  @Watch("subheader_tab_selection")
-  onSubheaderTabSelectionChange(subheader_tab_selection: string) {
-    this.$emit(
-      "subheader_tab_selection:change",
-      subheader_tab_selection.toLowerCase()
-    );
-  }
-
-  setSubheaderTabSelection(tab: string) {
-    Vue.set(this, "subheader_tab_selection", tab);
-  }
+  @Prop()
+  subheader_tab_selection: string;
 }

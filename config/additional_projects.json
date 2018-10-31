@@ -8,6 +8,7 @@
     "invertase::react-native-firebase-starter",
     "google::cocoapods-size",
     "flutter::plugins",
-    "rosariopfernandes::fireXtensions"
+    "rosariopfernandes::fireXtensions",
+    "rakannimer::react-firebase"
   ]
 }

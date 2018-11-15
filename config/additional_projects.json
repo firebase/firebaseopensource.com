@@ -9,6 +9,7 @@
     "google::cocoapods-size",
     "flutter::plugins",
     "rosariopfernandes::fireXtensions",
-    "rakannimer::react-firebase"
+    "rakannimer::react-firebase",
+    "jsayol::FireSQL"
   ]
 }

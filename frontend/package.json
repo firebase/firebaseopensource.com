@@ -54,7 +54,7 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "firebase-admin": "^5.13.1",
-    "firebase-tools": "^3.19.1",
+    "firebase-tools": "^6.1.0",
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.6",

@@ -1,0 +1,14 @@
+secrets:
+- kmsKeyName: projects/fir-oss/locations/global/keyRings/fosdc/cryptoKeys/FIREBASE_TOKEN
+  secretEnv:
+    TOKEN: CiQAltNzF5CE3iSor7QNi6sBviZUReob8uHmfWYWq1MLGOVWrtUSVgBAMMXe+C00ExhdwrOFF0AKi6ARKPxirgTwFuOXk6rBlIwmg3Rq5roI5aL7cT8jWLOQm8PWLmt+fo07QT8do08pmNWBsmpMCZDxf5J2rGxd9pO7SAma
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'us.gcr.io/fir-oss/static-renderer', '.' ]
+- name: gcr.io/cloud-builders/docker
+  entrypoint: 'bash'
+  args: ['-c', 'docker run -e FIREBASE_TOKEN=$$TOKEN us.gcr.io/fir-oss/static-renderer']
+  secretEnv:
+    - TOKEN
+images:
+- 'us.gcr.io/fir-oss/static-renderer'

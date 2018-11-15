@@ -8,4 +8,4 @@ cd firebaseopensource.com
 # Build and deploy
 make build-hosting
 cd frontend
-firebase --project="fir-oss" --token=$FIREBASE_TOKEN deploy --only hosting
+firebase --project="fir-oss" deploy --only hosting

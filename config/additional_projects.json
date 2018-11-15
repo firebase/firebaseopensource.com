@@ -10,6 +10,7 @@
     "flutter::plugins",
     "rosariopfernandes::fireXtensions",
     "rakannimer::react-firebase",
-    "jsayol::FireSQL"
+    "jsayol::FireSQL",
+    "scottlepp::fire-drill"
   ]
 }

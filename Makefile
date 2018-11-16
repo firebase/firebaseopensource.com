@@ -1,18 +1,7 @@
 PROD_PROJECT="fir-oss"
 
-build-docker:
-	cd static \
-		&& docker build -t static-renderer . \
-		&& docker tag static-renderer us.gcr.io/fir-oss/static-renderer \
-		&& cd -
-
-deploy-docker: build-docker
-	docker push us.gcr.io/fir-oss/static-renderer
-
-deploy-cronjobs: deploy-docker
-	gcloud container clusters get-credentials --zone=us-central1-a cronjobs
-	kubectl create -f cronjobs/daily-renderstatic.yaml
-	kubectl create -f cronjobs/daily-getallprojects.yaml
+cloud-build:
+	gcloud builds submit --config static/cloudbuild.yaml static
 
 build-functions:
 	cd functions \

@@ -10,6 +10,8 @@
     "firebase-admin": "^5.13.1",
     "firebase-functions": "^2.0.2",
     "fs-extra": "^5.0.0",
+    "google-auth-library": "^2.0.1",
+    "googleapis": "^35.0.0",
     "html-minifier": "3.5.19",
     "isomorphic-fetch": "2.2.1",
     "marked": "^0.3.6",

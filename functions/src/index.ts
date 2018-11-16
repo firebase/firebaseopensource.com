@@ -15,6 +15,7 @@
  */
 import { Project } from "./project";
 import * as functions from "firebase-functions";
+import { Cron } from "./cron";
 
 const PubSub = require("@google-cloud/pubsub");
 
@@ -84,5 +85,17 @@ exports.getAllProjects = functions
     } catch (e) {
       console.warn("Error:", e);
       response.status(500).send("Failed to store all projects.\n");
+    }
+  });
+
+exports.cloudBuild = functions
+  .runWith(RUNTIME_OPTS)
+  .https.onRequest(async (request, response) => {
+    try {
+      await Cron.build();
+      response.status(200).send("Build started!");
+    } catch (e) {
+      console.warn("Error: ", e);
+      response.status(500).send("Failed to start build.");
     }
   });

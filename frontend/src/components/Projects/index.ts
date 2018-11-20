@@ -294,8 +294,10 @@ export default class Projects extends Vue {
       console.log("Cannot fix URL");
     }
 
+    // Enable the gooogle code prettifier
+    // TODO: We should do this when doing the markdown
     document.querySelectorAll("pre code").forEach(function(el) {
-      hljs.highlightBlock(el);
+      el.classList.add("prettyprint");
     });
 
     new Clipboard(".copy-btn");

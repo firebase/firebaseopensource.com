@@ -32,12 +32,13 @@ h2 {
 pre {
   padding: 5px 10px;
   background-color: $code-bg;
-  font-family: "Roboto Mono";
+  font-family: "Roboto Mono", monospace;
   font-size: 14px;
   line-height: 20px;
   overflow: auto;
 
   code.hljs {
+    font-family: "Roboto Mono", monospace;
     background: $code-bg;
   }
 }

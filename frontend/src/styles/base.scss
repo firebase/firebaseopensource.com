@@ -31,18 +31,27 @@ h2 {
 
 pre {
   padding: 5px 10px;
-  background-color: #eee;
+  background-color: $code-bg;
   font-family: "Roboto Mono";
+  font-size: 14px;
+  line-height: 20px;
   overflow: auto;
 
   code.hljs {
-    background: #eee;
+    background: $code-bg;
   }
 }
 
+code {
+  background-color: $code-bg;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+
 a {
   text-decoration: none;
-  color: #039be5;
+  color: $blue;
 }
 
 table {
@@ -60,7 +69,7 @@ td {
 }
 
 th {
-  background-color: #78909c;
+  background-color: $blue-gray;
   padding: 10px;
   font-weight: bold;
   color: white;
@@ -90,10 +99,6 @@ img[alt] {
 
 img.img-badge {
   margin: 0;
-}
-
-pre {
-  line-height: 100%;
 }
 
 h1 {
@@ -166,7 +171,7 @@ li {
   span {
     font-size: 13px;
     line-height: 22px;
-    border-left: 4px solid #039be5;
+    border-left: 4px solid $blue;
     padding-left: 10px;
     clear: both;
     display: block;
@@ -183,7 +188,7 @@ li {
     text-decoration: none;
 
     &:hover {
-      color: #039be5;
+      color: $blue;
       cursor: pointer;
     }
   }
@@ -311,10 +316,4 @@ blockquote {
     padding: 0px;
     margin: 0px;
   }
-}
-
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 3px;
 }

@@ -145,19 +145,22 @@
       .project-title {
         grid-area: title;
 
+        // Wrap title text to one line
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 100%;
+
         color: #ff8f00;
         font-weight: bold;
         font-size: 18px;
         min-height: 20px;
+        margin-top: 8px;
         margin-bottom: 16px;
 
         @media (max-width: $phone) {
-          // Wrap title text to one line
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-
           // Align next to the logo circle
+          margin-top: 0px;
           line-height: 50px;
           margin-left: 15px;
         }

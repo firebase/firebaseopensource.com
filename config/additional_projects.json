@@ -11,6 +11,7 @@
     "rosariopfernandes::fireXtensions",
     "rakannimer::react-firebase",
     "jsayol::FireSQL",
-    "scottlepp::fire-drill"
+    "scottlepp::fire-drill",
+    "jsayol::vscode-firebase-explorer"
   ]
 }

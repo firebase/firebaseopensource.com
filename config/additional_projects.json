@@ -12,6 +12,7 @@
     "rakannimer::react-firebase",
     "jsayol::FireSQL",
     "scottlepp::fire-drill",
-    "jsayol::vscode-firebase-explorer"
+    "jsayol::vscode-firebase-explorer",
+    "PeterHdd::firebase-firestore-snippets"
   ]
 }

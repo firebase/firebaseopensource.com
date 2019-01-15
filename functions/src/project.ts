@@ -81,7 +81,7 @@ export class Project {
         return Promise.all([storeConfig, storeContent]);
       })
       .catch(e => {
-        Logger.error(id, "recursiveStoreProject failed", e);
+        Logger.error(id, "recursiveStoreProject: ", e);
       });
   }
 
@@ -301,6 +301,9 @@ export class Project {
 
       const pagePromise = github
         .getContent(pageUrl)
+        .catch(e => {
+          throw `Failed to get content for ${pageUrl}: ${JSON.stringify(e)}`;
+        })
         .then(data => {
           return content.processMarkdown(data, id, page, config);
         })

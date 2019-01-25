@@ -19,7 +19,8 @@ export default {
 
     return {
       platform: platform,
-      categories: data.categories
+      categories: data.categories,
+      releases: data.releases
     }
   }
 }

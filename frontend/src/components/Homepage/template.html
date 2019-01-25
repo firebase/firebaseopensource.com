@@ -27,6 +27,34 @@
           </div>
         </div>
 
+        <div class="section" v-if="showingAllPlatforms()">
+          <div class="content" id="recent_releases">
+            <div class="section-title">
+              <!-- TODO This should not have to be a link -->
+              <a href="#">
+                <i class="material-icons">event</i>
+                Recent Releases
+              </a>
+            </div>
+            <!-- TODO: Releases -->
+            <div class="releases">
+              <div class="release" v-for="release in releases">
+                <div class="grid">
+                  <a href="#" class="release-title">
+                    {{release.repo}}
+                  </a>
+                  <p class="release-description">
+                    Version <code>{{release.tag_name}}</code> released X days ago.
+                  </p>
+                  <a :href="release.url" target="_blank">
+                    <button>RELEASE NOTES</button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="section" v-for="category in categories">
           <div class="content" v-if="isSectionVisible(category.platform)">
             <div class="section-title">
@@ -35,7 +63,7 @@
                 {{category.title}}
               </a>
               <a :href="`/platform/${category.platform}`">
-                <button v-if="showingAllPlatforms()">SEE ALL</button>
+                <button class="button-right" v-if="showingAllPlatforms()">SEE ALL</button>
               </a>
             </div>
             <div class="projects">
@@ -58,7 +86,7 @@
                       {{project.description}}
                   </p>
                   <a :href="`/projects/${project.org}/${project.repo}/`">
-                    <button>LEARN MORE</button>
+                    <button class="button-right">LEARN MORE</button>
                   </a>
                 </div>
               </div>

@@ -76,6 +76,7 @@ export class Project {
         // Store this project's config and content
         const storeConfig = this.storeProjectConfig(id, config);
         const storeContent = this.storeProjectContent(id, config);
+        const storeReleases = this.storeProjectReleases(id);
 
         // Wait for both to complete then pass on config
         return Promise.all([storeConfig, storeContent]);
@@ -201,6 +202,24 @@ export class Project {
       .set(data);
 
     return configProm;
+  }
+
+  async storeProjectReleases(id: string): Promise<any> {
+    const { owner, repo } = Util.parseProjectId(id);
+    const releases = await github.getRepoReleases(owner, repo);
+    if (!releases || releases.length == 0) {
+      Logger.debug(id, `No releases for ${id}`);
+      return;
+    }
+
+    const batch = db.batch();
+    for (const release of releases) {
+      const releaseKey = `${id}::${release.tag_name}`;
+      const ref = db.collection('releases').doc(releaseKey);
+      batch.set(ref, release);
+    }
+
+    return batch.commit();
   }
 
   /**
@@ -412,3 +431,10 @@ export class Project {
     return newobj;
   }
 }
+
+// TODO: KILL
+const project = new Project();
+project.storeProjectReleases('firebase::firebaseui-android');
+project.storeProjectReleases('firebase::firebase-tools');
+project.storeProjectReleases('firebase::firebase-functions');
+project.storeProjectReleases('firebase::firebase-admin-java');

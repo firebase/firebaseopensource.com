@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import Vue from "vue";
-import { Component, Inject, Model, Prop, Watch } from "vue-property-decorator";
+import { Component, Inject, Model, Prop } from "vue-property-decorator";
 import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../HeaderBar";
@@ -22,8 +22,8 @@ import HeaderBar from "../HeaderBar";
 import { pickLogoLetter } from "../../utils";
 
 import { Util } from "../../../../shared/util";
+import { RepoRelease } from "../../../../shared/types";
 import { Config } from "../../types/config";
-import { Route } from "vue-router";
 
 type Category = {
   title: string;
@@ -64,8 +64,12 @@ export default class Homepage extends Vue {
 
   @Prop()
   platform: string;
+
   @Prop()
   categories: Category[];
+
+  @Prop()
+  releases: RepoRelease[];
 
   static getCategories(): Category[] {
     return [
@@ -118,6 +122,19 @@ export default class Homepage extends Vue {
       limit = 100;
     }
 
+    const releases = await fbt.fs
+      .collection("releases")
+      .orderBy("created_at", "desc")
+      .limit(3)
+      .get()
+      .then((snap: any) => {
+        const result: RepoRelease[] = [];
+        snap.forEach((doc: any) => {
+          result.push(doc.data())
+        })
+        return result;
+      });
+
     await Promise.all(
       categories.map((category, categoryIndex) => {
         return new Promise((resolve, reject) => {
@@ -165,6 +182,7 @@ export default class Homepage extends Vue {
     );
 
     return {
+      releases,
       categories
     };
   }

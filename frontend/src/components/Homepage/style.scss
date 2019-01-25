@@ -1,5 +1,28 @@
 @import "../../styles/base.scss";
 
+// Bold orange text
+.orange-title {
+  color: #ff8f00;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+// Layout that goes 3-->2-->1
+.flexible-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    // In tablet layout, two projects per row
+    @media (max-width: $tablet) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    // In phone layout, only one project per row
+    @media (max-width: $phone) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+}
+
 #homepage {
   .section-title {
     font-size: 30px;
@@ -69,19 +92,22 @@
     }
   }
 
+  .releases {
+    @extend .flexible-columns;
+
+    .release {
+      .grid {
+        padding: 20px;
+      }
+
+      .release-title {
+        @extend .orange-title;
+      }
+    }
+  }
+
   .projects {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-
-    // In tablet layout, two projects per row
-    @media (max-width: $tablet) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    // In phone layout, only one project per row
-    @media (max-width: $phone) {
-      grid-template-columns: repeat(1, 1fr);
-    }
+    @extend .flexible-columns;
 
     .project {
       overflow: hidden;
@@ -145,15 +171,14 @@
       .project-title {
         grid-area: title;
 
+        @extend .orange-title;
+
         // Wrap title text to one line
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 100%;
 
-        color: #ff8f00;
-        font-weight: bold;
-        font-size: 18px;
         min-height: 20px;
         margin-top: 8px;
         margin-bottom: 16px;
@@ -184,14 +209,18 @@
     top: -4px;
   }
 
+  .button-right {
+    padding: 10px;
+    float: right;
+  }
+
   button {
     color: #039be5;
     background-color: transparent;
     border-width: 0px;
     font-weight: bold;
     border-radius: 2px;
-    padding: 10px;
-    float: right;
+    padding: 0px;
 
     transition: 0.1s linear background-color;
 
@@ -200,9 +229,9 @@
       cursor: pointer;
     }
 
-    @media (max-width: $phone) {
-      float: right;
-    }
+    // @media (max-width: $phone) {
+    //   float: right;
+    // }
   }
 
   .section {

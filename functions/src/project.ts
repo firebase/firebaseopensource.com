@@ -215,7 +215,7 @@ export class Project {
     const batch = db.batch();
     for (const release of releases) {
       const releaseKey = `${id}::${release.tag_name}`;
-      const ref = db.collection('releases').doc(releaseKey);
+      const ref = db.collection("releases").doc(releaseKey);
       batch.set(ref, release);
     }
 

@@ -7,20 +7,25 @@
   font-size: 18px;
 }
 
+.body-text {
+  color: #757575;
+  font-weight: 400;
+}
+
 // Layout that goes 3-->2-->1
 .flexible-columns {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 
-    // In tablet layout, two projects per row
-    @media (max-width: $tablet) {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  // In tablet layout, two projects per row
+  @media (max-width: $tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    // In phone layout, only one project per row
-    @media (max-width: $phone) {
-      grid-template-columns: repeat(1, 1fr);
-    }
+  // In phone layout, only one project per row
+  @media (max-width: $phone) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 #homepage {
@@ -30,7 +35,7 @@
     height: 70px;
     padding: 0px 12px 20px 12px;
 
-    > a {
+    span {
       color: #656565;
       font-family: Roboto, Helvetica, Arial, sans-serif;
     }
@@ -44,7 +49,7 @@
       font-size: 40px;
       position: relative;
       top: 9.6px;
-      margin-right: 6px;
+      margin-right: 10px;
       opacity: 0.4;
     }
   }
@@ -97,7 +102,19 @@
 
     .release {
       .grid {
+        width: 100%;
+        display: grid;
+        grid-template-areas:
+          "title"
+          "description"
+          "link";
+        grid-template-rows: fit-content(100%) 70px 20px;
+
         padding: 20px;
+      }
+
+      .release-description {
+        @extend .body-text;
       }
 
       .release-title {
@@ -192,10 +209,9 @@
       }
 
       .project-description {
+        @extend .body-text;
         margin: 0px;
         grid-area: description;
-        color: #757575;
-        font-weight: 400;
       }
 
       a {

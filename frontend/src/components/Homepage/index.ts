@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import Vue from "vue";
-import { Component, Inject, Model, Prop } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import { FirebaseSingleton } from "../../services/firebaseSingleton";
 
 import HeaderBar from "../HeaderBar";
 
-import { pickLogoLetter } from "../../utils";
+import { pickLogoLetter, daysAgo } from "../../utils";
 
 import { Util } from "../../../../shared/util";
 import { RepoRelease } from "../../../../shared/types";
@@ -130,8 +130,8 @@ export default class Homepage extends Vue {
       .then((snap: any) => {
         const result: RepoRelease[] = [];
         snap.forEach((doc: any) => {
-          result.push(doc.data())
-        })
+          result.push(doc.data());
+        });
         return result;
       });
 
@@ -203,5 +203,9 @@ export default class Homepage extends Vue {
 
   showingAllPlatforms() {
     return this.platform === "all";
+  }
+
+  releaseTime(release: RepoRelease) {
+    return daysAgo(release.created_at);
   }
 }

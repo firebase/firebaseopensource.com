@@ -431,10 +431,3 @@ export class Project {
     return newobj;
   }
 }
-
-// TODO: KILL
-const project = new Project();
-project.storeProjectReleases('firebase::firebaseui-android');
-project.storeProjectReleases('firebase::firebase-tools');
-project.storeProjectReleases('firebase::firebase-functions');
-project.storeProjectReleases('firebase::firebase-admin-java');

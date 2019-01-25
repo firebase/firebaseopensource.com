@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { Util } from "../../shared/util";
+import { Timestamp } from "@google-cloud/firestore";
 import { ProjectConfig, RepoMetadata, RepoRelease } from "../../shared/types";
 import * as request from "request-promise-native";
 
@@ -122,7 +123,7 @@ export class Github {
           repo,
           url: release.html_url,
           tag_name: release.tag_name,
-          created_at: new Date(release.created_at)
+          created_at: Timestamp.fromDate(new Date(release.created_at))
         };
       });
     });

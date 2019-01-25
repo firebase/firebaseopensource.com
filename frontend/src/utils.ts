@@ -1,3 +1,6 @@
+import { distanceInWordsToNow } from "date-fns";
+import { Timestamp } from "../../shared/types";
+
 /**
  * Copyright 2017 Google Inc. All Rights Reserved.
  *
@@ -70,4 +73,8 @@ export function pickLogoLetter(name: string) {
   var firstLetter = words[0][0].toUpperCase();
 
   return firstLetter;
+}
+
+export function daysAgo(t: Timestamp) {
+  return distanceInWordsToNow(new Date(t.seconds * 1000)) + " ago";
 }

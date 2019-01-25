@@ -39,5 +39,9 @@ export interface RepoRelease {
   repo: string;
   url: string;
   tag_name: string;
-  created_at: Date;
+  created_at: Timestamp;
+}
+
+export interface Timestamp {
+  seconds: number;
 }

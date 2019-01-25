@@ -33,3 +33,15 @@ export interface RepoMetadata {
   stars: number;
   last_updated: any;
 }
+
+export interface RepoRelease {
+  org: string;
+  repo: string;
+  url: string;
+  tag_name: string;
+  created_at: Timestamp;
+}
+
+export interface Timestamp {
+  seconds: number;
+}

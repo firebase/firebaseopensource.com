@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import { Util } from "../../shared/util";
-import { ProjectConfig, RepoMetadata } from "../../shared/types";
+import { Timestamp } from "@google-cloud/firestore";
+import { ProjectConfig, RepoMetadata, RepoRelease } from "../../shared/types";
 import * as request from "request-promise-native";
 
 const parselh = require("parse-link-header");
@@ -107,6 +108,24 @@ export class Github {
 
     return request(url, this.getStandardOptions()).then(resp => {
       return resp.path;
+    });
+  }
+
+  /**
+   * Get recent releases for a GitHub repo
+   */
+  getRepoReleases(org: string, repo: string): Promise<RepoRelease[]> {
+    const url = `https://api.github.com/repos/${org}/${repo}/releases`;
+    return request(url, this.getStandardOptions()).then(resp => {
+      return resp.map((release: any) => {
+        return {
+          org,
+          repo,
+          url: release.html_url,
+          tag_name: release.tag_name,
+          created_at: Timestamp.fromDate(new Date(release.created_at))
+        };
+      });
     });
   }
 

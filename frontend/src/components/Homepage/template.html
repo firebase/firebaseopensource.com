@@ -27,15 +27,41 @@
           </div>
         </div>
 
+        <div class="section" v-if="showingAllPlatforms()">
+          <div class="content" id="recent_releases">
+            <div class="section-title">
+              <span>
+                <i class="material-icons">event</i>Recent Releases
+              </span>
+            </div>
+            <div class="releases">
+              <div class="release" v-for="release in releases">
+                <div class="grid">
+                  <a :href="`/projects/${release.org}/${release.repo}/`" class="release-title">
+                    {{release.repo}}
+                  </a>
+                  <p class="release-description">
+                    <code>{{release.tag_name}}</code> released {{releaseTime(release)}}.
+                  </p>
+                  <a :href="release.url" target="_blank">
+                    <button class="button-right">RELEASE NOTES</button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="section" v-for="category in categories">
           <div class="content" v-if="isSectionVisible(category.platform)">
             <div class="section-title">
               <a :href="`/platform/${category.platform}`">
-                <i class="material-icons">{{category.icon}}</i>
-                {{category.title}}
+                <span>
+                <i class="material-icons">{{category.icon}}</i>{{category.title}}
+                </span>
               </a>
               <a :href="`/platform/${category.platform}`">
-                <button v-if="showingAllPlatforms()">SEE ALL</button>
+                <button class="button-right" v-if="showingAllPlatforms()">SEE ALL</button>
               </a>
             </div>
             <div class="projects">
@@ -58,7 +84,7 @@
                       {{project.description}}
                   </p>
                   <a :href="`/projects/${project.org}/${project.repo}/`">
-                    <button>LEARN MORE</button>
+                    <button class="button-right">LEARN MORE</button>
                   </a>
                 </div>
               </div>

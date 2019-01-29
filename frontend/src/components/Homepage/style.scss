@@ -12,6 +12,14 @@
   font-weight: 400;
 }
 
+// Wrap text to a single line
+.wrap-one-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 100%;
+}
+
 // Layout that goes 3-->2-->1
 .flexible-columns {
   display: grid;
@@ -30,10 +38,10 @@
 
 #homepage {
   .section-title {
-    font-size: 30px;
+    font-size: 24px;
     border-bottom: 1px solid #eceff1;
-    height: 70px;
-    padding: 0px 12px 20px 12px;
+    height: 50px;
+    padding: 0px 12px 12px 12px;
 
     span {
       color: #656565;
@@ -42,14 +50,14 @@
 
     button {
       position: relative;
-      top: 12px;
+      top: 4px;
     }
 
     .material-icons {
-      font-size: 40px;
+      font-size: 30px;
       position: relative;
-      top: 9.6px;
-      margin-right: 10px;
+      top: 7px;
+      margin-right: 16px;
       opacity: 0.4;
     }
   }
@@ -108,17 +116,23 @@
           "title"
           "description"
           "link";
-        grid-template-rows: fit-content(100%) 70px 20px;
+        grid-template-rows: max-content 40px max-content;
+        grid-gap: 8px;
 
         padding: 20px;
       }
 
       .release-description {
         @extend .body-text;
+        @extend .wrap-one-line;
+
+        margin: 0px;
+        padding-top: 8px;
       }
 
       .release-title {
         @extend .orange-title;
+        @extend .wrap-one-line;
       }
     }
   }
@@ -134,23 +148,17 @@
 
       .grid {
         width: 100%;
+
         display: grid;
         grid-template-areas:
-          "logo"
-          "title"
-          "description"
-          "link";
-        grid-template-rows: 70px fit-content(100%) 70px 20px;
-
-        @media (max-width: $phone) {
-          grid-template-areas:
             "logo title"
             "description description"
             "link link";
-          grid-template-columns: 50px auto;
-          grid-template-rows: 65px 70px 20px;
-          padding: 20px 10px;
-        }
+        grid-template-columns: min-content auto;
+        grid-template-rows: max-content 70px min-content;
+        grid-gap: 8px;
+        padding: 20px 10px;
+
         float: left;
         position: relative;
         padding: 20px;
@@ -159,24 +167,22 @@
       .logo-circle {
         grid-area: logo;
 
-        width: 55px;
-        height: 55px;
-        background-color: #eee;
+        align-self: center;
+
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+        line-height: 50px;
+        float: left;
+
+        margin-right: 4px;
+        margin-left: 0px;
+
         border-radius: 100%;
-        font-size: 30px;
         display: grid;
         justify-items: center;
         align-items: center;
         color: white;
-
-        @media (max-width: $phone) {
-          width: 50px;
-          height: 50px;
-          font-size: 25px;
-          line-height: 50px;
-          float: left;
-          margin: 0px 10px 0px 0px;
-        }
 
         img {
           width: 74px;
@@ -186,32 +192,19 @@
       }
 
       .project-title {
-        grid-area: title;
-
         @extend .orange-title;
+        @extend .wrap-one-line;
 
-        // Wrap title text to one line
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 100%;
-
-        min-height: 20px;
-        margin-top: 8px;
-        margin-bottom: 16px;
-
-        @media (max-width: $phone) {
-          // Align next to the logo circle
-          margin-top: 0px;
-          line-height: 50px;
-          margin-left: 15px;
-        }
+        grid-area: title;
+        align-self: center;
       }
 
       .project-description {
         @extend .body-text;
-        margin: 0px;
         grid-area: description;
+
+        margin: 0px;
+        padding-top: 8px;
       }
 
       a {

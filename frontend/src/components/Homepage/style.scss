@@ -12,6 +12,14 @@
   font-weight: 400;
 }
 
+// Wrap text to a single line
+.wrap-one-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 100%;
+}
+
 // Layout that goes 3-->2-->1
 .flexible-columns {
   display: grid;
@@ -108,17 +116,23 @@
           "title"
           "description"
           "link";
-        grid-template-rows: fit-content(100%) 70px 20px;
+        grid-template-rows: max-content 40px max-content;
+        grid-gap: 8px;
 
         padding: 20px;
       }
 
       .release-description {
         @extend .body-text;
+        @extend .wrap-one-line;
+
+        margin: 0px;
+        padding-top: 8px;
       }
 
       .release-title {
         @extend .orange-title;
+        @extend .wrap-one-line;
       }
     }
   }
@@ -179,15 +193,9 @@
 
       .project-title {
         @extend .orange-title;
+        @extend .wrap-one-line;
+
         grid-area: title;
-
-        // Wrap title text to one line
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 100%;
-
-        // Center in the grid
         align-self: center;
       }
 

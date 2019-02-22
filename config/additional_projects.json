@@ -13,6 +13,7 @@
     "jsayol::FireSQL",
     "scottlepp::fire-drill",
     "jsayol::vscode-firebase-explorer",
-    "PeterHdd::firebase-firestore-snippets"
+    "PeterHdd::firebase-firestore-snippets",
+    "CSFrequency::react-firebase-hooks"
   ]
 }

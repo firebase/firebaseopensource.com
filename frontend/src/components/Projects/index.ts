@@ -151,7 +151,7 @@ export default class Projects extends Vue {
       pageContentDoc = repoDoc;
     }
 
-    // Load conetnt
+    // Load content
     const snapshot = await pageContentDoc.get();
     if (!snapshot.exists) {
       result.not_found = true;

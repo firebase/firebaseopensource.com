@@ -79,7 +79,7 @@ export class Project {
         const storeReleases = this.storeProjectReleases(id);
 
         // Wait for both to complete then pass on config
-        return Promise.all([storeConfig, storeContent]);
+        return Promise.all([storeConfig, storeContent, storeReleases]);
       })
       .catch(e => {
         Logger.error(id, "recursiveStoreProject: ", e);

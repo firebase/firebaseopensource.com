@@ -1,12 +1,12 @@
-const firebase = require("firebase/app");
+import * as firebase from "firebase/app";
 require("firebase/firestore");
 
 export class FirebaseSingleton {
   private static instance: FirebaseSingleton = undefined;
 
-  fs: any = {};
+  fs: firebase.firestore.Firestore;
 
-  constructor(fs: any) {
+  constructor(fs: firebase.firestore.Firestore) {
     this.fs = fs;
   }
 

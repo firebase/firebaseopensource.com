@@ -151,9 +151,9 @@
 
         display: grid;
         grid-template-areas:
-            "logo title"
-            "description description"
-            "link link";
+          "logo title"
+          "description description"
+          "link link";
         grid-template-columns: min-content auto;
         grid-template-rows: max-content 70px min-content;
         grid-gap: 8px;

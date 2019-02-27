@@ -60,7 +60,6 @@ export default class Homepage extends Vue {
   ];
 
   fbt: FirebaseSingleton;
-  cancels: Function[] = [];
 
   @Prop()
   platform: string;
@@ -114,72 +113,64 @@ export default class Homepage extends Vue {
   static async load(platform: string) {
     const fbt = await FirebaseSingleton.GetInstance();
     const categories = this.getCategories();
-    // TODO use
-    const cancels = [] as any[];
 
     let limit = 6;
     if (platform && platform !== "all") {
       limit = 100;
     }
 
-    const releases = await fbt.fs
+    const releasesSnap = await fbt.fs
       .collection("releases")
       .orderBy("created_at", "desc")
       .limit(3)
-      .get()
-      .then((snap: any) => {
-        const result: RepoRelease[] = [];
-        snap.forEach((doc: any) => {
-          result.push(doc.data());
-        });
-        return result;
-      });
+      .get();
 
-    await Promise.all(
-      categories.map((category, categoryIndex) => {
-        return new Promise((resolve, reject) => {
-          cancels.push(
-            fbt.fs
-              .collection("configs")
-              .where("blacklist", "==", false)
-              .where("fork", "==", false)
-              .orderBy(`platforms.${category.platform}`)
-              .orderBy("stars", "desc")
-              .orderBy("description")
-              .limit(limit)
-              .onSnapshot((snapshot: any) => {
-                snapshot.docs.forEach((doc: any, docIndex: any) => {
-                  const config = doc.data() as Config;
-                  config.letter = pickLogoLetter(config.name);
-                  config.color =
-                    COLORS[(docIndex + categoryIndex) % COLORS.length];
-
-                  const id = doc.id;
-                  const parsedId = Util.parseProjectId(id);
-                  config.org = parsedId.owner;
-                  config.repo = parsedId.repo;
-
-                  const words = config.description.split(" ");
-                  let sentence = words.slice(0, 10).join(" ");
-
-                  if (words.length > 15) {
-                    sentence += "...";
-                  }
-
-                  config.description = sentence;
-
-                  if (category.featured.length < 6) {
-                    category.featured.push(config);
-                  }
-
-                  category.projects.push(config);
-                });
-                resolve();
-              })
-          );
-        });
-      })
+    const releases: RepoRelease[] = [];
+    releasesSnap.docs.forEach(
+      (doc: firebase.firestore.QueryDocumentSnapshot) => {
+        releases.push(doc.data() as RepoRelease);
+      }
     );
+
+    for (let i = 0; i < categories.length; i++) {
+      const categoryIndex = i;
+      const category = categories[i];
+
+      const snapshot = await fbt.fs
+        .collection("configs")
+        .where("blacklist", "==", false)
+        .where("fork", "==", false)
+        .orderBy(`platforms.${category.platform}`)
+        .orderBy("stars", "desc")
+        .orderBy("description")
+        .limit(limit)
+        .get();
+
+      snapshot.docs.forEach(
+        (doc: firebase.firestore.QueryDocumentSnapshot, docIndex: number) => {
+          const config = doc.data() as Config;
+          config.letter = pickLogoLetter(config.name);
+          config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
+
+          const parsedId = Util.parseProjectId(doc.id);
+          config.org = parsedId.owner;
+          config.repo = parsedId.repo;
+
+          const words = config.description.split(" ");
+          let sentence = words.slice(0, 10).join(" ");
+          if (words.length > 10) {
+            sentence += "...";
+          }
+          config.description = sentence;
+
+          if (category.featured.length < 6) {
+            category.featured.push(config);
+          }
+
+          category.projects.push(config);
+        }
+      );
+    }
 
     return {
       releases,
@@ -187,11 +178,9 @@ export default class Homepage extends Vue {
     };
   }
 
-  async mounted() {}
+  mounted() {}
 
-  destroyed() {
-    this.cancels.forEach(c => c());
-  }
+  destroyed() {}
 
   isSectionVisible(section: string) {
     if (!this.platform || this.platform === "all") {

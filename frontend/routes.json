@@ -8,6 +8,7 @@
     "platform/games",
     "platform/admin",
     "projects/angular/angularfire2",
+    "projects/csfrequency/react-firebase-hooks",
     "projects/firebase/analytics-webview",
     "projects/firebase/angularfire",
     "projects/firebase/appquality-codelab-ios",

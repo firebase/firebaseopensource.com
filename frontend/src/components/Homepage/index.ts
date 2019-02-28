@@ -122,13 +122,20 @@ export default class Homepage extends Vue {
     const releasesSnap = await fbt.fs
       .collection("releases")
       .orderBy("created_at", "desc")
-      .limit(3)
+      .limit(10)
       .get();
 
+    // Want to get a total of 3 releases but make sure no repo
+    // is mentioned more than once
+    const releasedRepos = new Set<String>();
     const releases: RepoRelease[] = [];
     releasesSnap.docs.forEach(
       (doc: firebase.firestore.QueryDocumentSnapshot) => {
-        releases.push(doc.data() as RepoRelease);
+        const release = doc.data() as RepoRelease;
+        if (!releasedRepos.has(release.repo) && releases.length < 3) {
+          releases.push(release);
+          releasedRepos.add(release.repo);
+        }
       }
     );
 

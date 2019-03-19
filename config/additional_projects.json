@@ -15,6 +15,7 @@
     "jsayol::vscode-firebase-explorer",
     "PeterHdd::firebase-firestore-snippets",
     "CSFrequency::react-firebase-hooks",
-    "sgarciac::fuego"
+    "sgarciac::fuego",
+    "PatilShreyas::FirebaseRecyclerPagination"
   ]
 }

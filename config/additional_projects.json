@@ -16,6 +16,7 @@
     "PeterHdd::firebase-firestore-snippets",
     "CSFrequency::react-firebase-hooks",
     "sgarciac::fuego",
-    "PatilShreyas::FirebaseRecyclerPagination"
+    "PatilShreyas::FirebaseRecyclerPagination",
+    "FirebaseExtended/protobuf-rules-gen"
   ]
 }

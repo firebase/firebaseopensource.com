@@ -18,7 +18,7 @@ import { Content } from "./content";
 import { Github } from "./github";
 import { Logger } from "./logger";
 import { Util } from "../../shared/util";
-import { ProjectConfig, PageSection, ProjectPage } from "../../shared/types";
+import { ProjectConfig, PageSection, ProjectPage, Env, GetParams } from "../../shared/types";
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
@@ -65,20 +65,27 @@ export class Project {
   /**
    * Store a project and all of its pages.
    */
-  recursiveStoreProject(id: string) {
+  recursiveStoreProject(id: string, params: GetParams) {
     Logger.debug(id, "recursiveStoreProject()");
 
     return Config.loadGlobalConfig()
       .then(() => {
-        return this.getProjectConfig(id);
+        return this.getProjectConfig(id, params);
       })
       .then(config => {
         // Store this project's config and content
-        const storeConfig = this.storeProjectConfig(id, config);
-        const storeContent = this.storeProjectContent(id, config);
-        const storeReleases = this.storeProjectReleases(id);
+        const storeConfig = this.storeProjectConfig(id, config, params);
+        const storeContent = this.storeProjectContent(id, config, params);
 
-        // Wait for both to complete then pass on config
+        // Only store releases in production
+        let storeReleases: Promise<any>;
+        if (params.env == Env.PROD) {
+          storeReleases = this.storeProjectReleases(id);
+        } else {
+          storeReleases = Promise.resolve();
+        }
+
+        // Wait for all to complete then pass on config
         return Promise.all([storeConfig, storeContent, storeReleases]);
       })
       .catch(e => {
@@ -114,15 +121,14 @@ export class Project {
   /**
    * Get the configuration for a project at a certain path.
    */
-  getProjectConfig(id: string) {
-    const url = Github.getConfigUrl(id);
+  getProjectConfig(id: string, params: GetParams) {
     const idParsed = Util.parseProjectId(id);
 
-    return this.checkConfigExists(id)
+    return github.hasProjectConfig(id)
       .then((exists: boolean) => {
         if (exists) {
           // Config exists, fetch and parse it
-          return github.getContent(url).then(data => {
+          return github.getProjectConfig(id).then(data => {
             // Parse and remove comments
             const contents = data.toString();
             return cjson.parse(contents, null, true);
@@ -177,28 +183,22 @@ export class Project {
   }
 
   /**
-   * Check if the config exists for a given project.
-   */
-  checkConfigExists(id: string) {
-    const url = Github.getConfigUrl(id);
-    return github.pageExists(url);
-  }
-
-  /**
    * Fetch a project config and put it into Firestore.
    */
-  storeProjectConfig(id: string, config: ProjectConfig) {
+  storeProjectConfig(id: string, config: ProjectConfig, params: GetParams) {
     const data = config;
     const docId = Util.normalizeId(id);
 
     // Add server timestamp
     data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
 
-    Logger.debug(id, `Storing at /configs/${docId}`);
+    // Get path to the config document in the database
+    const configPath = Util.configPath(docId, params.env);
+
+    Logger.debug(id, `Storing at ${configPath}`);
     Logger.debug(id, "Config: " + JSON.stringify(config));
     const configProm = db
-      .collection("configs")
-      .doc(docId)
+      .doc(configPath)
       .set(data);
 
     return configProm;
@@ -225,8 +225,9 @@ export class Project {
   /**
    * Fetch a project's content and put it into Firestore.
    */
-  async storeProjectContent(id: string, config: ProjectConfig): Promise<any> {
-    const contentRef = db.collection("content").doc(Util.normalizeId(id));
+  async storeProjectContent(id: string, config: ProjectConfig, params: GetParams): Promise<any> {
+    const contentPath = Util.contentPath(id, params.env);
+    const contentRef = db.doc(contentPath);
 
     const sections = await this.getProjectContent(id, config);
 
@@ -256,10 +257,8 @@ export class Project {
    * Fetch a project's content.
    */
   getProjectContent(id: string, config: ProjectConfig) {
-    const url = Github.getContentUrl(id, config);
-
     return github
-      .getContent(url)
+      .getRawProjectContent(id, config)
       .then(data => {
         return content.processMarkdown(data, id, undefined, config);
       })
@@ -319,7 +318,7 @@ export class Project {
       Logger.debug(id, `Rendering page: ${pageUrl}`);
 
       const pagePromise = github
-        .getContent(pageUrl)
+        .getRawContent(pageUrl)
         .catch(e => {
           throw `Failed to get content for ${pageUrl}: ${JSON.stringify(e)}`;
         })

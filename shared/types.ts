@@ -1,3 +1,13 @@
+export enum Env {
+  STAGING = "staging",
+  PROD = "prod",
+}
+
+export class GetParams {
+  env: Env = Env.PROD;
+  branch: string = "master";
+}
+
 export interface ProjectConfig {
   name?: string;
   type?: string;

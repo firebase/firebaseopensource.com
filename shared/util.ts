@@ -1,4 +1,23 @@
+import { Env } from "./types";
+
 export class Util {
+
+  static contentPath(id: string, env: Env = Env.PROD) {
+    if (env == Env.STAGING) {
+      return `/content-staging/${Util.normalizeId(id)}`;
+    } else {
+      return `/content/${Util.normalizeId(id)}`;
+    }
+  }
+
+  static configPath(id: string, env: Env = Env.PROD) {
+    if (env == Env.STAGING) {
+      return `/configs-staging/${Util.normalizeId(id)}`;
+    } else {
+      return `/configs/${Util.normalizeId(id)}`;
+    }
+  }
+
   /**
    * Make sure all IDs have the same casing, etc.f
    */

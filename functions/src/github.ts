@@ -23,25 +23,11 @@ const urljoin = require("url-join");
 
 export class Github {
   token: string;
+  branch: string;
 
-  constructor(token: string) {
+  constructor(token: string, branch: string = "master") {
     this.token = token;
-  }
-
-  /**
-   * Get the URL to the config for a particular project ID.
-   */
-  static getConfigUrl(id: string) {
-    return urljoin(Github.getRawContentBaseUrl(id), ".opensource/project.json");
-  }
-
-  /**
-   * Get the URL to the content for a particular project ID.
-   */
-  static getContentUrl(id: string, config: ProjectConfig) {
-    // Path to content, relative to the project
-    const contentPath = config.content;
-    return urljoin(Github.getRawContentBaseUrl(id), contentPath);
+    this.branch = branch;
   }
 
   /**
@@ -69,6 +55,22 @@ export class Github {
     const pathPrefix = idObj.path ? idObj.path + "/" : "";
 
     return Github.getRawContentUrl(idObj.owner, idObj.repo, pathPrefix);
+  }
+
+  /**
+ * Get the URL to the config for a particular project ID.
+ */
+  private static getConfigUrl(id: string) {
+    return urljoin(Github.getRawContentBaseUrl(id), ".opensource/project.json");
+  }
+
+  /**
+   * Get the URL to the content for a particular project ID.
+   */
+  private static getContentUrl(id: string, config: ProjectConfig) {
+    // Path to content, relative to the project
+    const contentPath = config.content;
+    return urljoin(Github.getRawContentBaseUrl(id), contentPath);
   }
 
   /**
@@ -156,10 +158,33 @@ export class Github {
   }
 
   /**
+   * Determine if the config for the given project exists.
+   */
+  hasProjectConfig(id: string): Promise<boolean> {
+    return this.pageExists(Github.getConfigUrl(id));
+  }
+
+  /**
+   * Get project config as raw content.
+   */
+  getProjectConfig(id: string) {
+    const url = Github.getConfigUrl(id);
+    return this.getRawContent(url);
+  }
+
+  /**
+   * Get the raw content of a project's main content file.
+   */
+  getRawProjectContent(id: string, config: ProjectConfig) {
+    const url = Github.getContentUrl(id, config);
+    return this.getRawContent(url);
+  }
+
+  /**
    * Get raw content from Github.
    * URL should be a raw.githubusercontent page.
    */
-  getContent(url: string) {
+  getRawContent(url: string) {
     return request(url, this.getContentGetOptions());
   }
 

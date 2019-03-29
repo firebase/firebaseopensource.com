@@ -4,7 +4,7 @@
     "content": "README.md",
     "pages" : {
         "docs/configure-repo.md": "Configure your repo",
-        "docs/stage-project": "Stage content"
+        "docs/stage-project.md": "Stage content"
     },
     "related": [
         "firebase/oss-bot"

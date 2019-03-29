@@ -17,24 +17,27 @@ import { Github } from "./github";
 import * as functions from "firebase-functions";
 
 export class Config {
-  static github = new Github(Config.get("github.token"));
+  // TODO: Dynamic branch
+  static github = new Github(Config.get("github.token"), "master");
 
   static readonly FEATURED_BLACKLIST_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",
     "firebaseopensource.com",
-    "config/feature_blacklist_projects.json"
+    "config/feature_blacklist_projects.json",
+    "master"
   );
 
   static readonly ADDITIONAL_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",
     "firebaseopensource.com",
-    "config/additional_projects.json"
+    "config/additional_projects.json",
+    "master"
   );
 
-  static readonly ADDITIONAL_PROJECTS: string[] = [];
-  static readonly FEATURED_BLACKLIST_PROJECTS: string[] = [];
+  static ADDITIONAL_PROJECTS: string[] = [];
+  static FEATURED_BLACKLIST_PROJECTS: string[] = [];
 
-  static loadGlobalConfig = async function() {
+  static async loadGlobalConfig() {
     if (
       this.ADDITIONAL_PROJECTS.length > 0 &&
       this.FEATURED_BLACKLIST_PROJECTS.length > 0
@@ -42,16 +45,16 @@ export class Config {
       return;
     }
 
-    const additionalData = await this.github.getContent(
+    const additionalData = await this.github.getRawContent(
       this.ADDITIONAL_PROJECTS_URL
     );
     this.ADDITIONAL_PROJECTS = JSON.parse(additionalData).projects;
 
-    const blacklistData = await this.github.getContent(
+    const blacklistData = await this.github.getRawContent(
       this.FEATURED_BLACKLIST_PROJECTS_URL
     );
     this.FEATURED_BLACKLIST_PROJECTS = JSON.parse(blacklistData).projects;
-  };
+  }
 
   /**
    * Get a config key, either from the env or from local.

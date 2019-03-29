@@ -2,6 +2,14 @@
 @import "../../styles/variables.scss";
 
 #projects {
+  .warning {
+    background: #FF8A65;
+    text-align: center;
+    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
   // TODO: Make the margin-top unbreakable
   // TODO: Hide in mobile
   .sidebar {

@@ -17,11 +17,17 @@
 // TODO: Delete this file
 //
 // To run:
-// GCLOUD_PROJECT="fir-oss" github_token="<YOUR_GITHUB_TOKEN>" node test/test.js
+// GCLOUD_PROJECT="fir-oss" github_token="<YOUR_GITHUB_TOKEN>" ts-node test/test.ts
 import { Config } from "../config";
 import { Project } from "../project";
+import { GetParams, Env } from "../../../shared/types";
 
-const project = new Project();
+const DEFAULT_PARAMS: GetParams = {
+  env: Env.STAGING,
+  branch: "master"
+};
+
+const project = new Project(DEFAULT_PARAMS);
 
 const ids = [
   "samtstern::BotTest",

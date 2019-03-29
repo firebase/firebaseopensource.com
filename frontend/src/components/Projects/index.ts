@@ -9,6 +9,8 @@ import FourOhFour from "../../components/FourOhFour";
 
 import { Config } from "../../types/config";
 import { Route } from "vue-router";
+import { Env } from "../../../../shared/types";
+import { Util } from "../../../../shared/util";
 
 const Clipboard = require("clipboard");
 
@@ -84,6 +86,9 @@ export default class Projects extends Vue {
   $route: Route;
 
   @Prop()
+  env: Env;
+
+  @Prop()
   page_title: String;
   @Prop()
   sections: Section[];
@@ -107,11 +112,14 @@ export default class Projects extends Vue {
   cancels: Function[];
   show_clone_cmd: Boolean = false;
 
-  static async load(org: string, repo: string, page: string) {
-    console.log(`load(${org}, ${repo}, ${page})`);
+  static async load(org: string, repo: string, page: string, env: Env) {
+    console.log(`load(${org}, ${repo}, ${page}, ${env})`);
     const result = {
       sections: []
     } as any;
+
+    // Set the environment for rendering
+    result.env = env;
 
     const fbt = await FirebaseSingleton.GetInstance();
 
@@ -130,8 +138,10 @@ export default class Projects extends Vue {
       )
     ];
 
-    const repoDoc = fbt.fs.collection("content").doc(id);
-    const configDoc = fbt.fs.collection("configs").doc(id);
+    // Get the path to the config and content docs, depending on the
+    // display environment
+    const repoDoc = fbt.fs.doc(Util.contentPath(id, env));
+    const configDoc = fbt.fs.doc(Util.configPath(id, env));
 
     let pageContentDoc;
     if (page) {
@@ -154,6 +164,7 @@ export default class Projects extends Vue {
     // Load content
     const snapshot = await pageContentDoc.get();
     if (!snapshot.exists) {
+      console.warn(`No content at page: ${pageContentDoc.path}`);
       result.not_found = true;
     } else {
       result.not_found = false;
@@ -260,6 +271,10 @@ export default class Projects extends Vue {
     }
 
     return result;
+  }
+
+  get isStaging() {
+    return this.env === Env.STAGING;
   }
 
   destroyed() {

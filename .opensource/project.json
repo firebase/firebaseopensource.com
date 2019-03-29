@@ -2,9 +2,10 @@
     "name": "Firebase Open Source",
     "platforms": [],
     "content": "README.md",
-    "pages" : [
-        "docs/configure-repo.md"
-    ],
+    "pages" : {
+        "docs/configure-repo.md": "Configure your repo",
+        "docs/stage-project.md": "Stage content"
+    },
     "related": [
         "firebase/oss-bot"
     ]

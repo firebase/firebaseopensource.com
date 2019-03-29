@@ -63,9 +63,9 @@ exports.stageProject = functions
       response
         .status(200)
         .send(
-          `Visit https://firebaseopensource.com/projects/${org}/${
+          `Visit https://firebaseopensource.com/projects-staging/${org}/${
             repo
-          }/?env=staging`
+          }`
         );
     } catch (e) {
       console.warn(e);

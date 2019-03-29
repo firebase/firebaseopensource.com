@@ -45,10 +45,9 @@ export default {
     const org = context.params.org || context.route.params.org;
     const repo = context.params.repo || context.route.params.repo;
     const page = context.params.page || context.route.params.page;
-    const envString = context.query.env || context.route.query.env;
 
     let env: Env = Env.PROD;
-    if (envString === "staging") {
+    if (context.route.path.indexOf("-staging") >= 0) {
       env = Env.STAGING;
     }
 

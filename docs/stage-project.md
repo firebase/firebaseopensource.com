@@ -20,9 +20,11 @@ If you omit the `branch` parameter, the content will be fetched from the `master
 
 ## View your changes
 
-To see your staged changes, add `?env=staging` to the end of your project homepage URL.
-For example:
+To see your staged changes, change `/projects/` to `/projects-staging`. For example:
 
 ```
-https://firebaseopensource.com/projects/samtstern/BotTest/?env=staging
+https://firebaseopensource.com/projects-staging/samtstern/BotTest/
 ```
+
+Note that relative links throughout the site will still point to production, so you
+have to manually perform this URL edit on each page you'd like to see in staging.

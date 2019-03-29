@@ -8,6 +8,15 @@ module.exports = {
         path: "/projects/:org/:repo/:page(.+)",
         component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
       });
+
+      routes.push({
+        path: "/projects-staging/:org/:repo/",
+        component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
+      });
+      routes.push({
+        path: "/projects-staging/:org/:repo/:page(.+)",
+        component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
+      });
     }
   },
   generate: {

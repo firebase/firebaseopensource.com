@@ -20,8 +20,14 @@
 // GCLOUD_PROJECT="fir-oss" github_token="<YOUR_GITHUB_TOKEN>" node test/test.js
 import { Config } from "../config";
 import { Project } from "../project";
+import { GetParams, Env } from "../../../shared/types";
 
 const project = new Project();
+
+const DEFAULT_PARAMS: GetParams = {
+  env: Env.PROD,
+  branch: "master"
+};
 
 const ids = [
   "samtstern::BotTest",
@@ -38,7 +44,7 @@ const ids = [
 
 Config.loadGlobalConfig().then(() => {
   ids.forEach(id => {
-    return project.recursiveStoreProject(id).catch(err => {
+    return project.recursiveStoreProject(id, DEFAULT_PARAMS).catch(err => {
       console.warn(err);
     });
   });

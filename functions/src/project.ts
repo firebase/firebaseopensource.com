@@ -18,7 +18,13 @@ import { Content } from "./content";
 import { Github } from "./github";
 import { Logger } from "./logger";
 import { Util } from "../../shared/util";
-import { ProjectConfig, PageSection, ProjectPage, Env, GetParams } from "../../shared/types";
+import {
+  ProjectConfig,
+  PageSection,
+  ProjectPage,
+  Env,
+  GetParams
+} from "../../shared/types";
 
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
@@ -124,7 +130,8 @@ export class Project {
   getProjectConfig(id: string, params: GetParams) {
     const idParsed = Util.parseProjectId(id);
 
-    return github.hasProjectConfig(id)
+    return github
+      .hasProjectConfig(id)
       .then((exists: boolean) => {
         if (exists) {
           // Config exists, fetch and parse it
@@ -197,9 +204,7 @@ export class Project {
 
     Logger.debug(id, `Storing at ${configPath}`);
     Logger.debug(id, "Config: " + JSON.stringify(config));
-    const configProm = db
-      .doc(configPath)
-      .set(data);
+    const configProm = db.doc(configPath).set(data);
 
     return configProm;
   }
@@ -225,7 +230,11 @@ export class Project {
   /**
    * Fetch a project's content and put it into Firestore.
    */
-  async storeProjectContent(id: string, config: ProjectConfig, params: GetParams): Promise<any> {
+  async storeProjectContent(
+    id: string,
+    config: ProjectConfig,
+    params: GetParams
+  ): Promise<any> {
     const contentPath = Util.contentPath(id, params.env);
     const contentRef = db.doc(contentPath);
 
@@ -314,7 +323,8 @@ export class Project {
 
     // Loop through pages, get content for each
     Object.keys(config.pages).forEach(page => {
-      const pageUrl = Github.getPageUrl(id, page);
+      // TODO: Dynamic branch
+      const pageUrl = Github.getPageContentUrl(id, page, "master");
       Logger.debug(id, `Rendering page: ${pageUrl}`);
 
       const pagePromise = github

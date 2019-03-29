@@ -71,7 +71,11 @@ export class Content {
       this.getRenderedContentBaseUrl(repoId),
       pageDir
     );
-    const rawBaseUrl = urljoin(Github.getRawContentBaseUrl(repoId), pageDir);
+    // TODO: Dynamic branch
+    const rawBaseUrl = urljoin(
+      Github.getRawContentBaseUrl(repoId, "master"),
+      pageDir
+    );
 
     const $: CheerioStatic = cheerio.load(html);
 

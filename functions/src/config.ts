@@ -22,13 +22,15 @@ export class Config {
   static readonly FEATURED_BLACKLIST_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",
     "firebaseopensource.com",
-    "config/feature_blacklist_projects.json"
+    "config/feature_blacklist_projects.json",
+    "master"
   );
 
   static readonly ADDITIONAL_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",
     "firebaseopensource.com",
-    "config/additional_projects.json"
+    "config/additional_projects.json",
+    "master"
   );
 
   static readonly ADDITIONAL_PROJECTS: string[] = [];

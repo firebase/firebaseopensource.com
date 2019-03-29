@@ -16,6 +16,7 @@
 import { Project } from "./project";
 import * as functions from "firebase-functions";
 import { Cron } from "./cron";
+import { Env, GetParams } from "../../shared/types";
 
 const PubSub = require("@google-cloud/pubsub");
 
@@ -30,6 +31,11 @@ const RUNTIME_OPTS = {
   memory: "2GB" as "2GB"
 };
 
+const DEFAULT_PARAMS: GetParams = {
+  env: Env.PROD,
+  branch: "master"
+};
+
 /**
  * Get the config and content for a single project and its subprojects.
  *
@@ -40,7 +46,7 @@ exports.getProject = functions
   .pubsub.topic("get-project")
   .onPublish(message => {
     const id = message.json.id;
-    return project.recursiveStoreProject(id);
+    return project.recursiveStoreProject(id, DEFAULT_PARAMS);
   });
 
 /**
@@ -50,9 +56,10 @@ exports.getProject = functions
 exports.getProjectWebhook = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
+    // TODO: This should just send the PubSub
     const id = request.param("id");
     project
-      .recursiveStoreProject(id)
+      .recursiveStoreProject(id, DEFAULT_PARAMS)
       .then(() => {
         response.status(200).send(`Stored project ${id}.\n`);
       })

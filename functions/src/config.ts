@@ -17,7 +17,8 @@ import { Github } from "./github";
 import * as functions from "firebase-functions";
 
 export class Config {
-  static github = new Github(Config.get("github.token"));
+  // TODO: Dynamic branch
+  static github = new Github(Config.get("github.token"), "master");
 
   static readonly FEATURED_BLACKLIST_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",

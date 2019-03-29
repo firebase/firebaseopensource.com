@@ -25,7 +25,7 @@ export class Github {
   token: string;
   branch: string;
 
-  constructor(token: string, branch: string = "master") {
+  constructor(token: string, branch: string) {
     this.token = token;
     this.branch = branch;
   }

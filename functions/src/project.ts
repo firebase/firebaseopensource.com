@@ -32,7 +32,6 @@ import * as functions from "firebase-functions";
 const cjson = require("comment-json");
 
 const content = new Content();
-const github = new Github(Config.get("github.token"));
 
 // Initialize the Admin SDK with the right credentials for the environment
 try {
@@ -47,14 +46,22 @@ const db = admin.firestore();
 db.settings({ timestampsInSnapshots: true });
 
 export class Project {
+  params: GetParams;
+  github: Github;
+
+  constructor(params: GetParams) {
+    this.params = params;
+    this.github = new Github(Config.get("github.token"), params.branch);
+  }
+
   /**
    * Get a list of all project IDs, useful for fan-out project storing.
    */
-  listAllProjectIds = async function() {
+  async listAllProjectIds() {
     // Loads ADDITIONAL_PROJECTS
     await Config.loadGlobalConfig();
 
-    const repos = await github.listAllRepos("firebase");
+    const repos = await this.github.listAllRepos("firebase");
     const ids = repos.map(repo => {
       return Util.pathToSlug(repo);
     });
@@ -66,26 +73,26 @@ export class Project {
     );
     const allIds = ids.concat(Config.ADDITIONAL_PROJECTS);
     return allIds;
-  };
+  }
 
   /**
    * Store a project and all of its pages.
    */
-  recursiveStoreProject(id: string, params: GetParams) {
+  recursiveStoreProject(id: string) {
     Logger.debug(id, "recursiveStoreProject()");
 
     return Config.loadGlobalConfig()
       .then(() => {
-        return this.getProjectConfig(id, params);
+        return this.getProjectConfig(id);
       })
       .then(config => {
         // Store this project's config and content
-        const storeConfig = this.storeProjectConfig(id, config, params);
-        const storeContent = this.storeProjectContent(id, config, params);
+        const storeConfig = this.storeProjectConfig(id, config);
+        const storeContent = this.storeProjectContent(id, config);
 
         // Only store releases in production
         let storeReleases: Promise<any>;
-        if (params.env == Env.PROD) {
+        if (this.params.env == Env.PROD) {
           storeReleases = this.storeProjectReleases(id);
         } else {
           storeReleases = Promise.resolve();
@@ -127,15 +134,15 @@ export class Project {
   /**
    * Get the configuration for a project at a certain path.
    */
-  getProjectConfig(id: string, params: GetParams) {
+  getProjectConfig(id: string) {
     const idParsed = Util.parseProjectId(id);
 
-    return github
+    return this.github
       .hasProjectConfig(id)
       .then((exists: boolean) => {
         if (exists) {
           // Config exists, fetch and parse it
-          return github.getProjectConfig(id).then(data => {
+          return this.github.getProjectConfig(id).then(data => {
             // Parse and remove comments
             const contents = data.toString();
             return cjson.parse(contents, null, true);
@@ -143,7 +150,7 @@ export class Project {
         } else {
           // If the project has no config, make one up
           Logger.debug(id, "WARN: Using default config.");
-          return github
+          return this.github
             .getRepoReadmeFile(idParsed.owner, idParsed.repo)
             .then((readme: string) => {
               Logger.debug(id, `README: ${readme}`);
@@ -170,7 +177,7 @@ export class Project {
 
         // Merge the config with repo metadata like stars
         // and updated time.
-        return github
+        return this.github
           .getRepoMetadata(idParsed.owner, idParsed.repo)
           .then(meta => {
             if (meta.description) {
@@ -192,7 +199,7 @@ export class Project {
   /**
    * Fetch a project config and put it into Firestore.
    */
-  storeProjectConfig(id: string, config: ProjectConfig, params: GetParams) {
+  storeProjectConfig(id: string, config: ProjectConfig) {
     const data = config;
     const docId = Util.normalizeId(id);
 
@@ -200,7 +207,7 @@ export class Project {
     data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
 
     // Get path to the config document in the database
-    const configPath = Util.configPath(docId, params.env);
+    const configPath = Util.configPath(docId, this.params.env);
 
     Logger.debug(id, `Storing at ${configPath}`);
     Logger.debug(id, "Config: " + JSON.stringify(config));
@@ -211,7 +218,7 @@ export class Project {
 
   async storeProjectReleases(id: string): Promise<any> {
     const { owner, repo } = Util.parseProjectId(id);
-    const releases = await github.getRepoReleases(owner, repo);
+    const releases = await this.github.getRepoReleases(owner, repo);
     if (!releases || releases.length == 0) {
       Logger.debug(id, `No releases for ${id}`);
       return;
@@ -230,12 +237,8 @@ export class Project {
   /**
    * Fetch a project's content and put it into Firestore.
    */
-  async storeProjectContent(
-    id: string,
-    config: ProjectConfig,
-    params: GetParams
-  ): Promise<any> {
-    const contentPath = Util.contentPath(id, params.env);
+  async storeProjectContent(id: string, config: ProjectConfig): Promise<any> {
+    const contentPath = Util.contentPath(id, this.params.env);
     const contentRef = db.doc(contentPath);
 
     const sections = await this.getProjectContent(id, config);
@@ -266,7 +269,7 @@ export class Project {
    * Fetch a project's content.
    */
   getProjectContent(id: string, config: ProjectConfig) {
-    return github
+    return this.github
       .getRawProjectContent(id, config)
       .then(data => {
         return content.processMarkdown(data, id, undefined, config);
@@ -327,7 +330,7 @@ export class Project {
       const pageUrl = Github.getPageContentUrl(id, page, "master");
       Logger.debug(id, `Rendering page: ${pageUrl}`);
 
-      const pagePromise = github
+      const pagePromise = this.github
         .getRawContent(pageUrl)
         .catch(e => {
           throw `Failed to get content for ${pageUrl}: ${JSON.stringify(e)}`;

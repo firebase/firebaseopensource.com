@@ -20,8 +20,6 @@ import { Env, GetParams } from "../../shared/types";
 
 const PubSub = require("@google-cloud/pubsub");
 
-const project = new Project();
-
 const pubsubClient = new PubSub({
   projectId: process.env.GCLOUD_PROJECT
 });
@@ -36,6 +34,9 @@ const DEFAULT_PARAMS: GetParams = {
   branch: "master"
 };
 
+// TODO: These params should be dynamic
+const project = new Project(DEFAULT_PARAMS);
+
 /**
  * Get the config and content for a single project and its subprojects.
  *
@@ -46,7 +47,7 @@ exports.getProject = functions
   .pubsub.topic("get-project")
   .onPublish(message => {
     const id = message.json.id;
-    return project.recursiveStoreProject(id, DEFAULT_PARAMS);
+    return project.recursiveStoreProject(id);
   });
 
 /**
@@ -59,7 +60,7 @@ exports.getProjectWebhook = functions
     // TODO: This should just send the PubSub
     const id = request.param("id");
     project
-      .recursiveStoreProject(id, DEFAULT_PARAMS)
+      .recursiveStoreProject(id)
       .then(() => {
         response.status(200).send(`Stored project ${id}.\n`);
       })

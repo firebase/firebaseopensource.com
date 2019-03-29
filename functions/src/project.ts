@@ -332,7 +332,6 @@ export class Project {
     // Loop through pages, get content for each
     const content = new Content();
     Object.keys(config.pages).forEach(page => {
-      // TODO: Dynamic branch
       const pageUrl = Github.getPageContentUrl(id, page, this.params.branch);
       Logger.debug(id, `Rendering page: ${pageUrl}`);
 

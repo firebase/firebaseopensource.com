@@ -10,6 +10,7 @@ about: Is there a project you want to see added to firebaseopensource.com?
 
 **Why would Firebase developers be interested in this project?**: TODO
 
-**Stage your project**
+**Stage your project**:
+
 Follow the instructions here and post a link to your staged content:
 https://firebaseopensource.com/projects/firebase/firebaseopensource.com/docs/stage-project.md/

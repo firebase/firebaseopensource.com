@@ -8,6 +8,10 @@
     ],
     "rewrites": [
       {
+        "source": "/stageProject",
+        "function": "stageProject"
+      },
+      {
         "source": "**",
         "destination": "/404.html"
       }

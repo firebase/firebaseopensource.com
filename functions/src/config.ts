@@ -37,7 +37,7 @@ export class Config {
   static ADDITIONAL_PROJECTS: string[] = [];
   static FEATURED_BLACKLIST_PROJECTS: string[] = [];
 
- static async loadGlobalConfig() {
+  static async loadGlobalConfig() {
     if (
       this.ADDITIONAL_PROJECTS.length > 0 &&
       this.FEATURED_BLACKLIST_PROJECTS.length > 0
@@ -54,7 +54,7 @@ export class Config {
       this.FEATURED_BLACKLIST_PROJECTS_URL
     );
     this.FEATURED_BLACKLIST_PROJECTS = JSON.parse(blacklistData).projects;
-  };
+  }
 
   /**
    * Get a config key, either from the env or from local.

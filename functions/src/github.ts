@@ -46,7 +46,9 @@ export class Github {
     path: string,
     branch: string
   ): string {
-    return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${
+      path
+    }`;
   }
 
   /**

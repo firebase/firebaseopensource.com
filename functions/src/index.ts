@@ -35,10 +35,9 @@ const DEFAULT_PARAMS: GetParams = {
   branch: "master"
 };
 
-// TODO: These params should be dynamic
+// TODO: This should be created per-function with
+//       dynamic params.
 const project = new Project(DEFAULT_PARAMS);
-
-// TODO: Expose this function through hosting
 
 /**
  * Stage a project.

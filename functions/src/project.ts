@@ -31,8 +31,6 @@ import * as functions from "firebase-functions";
 
 const cjson = require("comment-json");
 
-const content = new Content();
-
 // Initialize the Admin SDK with the right credentials for the environment
 try {
   admin.initializeApp(functions.config().firebase);
@@ -269,10 +267,17 @@ export class Project {
    * Fetch a project's content.
    */
   getProjectContent(id: string, config: ProjectConfig) {
+    const content = new Content();
     return this.github
       .getRawProjectContent(id, config)
       .then(data => {
-        return content.processMarkdown(data, id, undefined, config);
+        return content.processMarkdown(
+          data,
+          id,
+          undefined,
+          config,
+          this.params.branch
+        );
       })
       .then(content => {
         content.sections = this.filterProjectSections(content.sections);
@@ -325,6 +330,7 @@ export class Project {
     const pages: ProjectPage[] = [];
 
     // Loop through pages, get content for each
+    const content = new Content();
     Object.keys(config.pages).forEach(page => {
       // TODO: Dynamic branch
       const pageUrl = Github.getPageContentUrl(id, page, "master");
@@ -336,7 +342,13 @@ export class Project {
           throw `Failed to get content for ${pageUrl}: ${JSON.stringify(e)}`;
         })
         .then(data => {
-          return content.processMarkdown(data, id, page, config);
+          return content.processMarkdown(
+            data,
+            id,
+            page,
+            config,
+            this.params.branch
+          );
         })
         .then(sections => {
           pages.push({

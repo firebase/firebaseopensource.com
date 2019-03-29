@@ -32,10 +32,11 @@ export class Content {
     data: string,
     repoId: string,
     page: string | undefined,
-    config: ProjectConfig
+    config: ProjectConfig,
+    branch: string
   ): PageContent {
     const html: string = marked(data);
-    const sanitizedHtml = this.sanitizeHtml(repoId, page, config, html);
+    const sanitizedHtml = this.sanitizeHtml(repoId, page, config, html, branch);
     const sections = this.htmlToSections(sanitizedHtml);
 
     return sections;
@@ -44,11 +45,12 @@ export class Content {
   /**
    * Sanitize the content Html.
    */
-  sanitizeHtml(
+  private sanitizeHtml(
     repoId: string,
     page: string,
     config: ProjectConfig,
-    html: string
+    html: string,
+    branch: string
   ): string {
     // Links
     // * Links to page content files should go to our page
@@ -67,13 +69,13 @@ export class Content {
       }
     }
 
+    // TODO: Dynamic branch
     const renderedBaseUrl = urljoin(
-      this.getRenderedContentBaseUrl(repoId),
+      this.getRenderedContentBaseUrl(repoId, branch),
       pageDir
     );
-    // TODO: Dynamic branch
     const rawBaseUrl = urljoin(
-      Github.getRawContentBaseUrl(repoId, "master"),
+      Github.getRawContentBaseUrl(repoId, branch),
       pageDir
     );
 
@@ -166,7 +168,7 @@ export class Content {
   /**
    * Turn HTML into a sections objects.
    */
-  htmlToSections(html: string): PageContent {
+  private htmlToSections(html: string): PageContent {
     const $ = cheerio.load(html);
     const sections: PageSection[] = [];
 
@@ -206,15 +208,15 @@ export class Content {
   /**
    * Get the base github URL for a project.
    */
-  getRenderedContentBaseUrl(id: string) {
+  private getRenderedContentBaseUrl(id: string, branch: string) {
     // Parse the ID into pieces
     const idObj = Util.parseProjectId(id);
 
     // Get the URL to the root folder
     const pathPrefix = idObj.path ? idObj.path + "/" : "";
-    const url = `https://github.com/${idObj.owner}/${idObj.repo}/tree/master/${
-      pathPrefix
-    }`;
+    const url = `https://github.com/${idObj.owner}/${idObj.repo}/tree/${
+      branch
+    }/${pathPrefix}`;
 
     return url;
   }
@@ -222,7 +224,11 @@ export class Content {
   /**
    * Sanitize relative links to be absolute.
    */
-  sanitizeRelativeLink(el: CheerioElement, attrName: string, base: string) {
+  private sanitizeRelativeLink(
+    el: CheerioElement,
+    attrName: string,
+    base: string
+  ) {
     const val = el.attribs[attrName];
 
     if (val) {
@@ -238,7 +244,7 @@ export class Content {
   /**
    * Change href to lowercase.
    */
-  lowercaseLink(el: CheerioElement) {
+  private lowercaseLink(el: CheerioElement) {
     const newVal = el.attribs["href"].toLowerCase();
     el.attribs["href"] = newVal;
   }
@@ -246,7 +252,7 @@ export class Content {
   /**
    * Determine if a project is listed on firebaseopensource.com
    */
-  _isIncludedProject(org: string, repo: string) {
+  private _isIncludedProject(org: string, repo: string) {
     if (org === "firebase") {
       return true;
     }
@@ -261,7 +267,7 @@ export class Content {
   /**
    * Determine if a link is to github.com
    */
-  _isGithubLink(href: string) {
+  private _isGithubLink(href: string) {
     const hrefUrl = url.parse(href);
     return (
       hrefUrl.hostname && hrefUrl.pathname && href.indexOf("github.com") >= 0
@@ -271,7 +277,7 @@ export class Content {
   /**
    * Determine if a link is relative.
    */
-  _isRelativeLink(href: string) {
+  private _isRelativeLink(href: string) {
     const hrefUrl = url.parse(href);
 
     // Relative link has a pathname but not a host

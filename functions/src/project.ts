@@ -333,7 +333,7 @@ export class Project {
     const content = new Content();
     Object.keys(config.pages).forEach(page => {
       // TODO: Dynamic branch
-      const pageUrl = Github.getPageContentUrl(id, page, "master");
+      const pageUrl = Github.getPageContentUrl(id, page, this.params.branch);
       Logger.debug(id, `Rendering page: ${pageUrl}`);
 
       const pagePromise = this.github

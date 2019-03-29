@@ -164,6 +164,7 @@ export default class Projects extends Vue {
     // Load content
     const snapshot = await pageContentDoc.get();
     if (!snapshot.exists) {
+      console.warn(`No content at page: ${pageContentDoc.path}`);
       result.not_found = true;
     } else {
       result.not_found = false;

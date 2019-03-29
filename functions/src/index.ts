@@ -50,6 +50,7 @@ exports.stageProject = functions
     const org = request.param("org");
     const repo = request.param("repo");
     const branch = request.param("branch") || "master";
+    console.log(`stageProject(${org}, ${repo}, ${branch})`);
 
     const p = new Project({
       env: Env.STAGING,

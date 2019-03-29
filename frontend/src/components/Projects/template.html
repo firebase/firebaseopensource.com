@@ -3,6 +3,11 @@
   <header-bar :enable_subheader="found" subheader_title="Documentation" ref="header" :subheader_tabs="subheader_tabs" ></header-bar>
 
   <four-oh-four v-if="not_found"></four-oh-four>
+
+  <div v-if="isStaging" class="warning">
+    You are viewing this page in the STAGING environment.
+  </div>
+
   <div class="page content_grid" v-if="found">
     <div class="col_gutter">
       <ul class="sidebar shadow_all">

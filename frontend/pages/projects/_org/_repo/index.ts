@@ -1,4 +1,5 @@
 import Projects from "../../../../src/components/Projects"
+import { Env } from "../../../../../shared/types";
 
 export default {
   components: {
@@ -44,7 +45,13 @@ export default {
     const org = context.params.org || context.route.params.org;
     const repo = context.params.repo || context.route.params.repo;
     const page = context.params.page || context.route.params.page;
+    const envString = context.query.env || context.route.query.env;
 
-    return await Projects.load(org, repo, page);
+    let env: Env = Env.PROD;
+    if (envString === "staging") {
+      env = Env.STAGING;
+    }
+
+    return await Projects.load(org, repo, page, env);
   }
 }

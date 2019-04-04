@@ -23,8 +23,7 @@ export interface StoredProjectConfig {
 
   // Content and other display info
   content: string;
-  // TODO: This should be an array of PageConfig
-  pages?: StringMap<any>;
+  pages?: Array<PageConfig>;
 
   // Optional page elements
   related?: StringMap<boolean>;

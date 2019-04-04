@@ -39,7 +39,14 @@ const ids = [
   "firebase::functions-samples",
   "firebase::assistant-codelab",
   "firebase::androiddrawing",
-  "googlesamples::easypermissions"
+  "googlesamples::easypermissions",
+
+  "firebase::firebase-android-sdk",
+
+  // Interesting because:
+  //  Non-Firebase
+  //  Has "old-style" pages config (no names)
+  "invertase::react-native-firebase"
 ];
 
 Config.loadGlobalConfig().then(() => {

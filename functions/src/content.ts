@@ -115,7 +115,10 @@ export class Content {
       if (that._isRelativeLink(href)) {
         // Check if the link is to a page within the repo
         const repoRelative = path.join(pageDir, href);
-        if (config.pages && config.pages[repoRelative]) {
+        const pageKeys = config.pages
+          ? config.pages.map(page => page.path)
+          : [];
+        if (pageKeys.indexOf(repoRelative) >= 0) {
           Logger.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
           that.lowercaseLink(el);
         } else {

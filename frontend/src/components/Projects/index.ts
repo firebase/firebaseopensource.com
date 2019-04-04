@@ -8,7 +8,7 @@ import HeaderBar from "../../components/HeaderBar";
 import FourOhFour from "../../components/FourOhFour";
 
 import { Route } from "vue-router";
-import { Env, StoredProjectConfig, TabConfig } from "../../../../shared/types";
+import { Env, StoredProjectConfig, TabConfig, PageConfig } from "../../../../shared/types";
 import { Util } from "../../../../shared/util";
 
 const Clipboard = require("clipboard");
@@ -262,38 +262,20 @@ export default class Projects extends Vue implements ProjectArgs {
 
     if (configData.pages) {
       const subpages: SelectableLink[] = [];
-      Object.keys(configData.pages).forEach((subPath: string) => {
-        // The pages config can either look like:
-        // { "path.md": true }
-        // OR
-        // { "path.md": "TITLE" }
+      for (const pageConfig of configData.pages) {
         let pageName;
-        const val = configData.pages[subPath];
-        if (typeof val === "string") {
-          pageName = val;
+        if (pageConfig.name) {
+          pageName = pageConfig.name;
         } else {
-          pageName = subPath.toLowerCase();
+          pageName = pageConfig.path.toLowerCase();
           pageName = pageName.replace("/readme.md", "");
           pageName = pageName.replace(".md", "");
         }
 
-        const selected = page && page.toLowerCase() === subPath.toLowerCase();
-        const href = `${projectPath}/${subPath}`.toLowerCase();
+        const selected = page && page.toLowerCase() === pageConfig.path.toLowerCase();
+        const href = `${projectPath}/${pageConfig.path}`.toLowerCase();
         subpages.push(new SelectableLink(pageName, href, selected));
-      });
-
-      // Sort the pages by their title (alphabetically)
-      subpages.sort((a, b) => {
-        if (a.title > b.title) {
-          return 1;
-        } else if (a.title == b.title) {
-          return 0;
-        } else {
-          return -1;
-        }
-      });
-
-      projectSidebar.pages = projectSidebar.pages.concat(subpages);
+      }
     }
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
 

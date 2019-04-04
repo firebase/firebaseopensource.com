@@ -1,3 +1,7 @@
+export interface StringMap<T> {
+  [s: string]: T;
+}
+
 export enum Env {
   STAGING = "staging",
   PROD = "prod",
@@ -8,18 +12,56 @@ export class GetParams {
   branch: string = "master";
 }
 
+/**
+ * A ProjectConfig as it is stored in the database.
+ */
+export interface StoredProjectConfig {
+  // Basic repo information
+  name: string;
+  description?: string;
+  stars: number;
+
+  // Content and other display info
+  content: string;
+  // TODO: This should be an array of PageConfig
+  pages?: StringMap<any>;
+
+  // Optional page elements
+  related?: StringMap<boolean>;
+  tabs?: Array<TabConfig>; 
+
+  // Categorization info
+  platforms: StringMap<boolean>;
+  blacklist: boolean;
+  fork: boolean;
+
+  // Timestamps
+  last_updated?: string;
+  // TODO: This is a timestamp
+  last_fetched?: any;
+}
+
 export interface ProjectConfig {
   name?: string;
   type?: string;
   platforms?: string[];
   content?: string;
 
-  // TODO: This is a map of string --> bool or string
-  pages?: any;
+  pages?: PageConfig[];
   related?: string[];
 
   last_fetched?: any;
   last_updated?: any;
+}
+
+export interface PageConfig {
+  name?: string;
+  path: string;
+}
+
+export interface TabConfig {
+  href: string;
+  title: string;
 }
 
 export interface ProjectPage {

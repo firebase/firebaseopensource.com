@@ -23,7 +23,8 @@ import {
   PageSection,
   ProjectPage,
   Env,
-  GetParams
+  GetParams,
+  PageConfig
 } from "../../shared/types";
 
 import * as admin from "firebase-admin";
@@ -171,6 +172,31 @@ export class Project {
           config.blacklist = true;
         } else {
           config.blacklist = false;
+        }
+
+        // Normalize the formatting of "pages"
+        if (config.pages) {
+          const normalizedPages: PageConfig[] = [];
+
+          if (Array.isArray(config.pages)) {
+            // In v0 pages was just an array of paths
+            for (const path of config.pages) {
+              normalizedPages.push({
+                path
+              });
+            }
+          } else {
+            // In v1 it is a map of { path: title }
+            Object.keys(config.pages).forEach((path: string) => {
+              const name = config.pages[path];
+              normalizedPages.push({
+                name,
+                path
+              });
+            });
+          }
+
+          config.pages = normalizedPages;
         }
 
         // Merge the config with repo metadata like stars

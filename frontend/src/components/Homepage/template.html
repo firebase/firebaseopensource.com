@@ -65,6 +65,7 @@
               </a>
             </div>
             <div class="projects">
+              <!-- TODO: This is gnarly, move more of this to JS -->
               <div class="project" v-for="project in ($refs.header && $refs.header.subheader_tab_selection == 'all')? category.featured : category.projects">
 
                 <div class="grid">

@@ -22,16 +22,26 @@ import HeaderBar from "../HeaderBar";
 import { pickLogoLetter, daysAgo } from "../../utils";
 
 import { Util } from "../../../../shared/util";
-import { RepoRelease } from "../../../../shared/types";
-import { Config } from "../../types/config";
+import { RepoRelease, StoredProjectConfig } from "../../../../shared/types";
 
 type Category = {
   title: string;
   platform: string;
   icon: string;
-  projects: Config[];
-  featured: Config[];
+  projects: ProjectInfo[];
+  featured: ProjectInfo[];
 };
+
+type ProjectInfo = {
+  org: string;
+  repo: string;
+
+  name: string;
+  description: string;
+
+  letter: string;
+  color: string;
+}
 
 const COLORS = [
   "#039BE5",
@@ -155,26 +165,36 @@ export default class Homepage extends Vue {
 
       snapshot.docs.forEach(
         (doc: firebase.firestore.QueryDocumentSnapshot, docIndex: number) => {
-          const config = doc.data() as Config;
-          config.letter = pickLogoLetter(config.name);
-          config.color = COLORS[(docIndex + categoryIndex) % COLORS.length];
+          const config = doc.data() as StoredProjectConfig;
+
+          const letter = pickLogoLetter(config.name);
+          const color = COLORS[(docIndex + categoryIndex) % COLORS.length];
 
           const parsedId = Util.parseProjectId(doc.id);
-          config.org = parsedId.owner;
-          config.repo = parsedId.repo;
+          const org = parsedId.owner;
+          const repo = parsedId.repo;
 
           const words = config.description.split(" ");
           let sentence = words.slice(0, 10).join(" ");
           if (words.length > 10) {
             sentence += "...";
           }
-          config.description = sentence;
+          const description = sentence;
 
-          if (category.featured.length < 6) {
-            category.featured.push(config);
+          const catProj: ProjectInfo = {
+            name: config.name,
+            description,
+            letter,
+            color,
+            org,
+            repo
           }
 
-          category.projects.push(config);
+          if (category.featured.length < 6) {
+            category.featured.push(catProj);
+          }
+
+          category.projects.push(catProj);
         }
       );
     }

@@ -44,8 +44,8 @@
 
             <div class="related" v-if="!is_subpage">
               <div class="repos">
-                <a class="repo test" :href="`/projects/${repo}`" v-for="repo in Object.keys(config.related || {})">
-                  <i class="material-icons">link</i><span>{{fmtRelated(repo)}}</span>
+                <a class="repo test" :href="`/projects/${repo}`" v-for="repo in related_repos">
+                  <i class="material-icons">link</i><span>{{repo}}</span>
                 </a>
               </div>
             </div>
@@ -53,25 +53,25 @@
 
           <div class="right">
             <div class="badges" v-if="!is_subpage">
-              <a :href="`https://github.com/${config.org}/${config.repo}/stargazers`">
+              <a :href="`https://github.com/${info.org}/${info.repo}/stargazers`">
                 <div class="badge">
                   <div class="key">
                     <i class="material-icons">star</i>
                   </div>
-                  <div class="value">{{config.stars}}</div>
+                  <div class="value">{{info.stars}}</div>
                 </div>
               </a>
 
-              <a :href="`https://github.com/${config.org}/${config.repo}/commits/master`">
+              <a :href="`https://github.com/${info.org}/${info.repo}/commits/master`">
                 <div class="badge">
                   <div class="key">
                       <i class="material-icons">access_time</i>
                   </div>
-                    <div class="value">{{config.last_updated_from_now}} ago</div>
+                    <div class="value">{{timestamps.last_updated_from_now}} ago</div>
                 </div>
               </a>
 
-              <a :href="`https://github.com/${config.org}/${config.repo}/`">
+              <a :href="`https://github.com/${info.org}/${info.repo}/`">
                 <div class="badge badge-action">
                   <div class="key">
                     <i class="material-icons">code</i>
@@ -80,7 +80,7 @@
                 </div>
               </a>
 
-                <a :href="`https://github.com/${config.org}/${config.repo}/issues`">
+                <a :href="`https://github.com/${info.org}/${info.repo}/issues`">
                   <div class="badge badge-action">
                     <div class="key">
                         <i class="material-icons">bug_report</i>
@@ -93,7 +93,7 @@
                   <input
                     id="git-clone-copy-txt"
                     type="text"
-                    :value="`git clone git@github.com:${config.org}/${config.repo}.git`"
+                    :value="`git clone git@github.com:${info.org}/${info.repo}.git`"
                     readonly />
                   <button
                     id="git-clone-copy-btn"
@@ -136,8 +136,8 @@
       <!-- Page footer -->
       <div class="section footer">
         <div class="content">
-          This page was generated approximately {{config.last_fetched_from_now}} ago.<br />
-          For copyright and licensing details please see the <a :href="`https://github.com/${config.org}/${config.repo}/blob/master/LICENSE`">LICENSE</a> file.
+          This page was generated approximately {{timestamps.last_fetched_from_now}} ago.<br />
+          For copyright and licensing details please see the <a :href="`https://github.com/${info.org}/${info.repo}/blob/master/LICENSE`">LICENSE</a> file.
         </div>
       </div>
     </div>

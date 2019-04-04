@@ -7,9 +7,8 @@ import { FirebaseSingleton } from "../../services/firebaseSingleton";
 import HeaderBar from "../../components/HeaderBar";
 import FourOhFour from "../../components/FourOhFour";
 
-import { Config } from "../../types/config";
 import { Route } from "vue-router";
-import { Env } from "../../../../shared/types";
+import { Env, StoredProjectConfig, TabConfig } from "../../../../shared/types";
 import { Util } from "../../../../shared/util";
 
 const Clipboard = require("clipboard");
@@ -78,16 +77,48 @@ const FIREBASE_SIDEBAR = new SidebarSection("Firebase", [
   )
 ]);
 
+interface RepoInfo {
+  org: string;
+  repo: string;
+  stars: number;
+}
+
+interface DisplayTimestamps {
+  last_updated_from_now: string;
+  last_fetched_from_now: string;
+}
+
+interface ProjectArgs {
+  env: Env;
+
+  page_title: String;
+  sections: Section[];
+  header: Section;
+  subheader_tabs: SelectableLink[];
+  sidebar: SidebarSection[];
+  related_repos: string[];
+
+  info: RepoInfo;
+  timestamps: DisplayTimestamps;
+
+  // TODO: How can we possibly need found and not_found
+  is_subpage: Boolean;
+  not_found: Boolean;
+  found: Boolean;
+
+  // TODO: Do we need this?
+  dropdown_selection: String;
+}
+
 @Component({
   components: { HeaderBar, FourOhFour }
 })
-export default class Projects extends Vue {
+export default class Projects extends Vue implements ProjectArgs {
   name = "projects";
   $route: Route;
 
   @Prop()
   env: Env;
-
   @Prop()
   page_title: String;
   @Prop()
@@ -95,7 +126,9 @@ export default class Projects extends Vue {
   @Prop()
   header: Section;
   @Prop()
-  config: Config;
+  info: RepoInfo;
+  @Prop()
+  timestamps: DisplayTimestamps;
   @Prop()
   is_subpage: Boolean;
   @Prop()
@@ -105,18 +138,20 @@ export default class Projects extends Vue {
   @Prop()
   found: Boolean;
   @Prop()
-  subheader_tabs: any[];
+  subheader_tabs: SelectableLink[];
   @Prop()
   sidebar: SidebarSection[];
+  @Prop()
+  related_repos: string[];
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
 
-  static async load(org: string, repo: string, page: string, env: Env) {
+  static async load(org: string, repo: string, page: string, env: Env): Promise<ProjectArgs> {
     console.log(`load(${org}, ${repo}, ${page}, ${env})`);
     const result = {
       sections: []
-    } as any;
+    } as ProjectArgs;
 
     // Set the environment for rendering
     result.env = env;
@@ -124,9 +159,7 @@ export default class Projects extends Vue {
     const fbt = await FirebaseSingleton.GetInstance();
 
     const id = [org, repo].join("::");
-
     const projectPath = `/projects/${org}/${repo}`.toLowerCase();
-    const pagePath = `${projectPath}/${page}`.toLowerCase();
 
     result.subheader_tabs = [
       new SelectableLink("Guides", projectPath, false, false),
@@ -140,10 +173,10 @@ export default class Projects extends Vue {
 
     // Get the path to the config and content docs, depending on the
     // display environment
-    const repoDoc = fbt.fs.doc(Util.contentPath(id, env));
-    const configDoc = fbt.fs.doc(Util.configPath(id, env));
+    const repoConfigRef = fbt.fs.doc(Util.configPath(id, env));
+    const repoContentRef = fbt.fs.doc(Util.contentPath(id, env));
 
-    let pageContentDoc;
+    let pageContentDoc: firebase.firestore.DocumentReference;
     if (page) {
       let page_id = page
         .split("/")
@@ -154,32 +187,36 @@ export default class Projects extends Vue {
         page_id += ".md";
       }
 
-      pageContentDoc = repoDoc.collection("pages").doc(page_id);
+      pageContentDoc = repoContentRef.collection("pages").doc(page_id);
       result.is_subpage = true;
     } else {
       result.is_subpage = false;
-      pageContentDoc = repoDoc;
+      pageContentDoc = repoContentRef;
     }
 
     // Load content
-    const snapshot = await pageContentDoc.get();
-    if (!snapshot.exists) {
+    const contentSnap = await pageContentDoc.get();
+    if (!contentSnap.exists) {
       console.warn(`No content at page: ${pageContentDoc.path}`);
       result.not_found = true;
     } else {
       result.not_found = false;
     }
-    const data = snapshot.data();
+    const data = contentSnap.data();
 
     // Load config
-    const configSnap = await configDoc.get();
+    const configSnap = await repoConfigRef.get();
     if (configSnap.exists && !result.not_found) {
       result.found = true;
     }
+    const configData = configSnap.data() as StoredProjectConfig;
 
-    result.config = configSnap.data() as Config;
-    result.config.repo = repo;
-    result.config.org = org;
+    // Basic Github info
+    result.info = {
+      org,
+      repo,
+      stars: configData.stars
+    };
 
     // Choose the page name depending on available info:
     // Option 0 - title of the header section
@@ -187,30 +224,35 @@ export default class Projects extends Vue {
     // Option 2 - the repo name
     if (data.header.name) {
       result.page_title = data.header.name;
-    } else if (result.config.name) {
-      result.page_title = result.config.name;
+    } else if (configData.name) {
+      result.page_title = configData.name;
     } else {
       result.page_title = repo;
     }
 
-    const sections = snapshot.data().sections as Section[];
+    const sections = contentSnap.data().sections as Section[];
     result.header = data.header as Section;
 
     sections.forEach(section => {
       if (BLOCKED_SECTIONS.indexOf(section.name.toLowerCase()) >= 0) {
         return;
       }
-      section.id = this.as_id(section.name);
+      section.id = this.formatAsId(section.name);
       section.ref = "#" + section.id;
       result.sections.push(section);
     });
 
-    result.config.last_updated_from_now = distanceInWordsToNow(
-      new Date(result.config.last_updated)
+    const last_updated_from_now = distanceInWordsToNow(
+      new Date(configData.last_updated)
     ).replace("about", "");
-    result.config.last_fetched_from_now = distanceInWordsToNow(
-      result.config.last_fetched.toDate()
+    const last_fetched_from_now = distanceInWordsToNow(
+      configData.last_fetched.toDate()
     );
+
+    result.timestamps = {
+      last_updated_from_now,
+      last_fetched_from_now
+    }
 
     const projectSidebar = new SidebarSection(
       "Project",
@@ -218,15 +260,15 @@ export default class Projects extends Vue {
       true
     );
 
-    if (result.config.pages) {
+    if (configData.pages) {
       const subpages: SelectableLink[] = [];
-      Object.keys(result.config.pages).forEach((subPath: string) => {
+      Object.keys(configData.pages).forEach((subPath: string) => {
         // The pages config can either look like:
         // { "path.md": true }
         // OR
         // { "path.md": "TITLE" }
         let pageName;
-        const val = result.config.pages[subPath];
+        const val = configData.pages[subPath];
         if (typeof val === "string") {
           pageName = val;
         } else {
@@ -255,47 +297,44 @@ export default class Projects extends Vue {
     }
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
 
-    // Tabs are in this format:
-    // tabs: [
-    //  {
-    //    title: text,
-    //    href: href
-    //  }
-    // ]
-    if (result.config.tabs) {
-      result.config.tabs.forEach((tab: any) => {
+    // Add each "tab" as a link in the subheader
+    if (configData.tabs) {
+      configData.tabs.forEach((tab: TabConfig) => {
         result.subheader_tabs.push(
           new SelectableLink(tab.title, tab.href, false, true)
         );
       });
     }
 
+    // Related repos
+    result.related_repos = this.relatedRepoNames(configData);
+
     return result;
+  }
+
+  static formatAsId(text: String) {
+    return text.toLowerCase().replace(" ", "_");
+  }
+
+  static relatedRepoNames(config: StoredProjectConfig): string[] {
+    if (!config.related) {
+      return [];
+    }
+
+    return Object.keys(config.related).map((repo: string) => {
+      // Format the name of a related project for display.
+      // Strips the "firebase/" from the name to save space, since
+      // the firebase context is implied on firebaseopensource.com
+      if (repo.indexOf("firebase/") >= 0) {
+        return repo.substring("firebase/".length, repo.length);
+      }
+  
+      return repo;
+    });
   }
 
   get isStaging() {
     return this.env === Env.STAGING;
-  }
-
-  destroyed() {
-    this.cancels.forEach(c => c());
-  }
-
-  static as_id(text: String) {
-    return text.toLowerCase().replace(" ", "_");
-  }
-
-  /**
-   * Format the name of a related project for display.
-   * Strips the "firebase/" from the name to save space, since
-   * the firebase context is implied on firebaseopensource.com
-   */
-  fmtRelated(project: string) {
-    if (project.indexOf("firebase/") >= 0) {
-      return project.substring("firebase/".length, project.length);
-    }
-
-    return project;
   }
 
   mounted() {
@@ -316,5 +355,9 @@ export default class Projects extends Vue {
     });
 
     new Clipboard(".copy-btn");
+  }
+
+  destroyed() {
+    this.cancels.forEach(c => c());
   }
 }

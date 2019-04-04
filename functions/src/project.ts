@@ -23,7 +23,8 @@ import {
   PageSection,
   ProjectPage,
   Env,
-  GetParams
+  GetParams,
+  PageConfig
 } from "../../shared/types";
 
 import * as admin from "firebase-admin";
@@ -173,6 +174,31 @@ export class Project {
           config.blacklist = false;
         }
 
+        // Normalize the formatting of "pages"
+        if (config.pages) {
+          const normalizedPages: PageConfig[] = [];
+
+          if (Array.isArray(config.pages)) {
+            // In v0 pages was just an array of paths
+            for (const path of config.pages) {
+              normalizedPages.push({
+                path
+              });
+            }
+          } else {
+            // In v1 it is a map of { path: title }
+            Object.keys(config.pages).forEach((path: string) => {
+              const name = config.pages[path];
+              normalizedPages.push({
+                name,
+                path
+              });
+            });
+          }
+
+          config.pages = normalizedPages;
+        }
+
         // Merge the config with repo metadata like stars
         // and updated time.
         return this.github
@@ -319,7 +345,7 @@ export class Project {
     id: string,
     config: ProjectConfig
   ): Promise<ProjectPage[]> {
-    if (!config.pages || Object.keys(config.pages).length == 0) {
+    if (!config.pages || config.pages.length == 0) {
       Logger.debug(id, `Project has no extra pages.`);
       return Promise.resolve([]);
     }
@@ -331,8 +357,12 @@ export class Project {
 
     // Loop through pages, get content for each
     const content = new Content();
-    Object.keys(config.pages).forEach(page => {
-      const pageUrl = Github.getPageContentUrl(id, page, this.params.branch);
+    for (const page of config.pages) {
+      const pageUrl = Github.getPageContentUrl(
+        id,
+        page.path,
+        this.params.branch
+      );
       Logger.debug(id, `Rendering page: ${pageUrl}`);
 
       const pagePromise = this.github
@@ -344,20 +374,20 @@ export class Project {
           return content.processMarkdown(
             data,
             id,
-            page,
+            page.path,
             config,
             this.params.branch
           );
         })
         .then(sections => {
           pages.push({
-            name: page,
+            name: page.path,
             content: sections
           });
         });
 
       promises.push(pagePromise);
-    });
+    }
 
     return Promise.all(promises).then(() => {
       return pages;

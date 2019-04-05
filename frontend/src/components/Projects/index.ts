@@ -88,6 +88,11 @@ interface DisplayTimestamps {
   last_fetched_from_now: string;
 }
 
+interface RelatedRepo {
+  name: string;
+  path: string;
+}
+
 interface ProjectArgs {
   env: Env;
 
@@ -96,7 +101,7 @@ interface ProjectArgs {
   header: Section;
   subheader_tabs: SelectableLink[];
   sidebar: SidebarSection[];
-  related_repos: string[];
+  related_repos: RelatedRepo[];
 
   info: RepoInfo;
   timestamps: DisplayTimestamps;
@@ -142,7 +147,7 @@ export default class Projects extends Vue implements ProjectArgs {
   @Prop()
   sidebar: SidebarSection[];
   @Prop()
-  related_repos: string[];
+  related_repos: RelatedRepo[];
 
   cancels: Function[];
   show_clone_cmd: Boolean = false;
@@ -276,6 +281,7 @@ export default class Projects extends Vue implements ProjectArgs {
         const href = `${projectPath}/${pageConfig.path}`.toLowerCase();
         subpages.push(new SelectableLink(pageName, href, selected));
       }
+      projectSidebar.pages = projectSidebar.pages.concat(subpages);
     }
     result.sidebar = [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR];
 
@@ -289,7 +295,7 @@ export default class Projects extends Vue implements ProjectArgs {
     }
 
     // Related repos
-    result.related_repos = this.relatedRepoNames(configData);
+    result.related_repos = this.relatedRepos(configData);
 
     return result;
   }
@@ -298,7 +304,7 @@ export default class Projects extends Vue implements ProjectArgs {
     return text.toLowerCase().replace(" ", "_");
   }
 
-  static relatedRepoNames(config: StoredProjectConfig): string[] {
+  static relatedRepos(config: StoredProjectConfig): RelatedRepo[] {
     if (!config.related) {
       return [];
     }
@@ -307,14 +313,17 @@ export default class Projects extends Vue implements ProjectArgs {
       // Format the name of a related project for display.
       // Strips the "firebase/" from the name to save space, since
       // the firebase context is implied on firebaseopensource.com
+      let name = repo;
       if (repo.indexOf("firebase/") >= 0) {
-        return repo.substring("firebase/".length, repo.length);
+        name = repo.substring("firebase/".length, repo.length);
       }
   
-      return repo;
+      return {
+        name,
+        path: repo
+      }
     });
   }
-
   get isStaging() {
     return this.env === Env.STAGING;
   }

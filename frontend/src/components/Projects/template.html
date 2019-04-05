@@ -44,8 +44,8 @@
 
             <div class="related" v-if="!is_subpage">
               <div class="repos">
-                <a class="repo test" :href="`/projects/${repo}`" v-for="repo in related_repos">
-                  <i class="material-icons">link</i><span>{{repo}}</span>
+                <a class="repo test" :href="`/projects/${repo.path}`" v-for="repo in related_repos">
+                  <i class="material-icons">link</i><span>{{repo.name}}</span>
                 </a>
               </div>
             </div>

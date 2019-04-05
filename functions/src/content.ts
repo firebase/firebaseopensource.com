@@ -118,6 +118,10 @@ export class Content {
         const pageKeys = config.pages
           ? config.pages.map(page => page.path)
           : [];
+
+        Logger.debug(repoId, `Relative link on page ${page}: ${href} --> ${repoRelative}`);
+        el.attribs['href'] = repoRelative;
+
         if (pageKeys.indexOf(repoRelative) >= 0) {
           Logger.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
           that.lowercaseLink(el);

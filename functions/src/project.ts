@@ -300,7 +300,7 @@ export class Project {
         return content.processMarkdown(
           data,
           id,
-          undefined,
+          config.content,
           config,
           this.params.branch
         );
@@ -363,7 +363,7 @@ export class Project {
         page.path,
         this.params.branch
       );
-      Logger.debug(id, `Rendering page: ${pageUrl}`);
+      Logger.debug(id, `Rendering page name=${page.name}, path=${page.path}, url=${pageUrl}`);
 
       const pagePromise = this.github
         .getRawContent(pageUrl)

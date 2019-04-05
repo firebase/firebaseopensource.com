@@ -34,18 +34,20 @@ const ids = [
   "firebase::quickstart-js",
   "firebase::quickstart-cpp",
   "firebase::firebaseui-android",
-  "firebase::firebaseui-ios",
   "firebase::angularfire",
   "firebase::functions-samples",
-  "firebase::assistant-codelab",
-  "firebase::androiddrawing",
-  "googlesamples::easypermissions",
 
+  // Interesting because:
+  //  * Is "blacklisted" from being featured
+  "firebase::androiddrawing",
+
+  // Interesting because:
+  //  * Uses a nested md file as it's "content" page.
   "firebase::firebase-android-sdk",
 
   // Interesting because:
-  //  Non-Firebase
-  //  Has "old-style" pages config (no names)
+  //  * Non-Firebase
+  //  * Has "old-style" pages config (no names)
   "invertase::react-native-firebase"
 ];
 

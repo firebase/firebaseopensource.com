@@ -363,7 +363,10 @@ export class Project {
         page.path,
         this.params.branch
       );
-      Logger.debug(id, `Rendering page name=${page.name}, path=${page.path}, url=${pageUrl}`);
+      Logger.debug(
+        id,
+        `Rendering page name=${page.name}, path=${page.path}, url=${pageUrl}`
+      );
 
       const pagePromise = this.github
         .getRawContent(pageUrl)

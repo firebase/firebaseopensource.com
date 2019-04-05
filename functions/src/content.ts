@@ -119,8 +119,11 @@ export class Content {
           ? config.pages.map(page => page.path)
           : [];
 
-        Logger.debug(repoId, `Relative link on page ${page}: ${href} --> ${repoRelative}`);
-        el.attribs['href'] = repoRelative;
+        Logger.debug(
+          repoId,
+          `Relative link on page ${page}: ${href} --> ${repoRelative}`
+        );
+        el.attribs["href"] = repoRelative;
 
         if (pageKeys.indexOf(repoRelative) >= 0) {
           Logger.debug(repoId, `Lowercasing relative link ${repoRelative}.`);

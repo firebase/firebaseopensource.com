@@ -18,6 +18,6 @@
     "sgarciac::fuego",
     "PatilShreyas::FirebaseRecyclerPagination",
     "FirebaseExtended::protobuf-rules-gen",
-    "freshfox::firestore-storage
+    "freshfox::firestore-storage"
   ]
 }

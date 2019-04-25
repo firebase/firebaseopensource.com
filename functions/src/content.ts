@@ -224,9 +224,9 @@ export class Content {
 
     // Get the URL to the root folder
     const pathPrefix = idObj.path ? idObj.path + "/" : "";
-    const url = `https://github.com/${idObj.owner}/${idObj.repo}/tree/${
-      branch
-    }/${pathPrefix}`;
+    const url = `https://github.com/${idObj.owner}/${
+      idObj.repo
+    }/tree/${branch}/${pathPrefix}`;
 
     return url;
   }

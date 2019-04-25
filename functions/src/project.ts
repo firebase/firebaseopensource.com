@@ -28,17 +28,13 @@ import {
 } from "../../shared/types";
 
 import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
 
 const cjson = require("comment-json");
 
-// Initialize the Admin SDK with the right credentials for the environment
 try {
-  admin.initializeApp(functions.config().firebase);
+  admin.initializeApp();
 } catch (e) {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault()
-  });
+  Logger.error("initialize", "Could not initialize firebase-admin", e);
 }
 
 const db = admin.firestore();
@@ -77,32 +73,24 @@ export class Project {
   /**
    * Store a project and all of its pages.
    */
-  recursiveStoreProject(id: string) {
+  async recursiveStoreProject(id: string): Promise<any> {
     Logger.debug(id, "recursiveStoreProject()");
 
-    return Config.loadGlobalConfig()
-      .then(() => {
-        return this.getProjectConfig(id);
-      })
-      .then(config => {
-        // Store this project's config and content
-        const storeConfig = this.storeProjectConfig(id, config);
-        const storeContent = this.storeProjectContent(id, config);
+    try {
+      await Config.loadGlobalConfig();
+      const config = await this.getProjectConfig(id);
 
-        // Only store releases in production
-        let storeReleases: Promise<any>;
-        if (this.params.env == Env.PROD) {
-          storeReleases = this.storeProjectReleases(id);
-        } else {
-          storeReleases = Promise.resolve();
-        }
+      // Store this project's config and content
+      await this.storeProjectConfig(id, config);
+      await this.storeProjectContent(id, config);
 
-        // Wait for all to complete then pass on config
-        return Promise.all([storeConfig, storeContent, storeReleases]);
-      })
-      .catch(e => {
-        Logger.error(id, "recursiveStoreProject: ", e);
-      });
+      // Only store releases in production
+      if (this.params.env == Env.PROD) {
+        await this.storeProjectReleases(id);
+      }
+    } catch (e) {
+      Logger.error(id, "recursiveStoreProject: ", e);
+    }
   }
 
   /**
@@ -235,9 +223,8 @@ export class Project {
 
     Logger.debug(id, `Storing at ${configPath}`);
     Logger.debug(id, "Config: " + JSON.stringify(config));
-    const configProm = db.doc(configPath).set(data);
 
-    return configProm;
+    return db.doc(configPath).set(data);
   }
 
   async storeProjectReleases(id: string): Promise<any> {

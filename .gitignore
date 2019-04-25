@@ -27,3 +27,5 @@ appengine/lib
 
 # Nuxt
 frontend/static/sitemap.xml
+
+*debug.log

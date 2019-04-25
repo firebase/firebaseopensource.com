@@ -92,16 +92,15 @@ exports.getProjectWebhook = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
     // TODO: This should just send the PubSub
-    const id = request.param("id");
-    project
-      .recursiveStoreProject(id)
-      .then(() => {
-        response.status(200).send(`Stored project ${id}.\n`);
-      })
-      .catch(e => {
-        console.warn(e);
-        response.status(500).send(`Failed to store project ${id}: ${e}.\n`);
-      });
+    const id = request.query["id"];
+
+    try {
+      await project.recursiveStoreProject(id);
+      response.status(200).send(`Stored project ${id}.\n`);
+    } catch (e) {
+      console.warn(e);
+      response.status(500).send(`Failed to store project ${id}: ${e}.\n`);
+    }
   });
 
 /**

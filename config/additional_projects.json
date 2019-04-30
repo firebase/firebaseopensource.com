@@ -19,6 +19,7 @@
     "PatilShreyas::FirebaseRecyclerPagination",
     "FirebaseExtended::protobuf-rules-gen",
     "freshfox::firestore-storage",
-    "oddbit::tanam"
+    "oddbit::tanam",
+    "bijoutrouvaille::fireward"
   ]
 }

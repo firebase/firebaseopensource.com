@@ -5,6 +5,7 @@
     "firebase::reactfire",
     "firebase::firechat-ios",
     "firebase::snippets-android",
-    "firebase::snippets-ios"
+    "firebase::snippets-ios",
+    "firebase::firebase-jobdispatcher-android"
   ]
 }

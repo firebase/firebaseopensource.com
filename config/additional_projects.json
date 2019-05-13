@@ -20,6 +20,7 @@
     "FirebaseExtended::protobuf-rules-gen",
     "freshfox::firestore-storage",
     "oddbit::tanam",
-    "bijoutrouvaille::fireward"
+    "bijoutrouvaille::fireward",
+    "anishkny::integrify"
   ]
 }

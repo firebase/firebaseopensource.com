@@ -81,6 +81,11 @@ export class Content {
 
     const $: CheerioStatic = cheerio.load(html);
 
+    // Make all code sections prettyprinted
+    $("pre > code").each((_: number, el: CheerioElement) => {
+      $(el).addClass("prettyprint");
+    });
+
     // Resolve all relative links to github
     const that = this;
     $("a").each((_: number, el: CheerioElement) => {

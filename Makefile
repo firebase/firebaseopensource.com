@@ -1,7 +1,7 @@
 PROD_PROJECT="fir-oss"
 
 cloud-build:
-	gcloud builds submit --config static/cloudbuild.yaml static
+	gcloud --project=$(PROD_PROJECT) builds submit --config static/cloudbuild.yaml static
 
 build-functions:
 	cd functions \

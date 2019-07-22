@@ -31,6 +31,13 @@ export class RoutesList {
                 pagesCollectionSnapshot.docs.forEach((subpageSnapshot: any) => {
                   pages.push(`${repoPath}/${this.getPath(subpageSnapshot.id)}`);
                 });
+              })
+              .catch(error => {
+                console.error(
+                  'Error getting Firestore collection "pages"',
+                  error
+                );
+                throw error;
               });
           })
         );
@@ -40,6 +47,10 @@ export class RoutesList {
         // return pages.map(page => {
         //   return page.toLowerCase();
         // });
+      })
+      .catch(error => {
+        console.error('Error getting Firestore collection "content"', error);
+        throw error;
       });
   }
 
@@ -57,4 +68,8 @@ RoutesList.getAll()
   .then(() => {
     console.log("Done.");
     process.exit();
+  })
+  .catch(error => {
+    console.error("Error getting list of routes", error);
+    throw error;
   });

@@ -54,7 +54,7 @@ const OSS_SIDEBAR = new SidebarSection("Open Source", [
   new SelectableLink("Home", "/"),
   new SelectableLink(
     "Add Project",
-    "https://github.com/firebase/firebaseopensource.com/issues/new/choose",
+    "https://github.com/firebase/firebaseopensource.com/issues/new?template=new_project.md",
     false,
     true
   )

@@ -21,6 +21,7 @@
     "freshfox::firestore-storage",
     "oddbit::tanam",
     "bijoutrouvaille::fireward",
-    "anishkny::integrify"
+    "anishkny::integrify",
+    "kreait::firebase-php"
   ]
 }

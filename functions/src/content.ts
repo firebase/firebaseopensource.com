@@ -154,7 +154,8 @@ export class Content {
         "gitter.im",
         "circleci.com",
         "opencollective.com",
-        "cirrus-ci.com"
+        "cirrus-ci.com",
+        "sonarcloud.io"
       ];
 
       let isBadge = false;

@@ -22,6 +22,7 @@
     "oddbit::tanam",
     "bijoutrouvaille::fireward",
     "anishkny::integrify",
-    "kreait::firebase-php"
+    "kreait::firebase-php",
+    "geofirestore::geofirestore-js"
   ]
 }

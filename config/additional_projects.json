@@ -23,6 +23,7 @@
     "bijoutrouvaille::fireward",
     "anishkny::integrify",
     "kreait::firebase-php",
-    "geofirestore::geofirestore-js"
+    "geofirestore::geofirestore-js",
+    "lupas::nuxt-fire"
   ]
 }

@@ -8,7 +8,7 @@ const buildConfig = {
         "projects/fir-oss/locations/global/keyRings/fosdc/cryptoKeys/FIREBASE_TOKEN",
       secretEnv: {
         TOKEN:
-          "CiQAltNzF5CE3iSor7QNi6sBviZUReob8uHmfWYWq1MLGOVWrtUSVgBAMMXe+C00ExhdwrOFF0AKi6ARKPxirgTwFuOXk6rBlIwmg3Rq5roI5aL7cT8jWLOQm8PWLmt+fo07QT8do08pmNWBsmpMCZDxf5J2rGxd9pO7SAma"
+          "CiQAltNzF1b8brQlHk459IJtppdVRodjYeQuDTulm/LYXL58GccSVwBAMMXeQ1IcfJaL7A7W7Rub/uF+31za3AiYGzcPsal59NZAzb4MOznrp5dl4aOYirKzs7DTwmDA2+qMS1eDv4Iet7I4obbpX5pdYqv5rAjVW1ktxCYo6Q=="
       }
     }
   ],

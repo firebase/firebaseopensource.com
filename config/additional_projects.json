@@ -24,6 +24,7 @@
     "anishkny::integrify",
     "kreait::firebase-php",
     "geofirestore::geofirestore-js",
-    "lupas::nuxt-fire"
+    "lupas::nuxt-fire",
+    "dantothefuture::svarog
   ]
 }

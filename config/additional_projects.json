@@ -7,7 +7,6 @@
     "invertase::react-native-firebase",
     "invertase::react-native-firebase-starter",
     "google::cocoapods-size",
-    "flutter::plugins",
     "rosariopfernandes::fireXtensions",
     "rakannimer::react-firebase",
     "jsayol::FireSQL",
@@ -26,6 +25,7 @@
     "geofirestore::geofirestore-js",
     "lupas::nuxt-fire",
     "dantothefuture::svarog",
-    "flamelink::flamelink-js-sdk"
+    "flamelink::flamelink-js-sdk",
+    "FirebaseExtended::flutterfire"
   ]
 }

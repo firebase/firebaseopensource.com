@@ -25,6 +25,7 @@
     "kreait::firebase-php",
     "geofirestore::geofirestore-js",
     "lupas::nuxt-fire",
-    "dantothefuture::svarog"
+    "dantothefuture::svarog",
+    "flamelink::flamelink-js-sdk"
   ]
 }

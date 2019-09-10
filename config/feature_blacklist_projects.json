@@ -6,6 +6,7 @@
     "firebase::firechat-ios",
     "firebase::snippets-android",
     "firebase::snippets-ios",
-    "firebase::firebase-jobdispatcher-android"
+    "firebase::firebase-jobdispatcher-android",
+    "flutter::plugins",
   ]
 }

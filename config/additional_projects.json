@@ -26,6 +26,7 @@
     "lupas::nuxt-fire",
     "dantothefuture::svarog",
     "flamelink::flamelink-js-sdk",
-    "FirebaseExtended::flutterfire"
+    "FirebaseExtended::flutterfire",
+    "MichaelRCruz::ioa"
   ]
 }

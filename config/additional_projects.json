@@ -27,6 +27,7 @@
     "dantothefuture::svarog",
     "flamelink::flamelink-js-sdk",
     "FirebaseExtended::flutterfire",
-    "MichaelRCruz::ioa"
+    "MichaelRCruz::ioa",
+    "FirebaseExtended::reactfire"
   ]
 }

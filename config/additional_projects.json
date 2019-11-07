@@ -28,6 +28,7 @@
     "flamelink::flamelink-js-sdk",
     "FirebaseExtended::flutterfire",
     "MichaelRCruz::ioa",
-    "FirebaseExtended::reactfire"
+    "FirebaseExtended::reactfire",
+    "IjzerenHein::firestorter"
   ]
 }

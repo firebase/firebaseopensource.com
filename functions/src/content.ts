@@ -155,7 +155,9 @@ export class Content {
         "circleci.com",
         "opencollective.com",
         "cirrus-ci.com",
-        "sonarcloud.io"
+        "sonarcloud.io",
+        "codecov.io",
+        "release-notes.com"
       ];
 
       let isBadge = false;

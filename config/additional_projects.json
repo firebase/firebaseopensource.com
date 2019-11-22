@@ -29,6 +29,7 @@
     "FirebaseExtended::flutterfire",
     "MichaelRCruz::ioa",
     "FirebaseExtended::reactfire",
-    "IjzerenHein::firestorter"
+    "IjzerenHein::firestorter",
+    "FirebaseExtended::remote-styles"
   ]
 }

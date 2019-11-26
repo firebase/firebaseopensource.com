@@ -31,6 +31,7 @@
     "FirebaseExtended::reactfire",
     "IjzerenHein::firestorter",
     "FirebaseExtended::remote-styles",
-    "prescottprue::redux-firestore"
+    "prescottprue::redux-firestore",
+    "prescottprue::generator-react-firebase"
   ]
 }

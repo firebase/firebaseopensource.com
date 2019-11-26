@@ -30,6 +30,7 @@
     "MichaelRCruz::ioa",
     "FirebaseExtended::reactfire",
     "IjzerenHein::firestorter",
-    "FirebaseExtended::remote-styles"
+    "FirebaseExtended::remote-styles",
+    "prescottprue::redux-firestore"
   ]
 }

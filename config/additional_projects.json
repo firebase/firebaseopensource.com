@@ -34,6 +34,7 @@
     "prescottprue::redux-firestore",
     "prescottprue::generator-react-firebase",
     "sejr::firegraph",
-    "PatilShreyas::FCM-OnDeviceNotificationScheduler"
+    "PatilShreyas::FCM-OnDeviceNotificationScheduler",
+    "Im-Mark42::FirebaseDatabaseAssistant"
   ]
 }

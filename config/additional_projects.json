@@ -36,6 +36,7 @@
     "sejr::firegraph",
     "PatilShreyas::FCM-OnDeviceNotificationScheduler",
     "Im-Mark42::FirebaseDatabaseAssistant",
-    "Im-Mark42::FirebaseFirestoreAssistant"
+    "Im-Mark42::FirebaseFirestoreAssistant",
+    "rosariopfernandes::firecoil"
   ]
 }

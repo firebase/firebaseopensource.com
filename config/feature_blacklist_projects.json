@@ -7,6 +7,7 @@
     "firebase::snippets-android",
     "firebase::snippets-ios",
     "firebase::firebase-jobdispatcher-android",
-    "flutter::plugins"
+    "flutter::plugins",
+    "invertase::react-native-firebase-starter"
   ]
 }

@@ -35,8 +35,6 @@
     "prescottprue::generator-react-firebase",
     "sejr::firegraph",
     "PatilShreyas::FCM-OnDeviceNotificationScheduler",
-    "Im-Mark42::FirebaseDatabaseAssistant",
-    "Im-Mark42::FirebaseFirestoreAssistant",
     "rosariopfernandes::firecoil"
   ]
 }

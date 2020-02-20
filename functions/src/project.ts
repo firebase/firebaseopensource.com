@@ -38,7 +38,6 @@ try {
 }
 
 const db = admin.firestore();
-db.settings({ timestampsInSnapshots: true });
 
 export class Project {
   params: GetParams;

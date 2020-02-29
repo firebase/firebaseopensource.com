@@ -3,6 +3,7 @@
     :project-config="projectConfig"
     :project-content="projectContent"
     :env="env"
+    :subpage-id="subpageId"
   />
 </template>
 

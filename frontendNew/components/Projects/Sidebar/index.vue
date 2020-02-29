@@ -52,10 +52,6 @@ export default {
       type: Object,
       required: true
     },
-    projectPages: {
-      type: Array,
-      required: true
-    },
     projectPath: {
       type: String,
       required: true
@@ -70,7 +66,6 @@ export default {
         true
       )
 
-      console.log('HIEER', this.$route)
       const pages = this.projectConfig.pages
       if (pages) {
         const subpages = []

@@ -27,7 +27,6 @@ const BLOCKED_SECTIONS = ['table of contents']
   components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter }
 })
 export default class Projects extends Vue implements ProjectArgs {
-  name = 'projects'
   $route: Route
 
   @Prop()
@@ -38,6 +37,9 @@ export default class Projects extends Vue implements ProjectArgs {
 
   @Prop()
   env: Env
+
+  @Prop()
+  subpageId: String
 
   get sections (): Section[] {
     const sections = []

@@ -33,7 +33,8 @@ export default {
       return {
         projectConfig,
         projectContent: pageContent,
-        env
+        env,
+        subpageId
 
       }
     } catch (e) {

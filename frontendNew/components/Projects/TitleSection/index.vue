@@ -21,70 +21,7 @@
         </div>
 
         <div class="right">
-          <div v-if="!isSubpage" class="badges">
-            <a
-              :href="
-                `https://github.com/${info.org}/${info.repo}/stargazers`
-              "
-            >
-              <div class="badge">
-                <div class="key">
-                  <i class="material-icons">star</i>
-                </div>
-                <div class="value">{{ info.stars }}</div>
-              </div>
-            </a>
-
-            <a
-              :href="
-                `https://github.com/${info.org}/${info.repo}/commits/master`
-              "
-            >
-              <div class="badge">
-                <div class="key">
-                  <i class="material-icons">access_time</i>
-                </div>
-                <div class="value">{{ lastUpdatedFromNow }} ago</div>
-              </div>
-            </a>
-
-            <a :href="`https://github.com/${info.org}/${info.repo}/`">
-              <div class="badge badge-action">
-                <div class="key">
-                  <i class="material-icons">code</i>
-                </div>
-                <div class="value">View Source</div>
-              </div>
-            </a>
-
-            <a :href="`https://github.com/${info.org}/${info.repo}/issues`">
-              <div class="badge badge-action">
-                <div class="key">
-                  <i class="material-icons">bug_report</i>
-                </div>
-                <div class="value">File Bug</div>
-              </div>
-            </a>
-
-            <div v-if="showCloneCmd" class="copy-code-container">
-              <input
-                id="git-clone-copy-txt"
-                type="text"
-                :value="
-                  `git clone git@github.com:${info.org}/${info.repo}.git`
-                "
-                readonly
-              >
-              <button
-                id="git-clone-copy-btn"
-                class="copy-btn"
-                type="button"
-                data-clipboard-target="#git-clone-copy-txt"
-              >
-                <i class="material-icons">content_copy</i>
-              </button>
-            </div>
-          </div>
+          <RepoButtons v-if="!isSubpage" :info="info" />
         </div>
 
         <div>
@@ -103,10 +40,12 @@
 <script>
 import { formatDistanceToNow } from 'date-fns'
 import TableOfContents from './TableOfContents'
+import RepoButtons from './RepoButtons'
 
 export default {
   components: {
-    TableOfContents
+    TableOfContents,
+    RepoButtons
   },
   props: {
     sections: {
@@ -124,34 +63,15 @@ export default {
     info: {
       type: Object,
       required: true
+    },
+    subpageId: {
+      type: String,
+      default: null
     }
   },
-  data: () => ({
-    showCloneCmd: false // Todo: Needed?
-  }),
   computed: {
     isSubpage () {
-    // Get the path to the config and content docs, depending on the
-      // display environment
-
-      // let pageContentDoc: firebase.firestore.DocumentReference
-      // if (page) {
-      //   let pageId = page
-      //     .split('/')
-      //     .join('::')
-      //     .toLowerCase()
-
-      //   if (!pageId.endsWith('.md')) {
-      //     pageId += '.md'
-      //   }
-
-      //   pageContentDoc = repoContentRef.collection('pages').doc(pageId)
-      //   result.isSubpage = true
-      // } else {
-      //   result.isSubpage = false
-      //   pageContentDoc = repoContentRef
-      // }
-      return false
+      return this.subpageId != null
     },
     pageTitle () {
     // Choose the page name depending on available info:

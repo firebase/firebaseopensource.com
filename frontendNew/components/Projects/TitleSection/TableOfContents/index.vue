@@ -5,10 +5,7 @@
       v-for="section in sections"
       :key="section.id"
       :to="section.ref"
-      :class="{
-        selected: section.name === dropdownSelection,
-        ellipsize: true
-      }"
+      class="ellipsize"
     >
       {{ section.name }}
     </nuxt-link>
@@ -22,10 +19,7 @@ export default {
       type: Array,
       required: true
     }
-  },
-  data: () => ({
-    dropdownSelection: ''// TODO
-  })
+  }
 }
 </script>
 

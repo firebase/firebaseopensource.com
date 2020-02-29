@@ -14,7 +14,7 @@
     </div>
 
     <div class="page content_grid">
-      <Sidebar :sidebar="sidebar" />
+      <Sidebar :project-config="projectConfig" :project-content="projectContent" :project-pages="projectPages" :project-path="projectPath" />
       <div class="sections col_main">
         <TitleSection :sections="sections" :project-config="projectConfig" :project-content="projectContent" :info="info" />
 

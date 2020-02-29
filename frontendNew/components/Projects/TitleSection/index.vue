@@ -91,11 +91,8 @@
           <!-- Table of contents shown if > 1 sections -->
           <TableOfContents v-if="sections.length > 1" :sections="sections" />
 
-          <!-- Header section body -->
-          <div v-if="header.content" class="header_content">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            {{ header.content }}
-          </div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-if="header.content" class="header_content" v-html="header.content" />
         </div>
       </div>
     </div>

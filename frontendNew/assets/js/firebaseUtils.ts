@@ -78,6 +78,19 @@ export async function getProjectConfigs (category: Category, limit: number) {
   }
 }
 
+export async function getSubpage (id: string, env: Env, pageId: string) {
+  const repoContentRef = fireStore.doc(Util.contentPath(id, env))
+  if (!pageId.endsWith('.md')) {
+    pageId += '.md'
+  }
+  const pageContentRef = repoContentRef.collection('pages').doc(pageId)
+  try {
+    return await queryFirestore(pageContentRef)
+  } catch (e) {
+    Promise.reject(e)
+  }
+}
+
 export async function getRecentReleases (amount: number) {
   const ref = releasesRef.orderBy('created_at', 'desc')
     .limit(amount)

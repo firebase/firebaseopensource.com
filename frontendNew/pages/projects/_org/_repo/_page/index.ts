@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { Env } from '../../../../../shared/types'
+import { Env } from '../../../../../../shared/types'
 import Projects from '@/components/Projects'
-import { getProjectConfig, getProjectContent } from '@/assets/js/firebaseUtils'
+import { getProjectConfig, getProjectContent, getSubpage } from '@/assets/js/firebaseUtils'
 
 export default {
   components: {
@@ -15,18 +15,24 @@ export default {
     }
     const org = context.params.org
     const repo = context.params.repo
+    const subpageId = context.params.page
     const id = [org, repo].join('::')
 
     try {
       const projectConfig = await getProjectConfig(id, env)
-      const projectContent = await getProjectContent(id, env)
+      let pageContent
+      if (subpageId) {
+        pageContent = await getSubpage(id, env, subpageId)
+      } else {
+        pageContent = await getProjectContent(id, env)
+      }
 
-      if (!projectConfig || !projectContent) {
+      if (!projectConfig || !pageContent) {
         context.error({ statusCode: 404, message: 'Project not found' })
       }
       return {
         projectConfig,
-        projectContent,
+        projectContent: pageContent,
         env
 
       }

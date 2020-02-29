@@ -15,75 +15,13 @@ import Sidebar from './Sidebar'
 import TitleSection from './TitleSection'
 import SectionH2 from './SectionH2'
 import PageFooter from './PageFooter'
+
 import HeaderBar from '@/components/_Shared/HeaderBar'
 
 import { Util } from '~/../shared/util'
-
-class SidebarSection {
-  title: String = ''
-  expanded: Boolean = false
-  pages: SelectableLink[] = []
-
-  constructor (title: String, pages: SelectableLink[], expanded = false) {
-    this.title = title
-    this.pages = pages
-    this.expanded = expanded
-  }
-}
-
-class SelectableLink {
-  title: String = ''
-  href: String = ''
-  selected: Boolean = false
-  outbound: Boolean = false
-
-  constructor (title: String, href: String, selected = false, outbound = false) {
-    this.title = title
-    this.href = href
-    this.selected = selected
-    this.outbound = outbound
-  }
-}
+import { SelectableLink } from '@/assets/js/classes'
 
 const BLOCKED_SECTIONS = ['table of contents']
-
-const OSS_SIDEBAR = new SidebarSection('Open Source', [
-  new SelectableLink('Home', '/'),
-  new SelectableLink(
-    'Add Project',
-    'https://github.com/firebase/firebaseopensource.com/issues/new?template=new_project.md',
-    false,
-    true
-  )
-])
-
-const FIREBASE_SIDEBAR = new SidebarSection('Firebase', [
-  new SelectableLink('Docs', 'https://firebase.google.com/docs/', false, true),
-  new SelectableLink(
-    'Console',
-    'https://console.firebase.google.com/',
-    false,
-    true
-  ),
-  new SelectableLink('Blog', 'https://firebase.googleblog.com/', false, true),
-  new SelectableLink(
-    'YouTube',
-    'https://www.youtube.com/user/Firebase',
-    false,
-    true
-  )
-])
-
-interface RepoInfo {
-  org: string
-  repo: string
-  stars: number
-}
-
-interface RelatedRepo {
-  name: string
-  path: string
-}
 
 @Component({
   components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter }
@@ -112,39 +50,6 @@ export default class Projects extends Vue implements ProjectArgs {
       sections.push(section)
     })
     return sections
-  }
-
-  get sidebar () {
-    const projectSidebar = new SidebarSection(
-      'Project',
-      [new SelectableLink('Home', this.projectPath, !this.projectContent.isSubpage)],
-      true
-    )
-
-    const pages = this.projectConfig.pages
-    if (pages && pages.testtest === 'asdasdas') {
-      console.log(pages)
-      const subpages: SelectableLink[] = []
-      for (const pageConfig of pages) {
-        let pageName
-        if (pageConfig.name) {
-          pageName = pageConfig.name
-        } else {
-          // TODO
-          // pageName = pageConfig.path.toLowerCase()
-          // pageName = pageName.replace('/readme.md', '')
-          // pageName = pageName.replace('.md', '')
-        }
-
-        // TODO
-        // const selected =
-        //   page && page.toLowerCase() === pageConfig.path.toLowerCase()
-        // const href = `${this.projectPath}/${pageConfig.path}`.toLowerCase()
-        // subpages.push(new SelectableLink(pageName, href, selected))
-      }
-      projectSidebar.pages = projectSidebar.pages.concat(subpages)
-    }
-    return [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR]
   }
 
   get parsedIdObj () {

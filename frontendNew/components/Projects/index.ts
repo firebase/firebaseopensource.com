@@ -1,7 +1,6 @@
 // @ts-nocheck
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { formatDistanceToNow } from 'date-fns'
 
 import { Route } from 'vue-router'
 
@@ -15,6 +14,7 @@ import {
 import Sidebar from './Sidebar'
 import TitleSection from './TitleSection'
 import SectionH2 from './SectionH2'
+import PageFooter from './PageFooter'
 import HeaderBar from '@/components/_Shared/HeaderBar'
 
 import { Util } from '~/../shared/util'
@@ -86,7 +86,7 @@ interface RelatedRepo {
 }
 
 @Component({
-  components: { HeaderBar, Sidebar, TitleSection, SectionH2 }
+  components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter }
 })
 export default class Projects extends Vue implements ProjectArgs {
   name = 'projects'
@@ -100,12 +100,6 @@ export default class Projects extends Vue implements ProjectArgs {
 
   @Prop()
   env: Env
-
-  get lastFetchedFromNow () {
-    // TODO: Use -> this.projectConfig.last_fetched.toDate()
-    const lastFetched = new Date(this.projectConfig.last_updated)
-    return formatDistanceToNow(lastFetched)
-  }
 
   get sections (): Section[] {
     const sections = []

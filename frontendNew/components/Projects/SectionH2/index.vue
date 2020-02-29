@@ -24,6 +24,8 @@ export default {
 @import '@/assets/styles/variables.scss';
 
 .section {
+    margin: 30px auto 0;
+    width: 100%;
 
     h1 {
       padding: 16px 0px 0px 0px;

@@ -18,8 +18,6 @@
       <div class="sections col_main">
         <TitleSection :sections="sections" :project-config="projectConfig" :project-content="projectContent" :info="info" />
 
-        <!-- All h2 sections -->
-
         <SectionH2
           v-for="section in sections"
           :key="section.id"
@@ -27,24 +25,7 @@
         />
 
         <!-- Page footer -->
-        <div
-          class="
-          section
-          footer"
-        >
-          <div class="content">
-            This page was generated approximately
-            {{ lastFetchedFromNow }} ago.
-            <br>For copyright and
-            licensing details please see the
-            <a
-              :href="
-                `https://github.com/${info.org}/${info.repo}/blob/master/LICENSE`
-              "
-            >LICENSE</a>
-            file.
-          </div>
-        </div>
+        <PageFooter :info="info" :project-config="projectConfig" />
       </div>
 
       <div class="col_gutter" />

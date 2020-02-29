@@ -1,10 +1,7 @@
 {
     "compilerOptions": {
-        "lib": ["es6"],
-        "types": [
-            "chai",
-            "mocha",
-            "node"
+        "lib": [
+            "es6"
         ],
         "module": "commonjs",
         "moduleResolution": "node",
@@ -24,8 +21,8 @@
         "outDir": "lib"
     },
     "include": [
-        "src/**/*", 
-        "src/test/**/*", 
+        "src/**/*",
+        "src/test/**/*",
         "../shared/**/*"
     ]
 }

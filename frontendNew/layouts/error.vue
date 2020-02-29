@@ -1,5 +1,6 @@
 <template>
   <div id="four-oh-four">
+    <HeaderBar />
     <div class="content">
       <h1>404</h1>
       <h2>{{ error.message }}</h2>
@@ -14,7 +15,12 @@
 </template>
 
 <script>
+import HeaderBar from '@/components/_Shared/HeaderBar'
+
 export default {
+  components: {
+    HeaderBar
+  },
   props: {
     error: {
       type: Object,

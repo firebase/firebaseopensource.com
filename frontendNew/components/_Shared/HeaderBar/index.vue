@@ -29,23 +29,37 @@
             {{ subheaderTitle }}
           </h2>
           <div class="tabs">
-            <a
+            <template
               v-for="tab in subheaderTabs"
-              :key="tab.title"
-              class="tab"
-              :class="{selected: subheaderTabSelection == tab.title.toLowerCase()}"
-              :target="tab.outbound ? '_blank' : ''"
-              :href="tab.href"
             >
-              {{ tab.title }}
-              <i v-if="tab.outbound" class="material-icons">open_in_new</i>
-            </a>
+              <a
+                v-if="tab.outbound"
+                :key="tab.title"
+                target="_blank"
+                :href="tab.href"
+                class="tab"
+              >
+                {{ tab.title }}
+                <i class="material-icons">open_in_new</i>
+              </a>
+              <nuxt-link
+                v-else
+                :key="tab.title"
+                :class="{selected: subheaderTabSelection == tab.title.toLowerCase()}"
+                :target="tab.outbound ? '_blank' : ''"
+                :to="tab.href"
+                class="tab"
+              >
+                {{ tab.title }}
+              </nuxt-link>
+            </template>
           </div>
-          <div v-if="!subheaderTabs" class="tab-spacer" />
         </div>
-        <div class="col_gutter" />
+        <div v-if="!subheaderTabs" class="tab-spacer" />
       </div>
+      <div class="col_gutter" />
     </div>
+  </div>
   </div>
 </template>
 

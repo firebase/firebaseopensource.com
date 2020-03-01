@@ -30,7 +30,7 @@ export default {
   data: () => ({
     expanded: false
   }),
-  mounted () {
+  created () {
     // Section Project shall be open at first
     if (this.section.title === 'Project') {
       this.expanded = true

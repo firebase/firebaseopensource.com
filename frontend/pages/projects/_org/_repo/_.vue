@@ -28,6 +28,37 @@ function calculatePageTitle (projectContent, pageContent, repo) {
   }
 }
 
+function removeLastForwardSlash (string) {
+  if (!string) {
+    return null
+  }
+  return string.replace(/\/$/, '')
+}
+
+function getCleanParams (params) {
+  const org = removeLastForwardSlash(params.org)
+  let repo = removeLastForwardSlash(params.repo)
+  let pathMatch = removeLastForwardSlash(params.pathMatch)
+  let subpageId = null
+
+  if (pathMatch && !repo) {
+    repo = pathMatch
+    pathMatch = null
+  }
+
+  if (pathMatch) {
+    subpageId = pathMatch.split('/')
+      .join('::')
+      .toLowerCase()
+  }
+
+  return {
+    org,
+    repo,
+    subpageId
+  }
+}
+
 export default {
   components: {
     Projects
@@ -39,9 +70,11 @@ export default {
       env = Env.STAGING
     }
 
-    const org = context.params.org
-    const repo = context.params.repo
-    const subpageId = context.params.page
+    const cleanParams = getCleanParams(context.params)
+
+    const org = cleanParams.org
+    const repo = cleanParams.repo
+    const subpageId = cleanParams.subpageId
     const id = [org, repo].join('::')
 
     try {
@@ -54,7 +87,7 @@ export default {
       }
 
       if (!projectConfig || !pageContent) {
-        context.error({ statusCode: 404, message: 'Project not found' })
+        return context.error({ statusCode: 404, message: 'Project not found.' })
       }
 
       return {

@@ -6,11 +6,17 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .ts,.js,.vue .",
-    "test": "jest"
+    "test": "npm run fmt && jest test --no-cache || true",
+    "gen": "nuxt generate",
+    "deploy": "npm run build && firebase --project=default deploy",
+    "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting",
+    "prerender": "ts-node prerender index.ts",
+    "fmt": "prettier --write *.css src/**/**/**.scss src/**/**.scss src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
+    "get-routes": "ts-node -O '{\"module\": \"commonjs\"}' src/scripts/routesList.ts"
   },
   "dependencies": {
     "@nuxtjs/firebase": "^4.1.0",

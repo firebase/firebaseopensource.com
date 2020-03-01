@@ -25,5 +25,3 @@ type Section = {
   id?: String
   ref?: String
 }
-
-declare module 'firewings'

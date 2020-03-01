@@ -1,4 +1,5 @@
-import { queryFirestore } from 'firewings'
+// @ts-ignore
+import { queryFirestore } from 'firewings' // TODO: Add typings
 import { Env } from '~/../shared/types'
 import { Util } from '~/../shared/util'
 

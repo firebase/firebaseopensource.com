@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from 'date-fns'
-import { Timestamp } from '../../../shared/types'
+import { Timestamp } from '../../shared/types'
 
 const COLORS = [
   '#039BE5',

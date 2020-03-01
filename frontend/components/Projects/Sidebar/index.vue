@@ -10,7 +10,7 @@
 import SidebarCard from './SiderbarCard'
 import {
   SidebarSection, SelectableLink
-} from '@/assets/js/classes'
+} from '@/assets/classes'
 
 const OSS_SIDEBAR = new SidebarSection('Open Source', [
   new SelectableLink('Home', '/'),

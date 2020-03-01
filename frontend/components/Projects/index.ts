@@ -19,7 +19,7 @@ import PageFooter from './PageFooter'
 import HeaderBar from '@/components/_Shared/HeaderBar'
 
 import { Util } from '~/../shared/util'
-import { SelectableLink } from '@/assets/js/classes'
+import { SelectableLink } from '~/assets/classes'
 
 const BLOCKED_SECTIONS = ['table of contents']
 

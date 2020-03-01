@@ -1,6 +1,6 @@
 // @ts-nocheck
 import Homepage from '@/components/Homepage'
-import { getCategories, getProjectConfigs } from '@/assets/js/firebaseUtils'
+import { getCategories, getProjectConfigs } from '~/assets/firebaseUtils'
 
 export default {
   components: {

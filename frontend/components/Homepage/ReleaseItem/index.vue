@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { daysAgo } from '@/assets/js/utils'
+import { daysAgo } from '@/assets/utils'
 
 export default {
   props: {

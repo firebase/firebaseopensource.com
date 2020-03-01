@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 // @ts-ignore
 import { queryFirestore } from 'firewings' // TODO: Add typings
-import firebaseConfig from '../../../shared/firebaseConfig'
+import firebaseConfig from '../../shared/firebaseConfig'
 
 function getPath (id: string) {
   return id.replace(/::/g, '/')

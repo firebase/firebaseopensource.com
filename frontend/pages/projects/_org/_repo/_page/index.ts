@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Env } from '../../../../../../shared/types'
 import Projects from '@/components/Projects'
-import { getProjectConfig, getProjectContent, getSubpage } from '@/assets/js/firebaseUtils'
+import { getProjectConfig, getProjectContent, getSubpage } from '~/assets/firebaseUtils'
 
 function calculatePageTitle (projectContent, pageContent, repo) {
   // Choose the page name depending on available info:

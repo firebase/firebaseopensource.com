@@ -28,7 +28,7 @@
 
 <script>
 import { Util } from '~/../shared/util'
-import { pickLogoLetter, pickLogoColor } from '@/assets/js/utils'
+import { pickLogoLetter, pickLogoColor } from '@/assets/utils'
 
 export default {
   props: {

@@ -1,5 +1,5 @@
 import firebaseConfig from '../shared/firebaseConfig'
-import getRoutes from './assets/js/getRoutes'
+import getRoutes from './assets/getRoutes'
 
 export default async () => {
   const routes = await getRoutes()
@@ -24,7 +24,7 @@ export default async () => {
     /*
      ** Customize the progress-bar color
      */
-    loading: { color: '#fff' },
+    loading: { color: '#039be5' },
     /*
      ** Global CSS
      */

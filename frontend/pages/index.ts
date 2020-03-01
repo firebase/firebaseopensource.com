@@ -1,5 +1,5 @@
 import Homepage from '@/components/Homepage'
-import { getRecentReleases, getCategories, getProjectConfigs } from '@/assets/js/firebaseUtils'
+import { getRecentReleases, getCategories, getProjectConfigs } from '~/assets/firebaseUtils'
 
 export default {
   components: {

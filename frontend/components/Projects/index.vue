@@ -45,17 +45,16 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
+import Sidebar from './Sidebar'
+import TitleSection from './TitleSection'
+import SectionH2 from './SectionH2'
+import PageFooter from './PageFooter'
 import {
   Env,
   StoredProjectConfig,
   TabConfig,
   PageContent
-} from './../../../shared/types'
-
-import Sidebar from './Sidebar'
-import TitleSection from './TitleSection'
-import SectionH2 from './SectionH2'
-import PageFooter from './PageFooter'
+} from '~/../shared/types'
 
 import HeaderBar from '@/components/_Shared/HeaderBar'
 

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { Env } from '../../../../../../shared/types'
+import { Env } from '~/../shared/types'
 import Projects from '@/components/Projects'
 import { getProjectConfig, getProjectContent, getSubpage } from '~/assets/firebaseUtils'
 

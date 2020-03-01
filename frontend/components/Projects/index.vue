@@ -16,7 +16,14 @@
     <div class="page content_grid">
       <Sidebar :project-config="projectConfig" :project-content="projectContent" :project-path="projectPath" />
       <div class="sections col_main">
-        <TitleSection :sections="sections" :project-config="projectConfig" :project-content="projectContent" :info="info" :subpage-id="subpageId" />
+        <TitleSection
+          :sections="sections"
+          :project-config="projectConfig"
+          :project-content="projectContent"
+          :info="info"
+          :subpage-id="subpageId"
+          :page-title="pageTitle"
+        />
 
         <SectionH2
           v-for="section in sections"

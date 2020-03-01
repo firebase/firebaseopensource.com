@@ -63,6 +63,10 @@ export default {
       type: Object,
       required: true
     },
+    pageTitle: {
+      type: String,
+      required: true
+    },
     subpageId: {
       type: String,
       default: null
@@ -71,19 +75,6 @@ export default {
   computed: {
     isSubpage () {
       return this.subpageId != null
-    },
-    pageTitle () {
-    // Choose the page name depending on available info:
-    // Option 0 - title of the header section
-    // Option 1 - the name from the config.
-    // Option 2 - the repo name
-      if (this.projectContent.header.name) {
-        return this.projectContent.header.name
-      } else if (this.projectConfig.name) {
-        return this.projectConfig.name
-      } else {
-        return this.repo
-      }
     },
     relatedRepos () {
       const config = this.projectConfig

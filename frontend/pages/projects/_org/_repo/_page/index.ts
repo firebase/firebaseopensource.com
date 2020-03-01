@@ -3,10 +3,28 @@ import { Env } from '../../../../../../shared/types'
 import Projects from '@/components/Projects'
 import { getProjectConfig, getProjectContent, getSubpage } from '@/assets/js/firebaseUtils'
 
+function calculatePageTitle (projectContent, pageContent, repo) {
+  // Choose the page name depending on available info:
+  // Option 0 - title of the header section
+  // Option 1 - the name from the config.
+  // Option 2 - the repo name
+  if (projectContent.header.name) {
+    return projectContent.header.name
+  } else if (pageContent.name) {
+    return pageContent.name
+  } else {
+    return repo
+  }
+}
+
 export default {
   components: {
     Projects
   },
+
+  data: () => ({
+    pageTitle: 'Firebase Open Source'
+  }),
 
   async asyncData (context: any) {
     let env = Env.PROD
@@ -30,12 +48,13 @@ export default {
       if (!projectConfig || !pageContent) {
         context.error({ statusCode: 404, message: 'Project not found' })
       }
+
       return {
         projectConfig,
         projectContent: pageContent,
         env,
-        subpageId
-
+        subpageId,
+        pageTitle: calculatePageTitle(pageContent, projectConfig, repo)
       }
     } catch (e) {
       console.error(e)
@@ -45,34 +64,14 @@ export default {
 
   head () {
     const head = {
+      title: this.pageTitle,
       meta: [
         {
-          property: 'og:image',
-          content: 'https://firebaseopensource.com/logo-small.png'
-        },
-        {
-          property: 'og:site_name',
-          content: 'Firebase Open Source'
-        },
-        {
-          property: 'og:type',
-          content: 'object'
-        },
-        {
-          property: 'og:description',
-          content: 'Check out this project on firebaseopensource.com!'
+          property: 'og:title',
+          content: this.pageTitle
         }
       ]
-    } as any
-
-    if (this.pageTitle) {
-      head.title = this.pageTitle
-      head.meta.push({
-        property: 'og:title',
-        content: this.pageTitle
-      })
     }
-
     return head
   }
 }

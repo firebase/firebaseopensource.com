@@ -4,6 +4,7 @@
     :project-content="projectContent"
     :env="env"
     :subpage-id="subpageId"
+    :page-title="pageTitle"
   />
 </template>
 

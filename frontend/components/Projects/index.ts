@@ -41,6 +41,9 @@ export default class Projects extends Vue implements ProjectArgs {
   @Prop()
   subpageId: String
 
+  @Prop()
+  pageTitle: String
+
   get sections (): Section[] {
     const sections = []
     this.projectContent.sections.forEach((section) => {

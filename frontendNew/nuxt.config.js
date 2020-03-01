@@ -37,7 +37,7 @@ export default () => {
      ** Nuxt.js modules
      */
     modules: [
-      '@nuxtjs/pwa'
+      '@nuxtjs/pwa',
       // [
       //   '@nuxtjs/sitemap',
       //   {
@@ -45,26 +45,26 @@ export default () => {
       //     hostname: 'https://firebaseopensource.com',
       //     cacheTime: 1000 * 60 * 60 * 24,
       //     generate: true,
-      //     routes: routes
+      //     routes
       //   }
       // ]
-      // [
-      //   '@nuxtjs/firebase',
-      //   {
-      //     config: {
-      //       apiKey: 'AIzaSyDFjAR2cS_QCghJ_HtKdZK06VpcqxDBt9g',
-      //       databaseURL: 'https://fir-oss.firebaseio.com',
-      //       storageBucket: 'fir-oss.appspot.com',
-      //       authDomain: 'fir-oss.firebaseapp.com',
-      //       messagingSenderId: '895878195922',
-      //       projectId: 'fir-oss',
-      //       appId: 'noidea' //TODO
-      //     },
-      //     services: {
-      //       firestore: true
-      //     }
-      //   }
-      // ]
+      [
+        '@nuxtjs/firebase',
+        {
+          config: {
+            apiKey: 'AIzaSyDFjAR2cS_QCghJ_HtKdZK06VpcqxDBt9g',
+            databaseURL: 'https://fir-oss.firebaseio.com',
+            storageBucket: 'fir-oss.appspot.com',
+            authDomain: 'fir-oss.firebaseapp.com',
+            messagingSenderId: '895878195922',
+            projectId: 'fir-oss',
+            appId: '.........' // TODO: Set appId
+          },
+          services: {
+            firestore: true
+          }
+        }
+      ]
     ],
     /*
      ** Build configuration

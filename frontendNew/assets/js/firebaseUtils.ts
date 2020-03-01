@@ -1,7 +1,12 @@
 import { queryFirestore } from 'firewings'
 import { Env } from '~/../shared/types'
-import { fireStore } from '@/plugins/firebaseInit'
 import { Util } from '~/../shared/util'
+
+let fireStore: firebase.firestore.Firestore
+
+export const _setupFirestore = (firestore: firebase.firestore.Firestore) => {
+  fireStore = firestore
+}
 
 const ALL_CATEGORIES = [
   {
@@ -41,9 +46,6 @@ const ALL_CATEGORIES = [
   }
 ]
 
-const releasesRef = fireStore.collection('releases')
-const configsRef = fireStore.collection('configs')
-
 export async function getProjectConfig (id: string, env: Env) {
   const path = Util.configPath(id, env)
   const ref = fireStore.doc(path)
@@ -65,7 +67,7 @@ export async function getProjectContent (id: string, env: Env) {
 }
 
 export async function getProjectConfigs (category: Category, limit: number) {
-  const ref = configsRef.orderBy(`platforms.${category.platform}`)
+  const ref = fireStore.collection('configs').orderBy(`platforms.${category.platform}`)
     .where('blacklist', '==', false)
     .where('fork', '==', false)
     .orderBy('stars', 'desc')
@@ -92,7 +94,7 @@ export async function getSubpage (id: string, env: Env, pageId: string) {
 }
 
 export async function getRecentReleases (amount: number) {
-  const ref = releasesRef.orderBy('created_at', 'desc')
+  const ref = fireStore.collection('releases').orderBy('created_at', 'desc')
     .limit(amount)
   try {
     return await queryFirestore(ref)

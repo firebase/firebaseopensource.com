@@ -1,4 +1,4 @@
-Still some bugs and stuff remaining before refactor is done. 
+Still some bugs and cleaups remaining before refactor is done. 
 
 ## Cleanup
 
@@ -6,10 +6,10 @@ Still some bugs and stuff remaining before refactor is done.
 - Remove // @ts-nocheck where is it set now (currently having issues with vetur not recognizing import paths)
 - ADD Style Lint for .sass files
 - Add Tests again
-- CHECK: Add "Featured" projects functioanlity again if needed
+- Add "Featured" projects functioanlity again (if really needed)
 
 ## Bugs
 
 ### this.projectConfig.last_fetched.toDate() breaks
 
-For some reason `this.projectConfig.last_fetched.toDate()` says toDate() os not a function even though it is always a timestamp...
+For some reason `this.projectConfig.last_fetched.toDate()` says toDate() is not a function even though it is ALWAYS a timestamp...

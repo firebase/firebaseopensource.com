@@ -5,13 +5,13 @@
   "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt-ts",
     "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "start": "nuxt start",
-    "generate": "nuxt generate",
+    "start": "nuxt-ts start",
+    "generate": "nuxt-ts generate",
     "lint": "eslint --ext .ts,.js,.vue .",
     "test": "npm run fmt && jest test --no-cache || true",
-    "gen": "nuxt generate",
+    "gen": "nuxt-ts generate",
     "deploy": "npm run build && firebase --project=default deploy",
     "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting",
     "prerender": "ts-node prerender index.ts",
@@ -19,6 +19,7 @@
     "get-routes": "ts-node -O '{\"module\": \"commonjs\"}' src/scripts/routesList.ts"
   },
   "dependencies": {
+    "@nuxt/typescript-runtime": "^0.3.10",
     "@nuxtjs/firebase": "^4.1.0",
     "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/sitemap": "^2.0.1",

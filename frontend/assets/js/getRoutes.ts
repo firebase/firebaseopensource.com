@@ -9,6 +9,10 @@ function getPath (id: string) {
 }
 
 export default async function () {
+  // don't load routes if not in production
+  if (process.env.ENV !== 'production') {
+    return []
+  }
   // Firebase has to be instantiated here additionally to @nuxtjs/firebase,
   // because at this point we cannot access this.$fireDb yet.
   if (!firebase.apps.length) {

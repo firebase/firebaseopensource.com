@@ -38,6 +38,8 @@ export default {
     if (context.route.path.includes('-staging')) {
       env = Env.STAGING
     }
+
+    console.log('HIER')
     const org = context.params.org
     const repo = context.params.repo
     const subpageId = context.params.page

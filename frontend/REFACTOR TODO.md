@@ -5,6 +5,8 @@ Still some bugs and stuff remaining before refactor is done.
 - Refactor all .vue files' script parts to be typescript
 - Remove // @ts-nocheck where is it set now (currently having issues with vetur not recognizing import paths)
 - ADD Style Lint for .sass files
+- Add Tests again
+- CHECK: Add "Featured" projects functioanlity again if needed
 
 ## Bugs
 

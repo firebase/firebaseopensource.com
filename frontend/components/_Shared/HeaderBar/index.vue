@@ -57,9 +57,7 @@
         </div>
         <div v-if="!subheaderTabs" class="tab-spacer" />
       </div>
-      <div class="col_gutter" />
     </div>
-  </div>
   </div>
 </template>
 

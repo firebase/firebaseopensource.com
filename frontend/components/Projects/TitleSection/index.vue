@@ -21,7 +21,7 @@
         </div>
 
         <div class="right">
-          <RepoButtons v-if="!isSubpage" :info="info" />
+          <RepoButtons v-if="!isSubpage" :info="info" :project-config="projectConfig" />
         </div>
 
         <div>
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import { formatDistanceToNow } from 'date-fns'
 import TableOfContents from './TableOfContents'
 import RepoButtons from './RepoButtons'
 
@@ -106,10 +105,6 @@ export default {
           path: repo
         }
       })
-    },
-    lastUpdatedFromNow () {
-    // For some reason lastUpdated is not a timestamp but a datestring
-      return formatDistanceToNow(new Date(this.projectConfig.last_updated))
     },
     header () {
       return this.projectContent.header

@@ -54,20 +54,31 @@
       </button>
     </div>
   </div>
-  </div>
 </template>
 
 <script>
+import { formatDistanceToNow } from 'date-fns'
+
 export default {
   props: {
     info: {
+      type: Object,
+      required: true
+    },
+    projectConfig: {
       type: Object,
       required: true
     }
   },
   data: () => ({
     showCloneCmd: false // Todo: Needed?
-  })
+  }),
+  computed: {
+    lastUpdatedFromNow () {
+    // For some reason lastUpdated is not a timestamp but a datestring
+      return formatDistanceToNow(new Date(this.projectConfig.last_updated))
+    }
+  }
 }
 </script>
 

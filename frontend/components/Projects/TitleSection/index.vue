@@ -25,7 +25,6 @@
         </div>
 
         <div>
-          <!-- Table of contents shown if > 1 sections -->
           <TableOfContents v-if="sections.length > 1" :sections="sections" />
 
           <!-- eslint-disable-next-line vue/no-v-html -->
@@ -33,7 +32,6 @@
         </div>
       </div>
     </div>
-    <!-- END content -->
   </div>
 </template>
 

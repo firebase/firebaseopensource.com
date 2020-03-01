@@ -69,11 +69,11 @@ export default {
     },
     subheaderTitle: {
       type: String,
-      required: true
+      default: null
     },
     subheaderTabs: {
       type: Array,
-      required: true
+      default: null
     },
     subheaderTabSelection: {
       type: String,

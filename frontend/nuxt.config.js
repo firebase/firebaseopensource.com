@@ -48,7 +48,6 @@ export default async () => {
           path: '/sitemap.xml',
           hostname: 'https://firebaseopensource.com',
           cacheTime: 1000 * 60 * 60 * 24,
-          generate: true,
           routes
         }
       ],

@@ -1,5 +1,5 @@
+import firebaseConfig from '../shared/firebaseConfig'
 import getRoutes from './assets/js/getRoutes'
-import firebaseConfig from './../shared/firebaseConfig'
 
 export default async () => {
   const routes = await getRoutes()

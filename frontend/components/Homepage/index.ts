@@ -2,11 +2,11 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
+import { RepoRelease } from '../../../shared/types'
 import ReleaseItem from './ReleaseItem'
 import CategoryCard from './CategoryCard'
 import WelcomeCard from './WelcomeCard'
 
-import { RepoRelease } from './../../../shared/types'
 import HeaderBar from '@/components/_Shared/HeaderBar'
 
 @Component({

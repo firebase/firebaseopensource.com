@@ -35,69 +35,51 @@
   </div>
 </template>
 
-<script>
-import TableOfContents from './TableOfContents'
-import RepoButtons from './RepoButtons'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import TableOfContents from './TableOfContents/index.vue'
+import RepoButtons from './RepoButtons/index.vue'
 
-export default {
-  components: {
-    TableOfContents,
-    RepoButtons
-  },
-  props: {
-    sections: {
-      type: Array,
-      required: true
-    },
-    projectConfig: {
-      type: Object,
-      required: true
-    },
-    projectContent: {
-      type: Object,
-      required: true
-    },
-    info: {
-      type: Object,
-      required: true
-    },
-    pageTitle: {
-      type: String,
-      required: true
-    },
-    subpageId: {
-      type: String,
-      default: null
+@Component({
+  components: { TableOfContents, RepoButtons }
+})
+export default class TitleSectionComponent extends Vue {
+  @Prop() sections!: []
+  @Prop() projectConfig!: any // TODO
+  @Prop() projectContent!: any // TODO
+  @Prop() info!: any // TODO
+  @Prop() pageTitle!: string // TODO
+  @Prop() subpageId: string // TODO
+
+  get isSubpage () {
+    return this.subpageId != null
+  }
+
+  get relatedRepos () {
+    const config = this.projectConfig
+    if (!config.related) {
+      return []
     }
-  },
-  computed: {
-    isSubpage () {
-      return this.subpageId != null
-    },
-    relatedRepos () {
-      const config = this.projectConfig
-      if (!config.related) {
-        return []
+
+    return Object.keys(config.related).map((repo) => {
+    // Format the name of a related project for display.
+    // Strips the "firebase/" from the name to save space, since
+    // the firebase context is implied on firebaseopensource.com
+      let name = repo
+      if (repo.includes('firebase/')) {
+        name = repo.substring('firebase/'.length, repo.length)
       }
 
-      return Object.keys(config.related).map((repo) => {
-      // Format the name of a related project for display.
-      // Strips the "firebase/" from the name to save space, since
-      // the firebase context is implied on firebaseopensource.com
-        let name = repo
-        if (repo.includes('firebase/')) {
-          name = repo.substring('firebase/'.length, repo.length)
-        }
+      return {
+        name,
+        path: repo
+      }
+    })
+  }
 
-        return {
-          name,
-          path: repo
-        }
-      })
-    },
-    header () {
-      return this.projectContent.header
-    }
+  get header () {
+    return this.projectContent.header
   }
 }
 </script>

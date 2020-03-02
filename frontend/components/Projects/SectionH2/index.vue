@@ -9,14 +9,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    section: {
-      type: Object,
-      required: true
-    }
-  }
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class SidebarSectionH2Component extends Vue {
+  @Prop() section!: any // TODO
 }
 </script>
 

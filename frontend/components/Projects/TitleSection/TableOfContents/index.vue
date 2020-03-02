@@ -12,14 +12,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    sections: {
-      type: Array,
-      required: true
-    }
-  }
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class TableOfContentsComponent extends Vue {
+  @Prop() sections!: []
 }
 </script>
 

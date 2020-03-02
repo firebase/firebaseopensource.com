@@ -4,7 +4,7 @@
 
     <HeaderBar
       ref="header"
-      enable-subheader
+      :enable-subheader="true"
       subheader-title="Documentation"
       :subheader-tabs="subheaderTabs"
     />
@@ -41,49 +41,38 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import Sidebar from './Sidebar'
-import TitleSection from './TitleSection'
-import SectionH2 from './SectionH2'
-import PageFooter from './PageFooter'
+import { Util } from '../../../shared/util'
 import {
   Env,
   StoredProjectConfig,
   TabConfig,
   PageContent
-} from '~/../shared/types'
+} from '../../../shared/types'
+import { SelectableLink } from '../../assets/classes'
+import Sidebar from './Sidebar/index.vue'
+import TitleSection from './TitleSection/index.vue'
+import SectionH2 from './SectionH2/index.vue'
+import PageFooter from './PageFooter/index.vue'
 
-import HeaderBar from '@/components/_Shared/HeaderBar'
-
-import { Util } from '~/../shared/util'
-import { SelectableLink } from '~/assets/classes'
+import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 
 const BLOCKED_SECTIONS = ['table of contents']
 
 @Component({
   components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter }
 })
-export default class Projects extends Vue implements ProjectArgs {
-  @Prop()
-  projectConfig: StoredProjectConfig
-
-  @Prop()
-  projectContent: PageContent
-
-  @Prop()
-  env: Env
-
-  @Prop()
-  subpageId: String
-
-  @Prop()
-  pageTitle: String
+export default class Projects extends Vue {
+  @Prop() projectConfig!: StoredProjectConfig
+  @Prop() projectContent!: PageContent
+  @Prop() env: Env
+  @Prop() subpageId: String
+  @Prop() pageTitle!: String
 
   get sections (): Section[] {
-    const sections = []
+    const sections : Section[] = []
     this.projectContent.sections.forEach((section) => {
       if (BLOCKED_SECTIONS.includes(section.name.toLowerCase())) {
         return
@@ -96,7 +85,7 @@ export default class Projects extends Vue implements ProjectArgs {
   }
 
   get parsedIdObj () {
-    return Util.parseProjectId(this.projectConfig.id)
+    return Util.parseProjectId(this.projectConfig.id!)
   }
 
   get info () {

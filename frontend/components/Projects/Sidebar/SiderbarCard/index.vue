@@ -14,28 +14,25 @@
   </li>
 </template>
 
-<script>
-import SidebarLink from './SidebarLink'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import SidebarLink from './SidebarLink/index.vue'
 
-export default {
-  components: {
-    SidebarLink
-  },
-  props: {
-    section: {
-      type: Object,
-      required: true
-    }
-  },
-  data: () => ({
-    expanded: false
-  }),
-  created () {
+@Component({
+  components: { SidebarLink }
+})
+export default class SidebarCardComponent extends Vue {
+    @Prop() section!: any // TODO
+
+    expanded: Boolean = false
+
+    created () {
     // Section Project shall be open at first
-    if (this.section.title === 'Project') {
-      this.expanded = true
+      if (this.section.title === 'Project') {
+        this.expanded = true
+      }
     }
-  }
 }
 </script>
 

@@ -26,53 +26,50 @@
   </div>
 </template>
 
-<script>
-import { Util } from '~/../shared/util'
-import { pickLogoLetter, pickLogoColor } from '@/assets/utils'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Util } from '../../../../../shared/util'
+import { pickLogoLetter, pickLogoColor } from '../../../../assets/utils'
 
-export default {
-  props: {
-    project: {
-      type: Object,
-      required: true
-    },
-    projectIndex: {
-      type: Number,
-      required: true
-    },
-    categoryIndex: {
-      type: Number,
-      required: true
-    }
-  },
-  computed: {
-    singleLetter () {
+@Component
+export default class ProjectItemComponent extends Vue {
+    @Prop() project! : any // TODO: Typings
+    @Prop() projectIndex! : number
+    @Prop() categoryIndex! : number
+
+    get singleLetter () {
       return pickLogoLetter(this.project.name)
-    },
-    color () {
+    }
+
+    get color () {
       return pickLogoColor(this.projectIndex, this.categoryIndex)
-    },
-    description () {
+    }
+
+    get description () {
       const words = this.project.description.split(' ')
       let sentence = words.slice(0, 10).join(' ')
       if (words.length > 10) {
         sentence += '...'
       }
       return sentence
-    },
-    parsedIdObj () {
+    }
+
+    get parsedIdObj () {
       return Util.parseProjectId(this.project.id)
-    },
-    org () {
+    }
+
+    get org () {
       return this.parsedIdObj.owner
-    },
-    repo () {
+    }
+
+    get repo () {
       return this.parsedIdObj.repo
-    },
-    link () {
+    }
+
+    get link () {
       return `/projects/${this.org}/${this.repo}/`
     }
-  }
 }
 </script>
 

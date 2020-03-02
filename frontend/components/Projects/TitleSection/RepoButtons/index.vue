@@ -56,28 +56,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { formatDistanceToNow } from 'date-fns'
 
-export default {
-  props: {
-    info: {
-      type: Object,
-      required: true
-    },
-    projectConfig: {
-      type: Object,
-      required: true
-    }
-  },
-  data: () => ({
-    showCloneCmd: false // Todo: Needed?
-  }),
-  computed: {
-    lastUpdatedFromNow () {
+@Component
+export default class RepoButtonsComponent extends Vue {
+  @Prop() info! : any // TODO
+  @Prop() projectConfig! : any // TODO
+
+  showCloneCmd = false // Todo: Needed?
+
+  get lastUpdatedFromNow () {
     // For some reason lastUpdated is not a timestamp but a datestring
-      return formatDistanceToNow(new Date(this.projectConfig.last_updated))
-    }
+    return formatDistanceToNow(new Date(this.projectConfig.last_updated))
   }
 }
 </script>

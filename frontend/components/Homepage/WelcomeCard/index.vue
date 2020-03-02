@@ -24,8 +24,12 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component } from 'vue-property-decorator'
+
+@Component
+export default class WelcomeCardComponent extends Vue {
 }
 </script>
 

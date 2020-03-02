@@ -1,16 +1,16 @@
 <template>
-  <homepage :platform="platform" :categories="categories" :recent-releases="recentReleases" />
+  <Homepage :platform="platform" :categories="categories" :recent-releases="recentReleases" />
 </template>
 
 <script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component } from 'vue-property-decorator'
 import { getRecentReleases, getCategories, getProjectConfigs } from '../assets/firebaseUtils'
 import Homepage from '@/components/Homepage/index.vue'
 
-export default {
-  components: {
-    Homepage
-  },
-
+// @ts-ignore - idk why this shows "no overload matches this call..."
+@Component({
+  components: { Homepage },
   async asyncData (context: any) {
     try {
       const recentReleases = await getRecentReleases(3)
@@ -30,12 +30,10 @@ export default {
       console.error(e)
       context.error({ statusCode: 404, message: 'Platform not found' })
     }
-  },
-
-  data: () => ({
-    platform: 'all'
-
-  })
+  }
+})
+export default class MainPage extends Vue {
+    platform: string = 'all'
 }
 
 </script>

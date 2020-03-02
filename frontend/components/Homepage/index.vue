@@ -2,7 +2,7 @@
   <div id="homepage">
     <HeaderBar
       ref="header"
-      enable-subheader
+      :enable-subheader="true"
       subheader-title="Platforms"
       :subheader-tabs="subheaderTabs"
       :subheader-tab-selection="platform"
@@ -36,22 +36,25 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
 
-import ReleaseItem from './ReleaseItem'
-import CategoryCard from './CategoryCard'
-import WelcomeCard from './WelcomeCard'
-import { RepoRelease } from '~/../shared/types'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import HeaderBar from '@/components/_Shared/HeaderBar'
+import { RepoRelease } from '../../../shared/types'
+import ReleaseItem from './ReleaseItem/index.vue'
+import CategoryCard from './CategoryCard/index.vue'
+import WelcomeCard from './WelcomeCard/index.vue'
+
+import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 
 @Component({
   components: { HeaderBar, ReleaseItem, CategoryCard, WelcomeCard }
 })
+export default class HomepageComponent extends Vue {
+  @Prop() platform: string
+  @Prop() categories: Category[]
+  @Prop() recentReleases: RepoRelease[]
 
-export default class Homepage extends Vue {
   subheaderTabs: any[] = [
     { title: 'All', href: '/' },
     { title: 'iOS', href: '/platform/ios' },
@@ -60,15 +63,6 @@ export default class Homepage extends Vue {
     { title: 'Admin', href: '/platform/admin' },
     { title: 'Games', href: '/platform/games' }
   ]
-
-  @Prop()
-  platform: string
-
-  @Prop()
-  categories: Category[]
-
-  @Prop()
-  recentReleases: RepoRelease[]
 
   isSectionVisible (section: string) {
     if (!this.platform || this.platform === 'all') {

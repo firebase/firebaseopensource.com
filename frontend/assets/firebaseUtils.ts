@@ -1,7 +1,7 @@
 // @ts-ignore
 import { queryFirestore } from 'firewings' // TODO: Add typings
-import { Env } from '~/../shared/types'
-import { Util } from '~/../shared/util'
+import { Env } from '../../shared/types'
+import { Util } from '../../shared/util'
 
 let fireStore: firebase.firestore.Firestore
 

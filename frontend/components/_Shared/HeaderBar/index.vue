@@ -61,28 +61,18 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    enableSubheader: {
-      type: Boolean
-    },
-    subheaderTitle: {
-      type: String,
-      default: null
-    },
-    subheaderTabs: {
-      type: Array,
-      default: null
-    },
-    subheaderTabSelection: {
-      type: String,
-      default: null
-    }
-  },
-  data: () => ({
-    headers: [{ id: 0 }, { id: 1, spacer: true }]
-  })
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class HeaderBarComponent extends Vue {
+    @Prop() subheaderTitle: String
+    @Prop() enableSubheader: Boolean
+    @Prop() subheaderTabs: any[]
+    @Prop() subheaderTabSelection: String
+
+    headers = [{ id: 0 }, { id: 1, spacer: true }]
 }
 
 </script>

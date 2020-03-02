@@ -14,19 +14,18 @@
   </div>
 </template>
 
-<script>
-import HeaderBar from '@/components/_Shared/HeaderBar'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 
-export default {
-  components: {
-    HeaderBar
-  },
-  props: {
-    error: {
-      type: Object,
-      default: null
-    }
-  },
+@Component({
+  components: { HeaderBar }
+})
+export default class ErrorLayout extends Vue {
+  @Prop()
+  error: any = null // TODO: type
+
   head () {
     return {
       title: 'Firebase Open Source',

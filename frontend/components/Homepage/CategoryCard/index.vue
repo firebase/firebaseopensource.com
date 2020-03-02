@@ -19,27 +19,24 @@
   </div>
 </template>
 
-<script>
-import ProjectItem from './ProjectItem'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Route } from 'vue-router'
+import ProjectItem from './ProjectItem/index.vue'
 
-export default {
-  components: {
-    ProjectItem
-  },
-  props: {
-    category: {
-      type: Object,
-      required: true
-    },
-    categoryIndex: {
-      type: Number,
-      required: true
-    }
-  },
-  methods: {
-    onHomepage () {
-      return this.$route.path === '/'
-    }
+@Component({
+  components: { ProjectItem }
+})
+export default class CategoryCardComponent extends Vue {
+  @Prop() category!: any // TODO
+  @Prop() categoryIndex!: number // TODO
+
+  // TODO: try Vue.prototype.$nuxt.$route
+  $route: Route
+
+  onHomepage () {
+    return this.$route.path === '/'
   }
 }
 </script>

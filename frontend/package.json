@@ -29,6 +29,7 @@
     "firewings": "^0.2.4",
     "node-sass": "^4.13.1",
     "nuxt": "^2.0.0",
+    "reflect-metadata": "^0.1.13",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",

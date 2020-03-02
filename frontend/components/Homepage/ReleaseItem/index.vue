@@ -15,20 +15,17 @@
   </div>
 </template>
 
-<script>
-import { daysAgo } from '@/assets/utils'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { daysAgo } from '../../../assets/utils'
 
-export default {
-  props: {
-    release: {
-      type: Object,
-      required: true
-    }
-  },
-  computed: {
-    releaseTime () {
-      return daysAgo(this.release.created_at)
-    }
+@Component
+export default class ReleaseItemComponent extends Vue {
+  @Prop() release!: any // ToDo: Typing
+
+  get releaseTime () {
+    return daysAgo(this.release.created_at)
   }
 }
 </script>

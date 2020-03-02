@@ -20,19 +20,17 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    page: {
-      type: Object,
-      required: true
-    }
-  },
-  computed: {
-    link () {
-      // remove .md in the link
-      return this.page.href.replace('.md', '')
-    }
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class SidebarLinkComponent extends Vue {
+  @Prop() page! : any // TODO
+
+  get link () {
+    // remove .md in the link
+    return this.page.href.replace('.md', '')
   }
 }
 </script>

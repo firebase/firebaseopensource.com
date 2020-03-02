@@ -1,16 +1,17 @@
 <template>
-  <homepage :platform="platform" :categories="categories" />
+  <Homepage :platform="platform" :categories="categories" />
 </template>
 
 <script lang="ts">
-// @ts-nocheck
-import Homepage from '@/components/Homepage'
-import { getCategories, getProjectConfigs } from '~/assets/firebaseUtils'
+import 'reflect-metadata'
+import { Vue, Component } from 'vue-property-decorator'
 
-export default {
-  components: {
-    Homepage
-  },
+import { getCategories, getProjectConfigs } from '../../../assets/firebaseUtils'
+import Homepage from '@/components/Homepage/index.vue'
+
+// @ts-ignore - idk why this shows "no overload matches this call..."
+@Component({
+  components: { Homepage },
   async asyncData (context: any) {
     const platform = context.params.platformId
 
@@ -32,6 +33,8 @@ export default {
       context.error({ statusCode: 404, message: 'Platform not found' })
     }
   }
+})
+export default class PlatformPage extends Vue {
 }
 
 </script>

@@ -17,6 +17,8 @@ export class GetParams {
  */
 export interface StoredProjectConfig {
   // Basic repo information
+  id?: string; // if fetched with firewings
+  ref?: string; // if fetched with firewings
   name: string;
   description?: string;
   stars: number;
@@ -74,6 +76,8 @@ export interface PageContent {
 }
 
 export interface PageSection {
+  id?: string; // if fetched with firewings
+  ref?: string; // if fetched with firewings
   name: string;
   content: string;
 }

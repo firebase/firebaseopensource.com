@@ -9,12 +9,18 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
-import { Env } from '~/../shared/types'
-import Projects from '@/components/Projects'
-import { getProjectConfig, getProjectContent, getSubpage } from '~/assets/firebaseUtils'
+import 'reflect-metadata'
+import { Vue, Component } from 'vue-property-decorator'
+import {
+  Env,
+  StoredProjectConfig
+} from '../../../../../shared/types'
+import { getProjectConfig, getProjectContent, getSubpage } from '../../../../assets/firebaseUtils'
 
-function calculatePageTitle (projectContent, pageContent, repo) {
+import Projects from '@/components/Projects/index.vue'
+
+// TODO: remove :any's
+function calculatePageTitle (projectContent: any, pageContent: any, repo : string) : string {
   // Choose the page name depending on available info:
   // Option 0 - title of the header section
   // Option 1 - the name from the config.
@@ -28,17 +34,18 @@ function calculatePageTitle (projectContent, pageContent, repo) {
   }
 }
 
-function removeLastForwardSlash (string) {
+function cleanParam (string: string | null) : string | null {
+  // Set null if
   if (!string) {
     return null
   }
   return string.replace(/\/$/, '')
 }
 
-function getCleanParams (params) {
-  const org = removeLastForwardSlash(params.org)
-  let repo = removeLastForwardSlash(params.repo)
-  let pathMatch = removeLastForwardSlash(params.pathMatch)
+function getCleanParams (params: ProjectRouteParams) {
+  const org = cleanParam(params.org)
+  let repo = cleanParam(params.repo)
+  let pathMatch = cleanParam(params.pathMatch)
   let subpageId = null
 
   if (pathMatch && !repo) {
@@ -59,11 +66,9 @@ function getCleanParams (params) {
   }
 }
 
-export default {
-  components: {
-    Projects
-  },
-
+// @ts-ignore - idk why this shows "no overload matches this call..."
+@Component({
+  components: { Projects },
   async asyncData (context: any) {
     let env = Env.PROD
     if (context.route.path.includes('-staging')) {
@@ -72,13 +77,13 @@ export default {
 
     const cleanParams = getCleanParams(context.params)
 
-    const org = cleanParams.org
-    const repo = cleanParams.repo
-    const subpageId = cleanParams.subpageId
+    const org: string = cleanParams.org!
+    const repo: string | null = cleanParams.repo
+    const subpageId: string | null = cleanParams.subpageId
     const id = [org, repo].join('::')
 
     try {
-      const projectConfig = await getProjectConfig(id, env)
+      const projectConfig: StoredProjectConfig = await getProjectConfig(id, env)
       let pageContent
       if (subpageId) {
         pageContent = await getSubpage(id, env, subpageId)
@@ -95,18 +100,16 @@ export default {
         projectContent: pageContent,
         env,
         subpageId,
-        pageTitle: calculatePageTitle(pageContent, projectConfig, repo)
+        pageTitle: calculatePageTitle(pageContent, projectConfig, repo!)
       }
     } catch (e) {
       console.error(e)
       context.error({ statusCode: 404, message: 'Something went wrong.' })
     }
-  },
-
-  data: () => ({
-    pageTitle: 'Firebase Open Source'
-  }),
-
+  }
+})
+export default class RepoPage extends Vue {
+  pageTitle: string = 'Firebase Open Source'
   head () {
     const head = {
       title: this.pageTitle,

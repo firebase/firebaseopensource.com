@@ -6,11 +6,13 @@
   </div>
 </template>
 
-<script>
-import SidebarCard from './SiderbarCard'
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import {
   SidebarSection, SelectableLink
-} from '@/assets/classes'
+} from '../../../assets/classes'
+import SidebarCard from './SiderbarCard/index.vue'
 
 const OSS_SIDEBAR = new SidebarSection('Open Source', [
   new SelectableLink('Home', '/'),
@@ -39,55 +41,42 @@ const FIREBASE_SIDEBAR = new SidebarSection('Firebase', [
   )
 ])
 
-export default {
-  components: {
-    SidebarCard
-  },
-  props: {
-    projectConfig: {
-      type: Object,
-      required: true
-    },
-    projectContent: {
-      type: Object,
-      required: true
-    },
-    projectPath: {
-      type: String,
-      required: true
-    }
-  },
-  computed: {
-    sidebarData () {
-      const selectableLink = new SelectableLink('Home', this.projectPath, !this.projectContent.isSubpage)
-      const projectSidebar = new SidebarSection(
-        'Project',
-        [selectableLink],
-        true
-      )
+@Component({
+  components: { SidebarCard }
+})
+export default class SidebarComponent extends Vue {
+  @Prop() projectConfig!: any // TODO
+  @Prop() projectContent!: any // TODO
+  @Prop() projectPath!: string
 
-      const pages = this.projectConfig.pages
-      if (pages) {
-        const subpages = []
-        for (const pageConfig of pages) {
-          let pageName
-          if (pageConfig.name) {
-            pageName = pageConfig.name
-          } else {
-            pageName = pageConfig.path.toLowerCase()
-            pageName = pageName.replace('/readme.md', '')
-            pageName = pageName.replace('.md', '')
-          }
+  get sidebarData () {
+    const selectableLink = new SelectableLink('Home', this.projectPath, !this.projectContent.isSubpage)
+    const projectSidebar = new SidebarSection(
+      'Project',
+      [selectableLink],
+      true
+    )
 
-          const selected =
-          this.page && this.page.toLowerCase() === pageConfig.path.toLowerCase()
-          const href = `${this.projectPath}/${pageConfig.path}`.toLowerCase()
-          subpages.push(new SelectableLink(pageName, href, selected))
+    const pages = this.projectConfig.pages
+    if (pages) {
+      const subpages = []
+      for (const pageConfig of pages) {
+        let pageName
+        if (pageConfig.name) {
+          pageName = pageConfig.name
+        } else {
+          pageName = pageConfig.path.toLowerCase()
+          pageName = pageName.replace('/readme.md', '')
+          pageName = pageName.replace('.md', '')
         }
-        projectSidebar.pages = projectSidebar.pages.concat(subpages)
+
+        const selected = false // TODO: Not needed anymore, can be deleted
+        const href = `${this.projectPath}/${pageConfig.path}`.toLowerCase()
+        subpages.push(new SelectableLink(pageName, href, selected))
       }
-      return [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR]
+      projectSidebar.pages = projectSidebar.pages.concat(subpages)
     }
+    return [projectSidebar, OSS_SIDEBAR, FIREBASE_SIDEBAR]
   }
 }
 </script>

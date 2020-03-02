@@ -4,8 +4,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Vue } from 'vue-property-decorator'
+
+export default class DefaultLayout extends Vue {
   head () {
     return {
       title: 'Firebase Open Source',

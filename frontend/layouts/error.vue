@@ -51,7 +51,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -66,7 +65,7 @@ export default {
     opacity: 0.6;
   }
 
-    h2 {
+  h2 {
     font-size: 25px;
     opacity: 0.4;
     padding-bottom: 0px;
@@ -95,5 +94,4 @@ export default {
     line-height: 5px;
   }
 }
-
 </style>

@@ -13,11 +13,11 @@ const COLORS = [
 ]
 
 function isLetter (c: string) {
-  return c.toLowerCase() != c.toUpperCase()
+  return c.toLowerCase() !== c.toUpperCase()
 }
 
 function isCapital (c: string) {
-  return c == c.toUpperCase()
+  return c === c.toUpperCase()
 }
 
 function splitWords (name: string) {
@@ -26,8 +26,8 @@ function splitWords (name: string) {
 
   for (let i = 0; i < name.length; i++) {
     const c = name[i]
-    const prev = i == 0 ? '' : name[i - 1]
-    const next = i == name.length - 1 ? '' : name[i + 1]
+    const prev = i === 0 ? '' : name[i - 1]
+    const next = i === name.length - 1 ? '' : name[i + 1]
 
     // Word breaks are:
     //  * Non letter characters
@@ -37,7 +37,7 @@ function splitWords (name: string) {
       isLetter(c) &&
       isCapital(c) &&
       !isCapital(next) &&
-      i != 1
+      i !== 1
 
     const exclude = !isLetter(c)
     const wordBreak = !isLetter(c) || wordStart

@@ -33,7 +33,6 @@ export default class CategoryCardComponent extends Vue {
   @Prop() category!: Category
   @Prop() categoryIndex!: number
 
-  // TODO: try Vue.prototype.$nuxt.$route
   $route: Route
 
   onHomepage () {

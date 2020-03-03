@@ -19,13 +19,9 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 
+// @ts-ignore - idk why this shows "no overload matches this call..."
 @Component({
-  components: { HeaderBar }
-})
-export default class ErrorLayout extends Vue {
-  @Prop()
-  error: any = null // TODO: type
-
+  components: { HeaderBar },
   head () {
     return {
       title: 'Firebase Open Source',
@@ -49,6 +45,10 @@ export default class ErrorLayout extends Vue {
       ]
     }
   }
+})
+export default class ErrorLayout extends Vue {
+  @Prop()
+  error: any = null // TODO: type
 }
 </script>
 

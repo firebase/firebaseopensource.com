@@ -69,6 +69,18 @@ function getCleanParams (params: ProjectRouteParams) {
 // @ts-ignore - idk why this shows "no overload matches this call..."
 @Component({
   components: { Projects },
+  head () {
+    const head = {
+      title: this.pageTitle,
+      meta: [
+        {
+          property: 'og:title',
+          content: this.pageTitle
+        }
+      ]
+    }
+    return head
+  },
   async asyncData (context: any) {
     let env = Env.PROD
     if (context.route.path.includes('-staging')) {
@@ -110,18 +122,6 @@ function getCleanParams (params: ProjectRouteParams) {
 })
 export default class RepoPage extends Vue {
   pageTitle: string = 'Firebase Open Source'
-  head () {
-    const head = {
-      title: this.pageTitle,
-      meta: [
-        {
-          property: 'og:title',
-          content: this.pageTitle
-        }
-      ]
-    }
-    return head
-  }
 }
 
 </script>

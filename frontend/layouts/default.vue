@@ -5,9 +5,10 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 
-export default class DefaultLayout extends Vue {
+@Component({
+  // @ts-ignore - idk why this shows "no overload matches this call..."
   head () {
     return {
       title: 'Firebase Open Source',
@@ -31,5 +32,8 @@ export default class DefaultLayout extends Vue {
       ]
     }
   }
+})
+export default class DefaultLayout extends Vue {
+
 }
 </script>

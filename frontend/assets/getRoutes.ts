@@ -5,10 +5,16 @@ import 'firebase/firestore'
 import { queryFirestore } from 'firewings' // TODO: Add typings
 import firebaseConfig from '../../shared/firebaseConfig'
 
+/**
+ * Converts an id into a path.
+ */
 function getPath (id: string) {
   return id.replace(/::/g, '/')
 }
 
+/**
+ * Gets all routes for the website for generating the sitemap.xml
+ */
 export default async function () {
   // don't load routes if not in production
   if (process.env.ENV !== 'production') {

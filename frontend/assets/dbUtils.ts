@@ -49,6 +49,9 @@ const ALL_CATEGORIES = [
   }
 ]
 
+/**
+ * Firebase get() call to retrieve a "config" document by id & env
+ */
 export async function getProjectConfig (id: string, env: Env) {
   const path = Util.configPath(id, env)
   const ref = fireStore.doc(path)

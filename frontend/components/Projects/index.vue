@@ -9,9 +9,7 @@
       :subheader-tabs="subheaderTabs"
     />
 
-    <div v-if="isStaging" class="warning">
-      You are viewing this page in the STAGING environment.
-    </div>
+    <StagingWarning v-if="isStaging" />
 
     <div class="page content_grid">
       <Sidebar :project-config="projectConfig" :project-content="projectContent" :project-path="projectPath" />
@@ -56,13 +54,14 @@ import Sidebar from './Sidebar/index.vue'
 import TitleSection from './TitleSection/index.vue'
 import SectionH2 from './SectionH2/index.vue'
 import PageFooter from './PageFooter/index.vue'
+import StagingWarning from './StagingWarning/index.vue'
 
 import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 
 const BLOCKED_SECTIONS = ['table of contents']
 
 @Component({
-  components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter }
+  components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter, StagingWarning }
 })
 export default class Projects extends Vue {
   @Prop() projectConfig!: StoredProjectConfig

@@ -29,7 +29,7 @@ export default class PageFooterComponent extends Vue {
 
   get lastFetchedFromNow () {
     // TODO: Use -> this.projectConfig.last_fetched.toDate()
-    const lastFetched = new Date(this.projectConfig.last_updated!)
+    const lastFetched = new Date(this.projectConfig.last_updated)
     return formatDistanceToNow(lastFetched)
   }
 }

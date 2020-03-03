@@ -1,3 +1,7 @@
+import firebase from 'firebase'
+
+export type Timestamp = firebase.firestore.Timestamp
+
 export interface StringMap<T> {
   [s: string]: T;
 }
@@ -37,9 +41,8 @@ export interface StoredProjectConfig {
   fork: boolean;
 
   // Timestamps
-  last_updated?: string;
-  // TODO: This is a timestamp
-  last_fetched?: any;
+  last_updated: string;
+  last_fetched: Timestamp;
 }
 
 export interface ProjectConfig {
@@ -97,8 +100,4 @@ export interface RepoRelease {
   url: string;
   tag_name: string;
   created_at: Timestamp;
-}
-
-export interface Timestamp {
-  seconds: number;
 }

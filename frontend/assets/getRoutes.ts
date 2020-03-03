@@ -1,8 +1,7 @@
 
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-// @ts-ignore
-import { queryFirestore } from 'firewings' // TODO: Add typings
+import { queryFirestore } from 'firewings'
 import firebaseConfig from '../../shared/firebaseConfig'
 
 /**

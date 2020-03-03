@@ -29,8 +29,8 @@ import ProjectItem from './ProjectItem/index.vue'
   components: { ProjectItem }
 })
 export default class CategoryCardComponent extends Vue {
-  @Prop() category!: any // TODO
-  @Prop() categoryIndex!: number // TODO
+  @Prop() category!: Category
+  @Prop() categoryIndex!: number
 
   // TODO: try Vue.prototype.$nuxt.$route
   $route: Route

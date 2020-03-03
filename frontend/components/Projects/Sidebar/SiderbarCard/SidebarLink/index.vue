@@ -23,10 +23,11 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { SelectableLink } from '../../../../../assets/classes'
 
 @Component
 export default class SidebarLinkComponent extends Vue {
-  @Prop() page! : any // TODO
+  @Prop() page! : SelectableLink
 
   get link () {
     // remove .md in the link

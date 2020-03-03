@@ -113,18 +113,17 @@ export default class Projects extends Vue {
 
   get subheaderTabs () {
     const tabs = [
-      new SelectableLink('Guides', this.projectPath, false, false),
+      new SelectableLink('Guides', this.projectPath, false),
       new SelectableLink(
         'GitHub',
       `https://github.com/${this.org}/${this.repo}`,
-      false,
       true
       )
     ]
     if (this.projectConfig.tabs) {
       this.projectConfig.tabs.forEach((tab: TabConfig) => {
         tabs.push(
-          new SelectableLink(tab.title, tab.href, false, true)
+          new SelectableLink(tab.title, tab.href, true)
         )
       })
     }

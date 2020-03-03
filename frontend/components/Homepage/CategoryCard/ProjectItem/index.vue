@@ -21,17 +21,21 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Util } from '../../../../../shared/util'
+import { StoredProjectConfig } from '../../../../../shared/types'
 import LogoCircle from './LogoCircle/index.vue'
 
 @Component({
   components: { LogoCircle }
 })
 export default class ProjectItemComponent extends Vue {
-    @Prop() project! : any // TODO: Typings
+    @Prop() project! : StoredProjectConfig
     @Prop() projectIndex! : number
     @Prop() categoryIndex! : number
 
     get description () {
+      if (!this.project.description) {
+        return ''
+      }
       const words = this.project.description.split(' ')
       let sentence = words.slice(0, 10).join(' ')
       if (words.length > 10) {
@@ -41,7 +45,7 @@ export default class ProjectItemComponent extends Vue {
     }
 
     get parsedIdObj () {
-      return Util.parseProjectId(this.project.id)
+      return Util.parseProjectId(this.project.id!)
     }
 
     get org () {

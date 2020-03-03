@@ -38,6 +38,7 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { StoredProjectConfig } from '../../../../shared/types'
 import TableOfContents from './TableOfContents/index.vue'
 import RepoButtons from './RepoButtons/index.vue'
 
@@ -46,11 +47,11 @@ import RepoButtons from './RepoButtons/index.vue'
 })
 export default class TitleSectionComponent extends Vue {
   @Prop() sections!: []
-  @Prop() projectConfig!: any // TODO
+  @Prop() projectConfig!: StoredProjectConfig
   @Prop() projectContent!: any // TODO
   @Prop() info!: any // TODO
-  @Prop() pageTitle!: string // TODO
-  @Prop() subpageId: string // TODO
+  @Prop() pageTitle!: string
+  @Prop() subpageId: string
 
   get isSubpage () {
     return this.subpageId != null

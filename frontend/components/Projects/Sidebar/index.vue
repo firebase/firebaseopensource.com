@@ -12,6 +12,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import {
   SidebarSection, SelectableLink
 } from '../../../assets/classes'
+import { StoredProjectConfig } from '../../../../shared/types'
 import SidebarCard from './SiderbarCard/index.vue'
 
 const OSS_SIDEBAR = new SidebarSection('Open Source', [
@@ -19,24 +20,21 @@ const OSS_SIDEBAR = new SidebarSection('Open Source', [
   new SelectableLink(
     'Add Project',
     'https://github.com/firebase/firebaseopensource.com/issues/new?template=new_project.md',
-    false,
     true
   )
 ])
 
 const FIREBASE_SIDEBAR = new SidebarSection('Firebase', [
-  new SelectableLink('Docs', 'https://firebase.google.com/docs/', false, true),
+  new SelectableLink('Docs', 'https://firebase.google.com/docs/', true),
   new SelectableLink(
     'Console',
     'https://console.firebase.google.com/',
-    false,
     true
   ),
-  new SelectableLink('Blog', 'https://firebase.googleblog.com/', false, true),
+  new SelectableLink('Blog', 'https://firebase.googleblog.com/', true),
   new SelectableLink(
     'YouTube',
     'https://www.youtube.com/user/Firebase',
-    false,
     true
   )
 ])
@@ -45,16 +43,15 @@ const FIREBASE_SIDEBAR = new SidebarSection('Firebase', [
   components: { SidebarCard }
 })
 export default class SidebarComponent extends Vue {
-  @Prop() projectConfig!: any // TODO
+  @Prop() projectConfig!: StoredProjectConfig
   @Prop() projectContent!: any // TODO
   @Prop() projectPath!: string
 
   get sidebarData () {
-    const selectableLink = new SelectableLink('Home', this.projectPath, !this.projectContent.isSubpage)
+    const selectableLink = new SelectableLink('Home', this.projectPath)
     const projectSidebar = new SidebarSection(
       'Project',
-      [selectableLink],
-      true
+      [selectableLink]
     )
 
     const pages = this.projectConfig.pages
@@ -70,9 +67,8 @@ export default class SidebarComponent extends Vue {
           pageName = pageName.replace('.md', '')
         }
 
-        const selected = false // TODO: Not needed anymore, can be deleted
         const href = `${this.projectPath}/${pageConfig.path}`.toLowerCase()
-        subpages.push(new SelectableLink(pageName, href, selected))
+        subpages.push(new SelectableLink(pageName, href))
       }
       projectSidebar.pages = projectSidebar.pages.concat(subpages)
     }

@@ -12,10 +12,11 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { PageSection } from '../../../../shared/types'
 
 @Component
 export default class SidebarSectionH2Component extends Vue {
-  @Prop() section!: any // TODO
+  @Prop() section!: PageSection
 }
 </script>
 

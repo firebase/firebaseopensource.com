@@ -17,13 +17,14 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { SidebarSection } from '../../../../assets/classes'
 import SidebarLink from './SidebarLink/index.vue'
 
 @Component({
   components: { SidebarLink }
 })
 export default class SidebarCardComponent extends Vue {
-    @Prop() section!: any // TODO
+    @Prop() section!: SidebarSection
 
     expanded: Boolean = false
 

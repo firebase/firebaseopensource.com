@@ -3,12 +3,14 @@ import { queryFirestore } from 'firewings' // TODO: Add typings
 import { Env } from '../../shared/types'
 import { Util } from '../../shared/util'
 
+// The @/plugins/nuxtFireInit.js plugin initializes Firebase and
+// caslls _setupFirestore() to set the fireStore instance in this file.
 let fireStore: firebase.firestore.Firestore
-
 export const _setupFirestore = (firestore: firebase.firestore.Firestore) => {
   fireStore = firestore
 }
 
+// Categories used for the subheader
 const ALL_CATEGORIES = [
   {
     title: 'Android',
@@ -57,6 +59,9 @@ export async function getProjectConfig (id: string, env: Env) {
   }
 }
 
+/**
+ * Firebase get() call to retrieve a "content" OR "content-staging" document.
+ */
 export async function getProjectContent (id: string, env: Env) {
   const path = Util.contentPath(id, env)
   const ref = fireStore.doc(path)
@@ -67,6 +72,9 @@ export async function getProjectContent (id: string, env: Env) {
   }
 }
 
+/**
+ * Firebase get() call to retrieve the "configs" documents.
+ */
 export async function getProjectConfigs (category: Category, limit: number) {
   const ref = fireStore.collection('configs').orderBy(`platforms.${category.platform}`)
     .where('blacklist', '==', false)
@@ -81,6 +89,9 @@ export async function getProjectConfigs (category: Category, limit: number) {
   }
 }
 
+/**
+ * Firebase get() call to retrieve the "pages" (i.e. "subpages") documents for a project.
+ */
 export async function getSubpage (id: string, env: Env, pageId: string) {
   const repoContentRef = fireStore.doc(Util.contentPath(id, env))
   if (!pageId.endsWith('.md')) {
@@ -94,6 +105,9 @@ export async function getSubpage (id: string, env: Env, pageId: string) {
   }
 }
 
+/**
+ * Firebase get() call to retrieve x-amount of recent "releases" documents.
+ */
 export async function getRecentReleases (amount: number) {
   const ref = fireStore.collection('releases').orderBy('created_at', 'desc')
     .limit(amount)
@@ -104,6 +118,9 @@ export async function getRecentReleases (amount: number) {
   }
 }
 
+/**
+ * Get categories by platform.
+ */
 export function getCategories (platform: String | null = null): Category[] {
   if (platform) {
     return [ALL_CATEGORIES.find(x => x.platform === platform)!]

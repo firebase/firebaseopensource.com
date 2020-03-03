@@ -1,4 +1,4 @@
-import { _setupFirestore } from '~/assets/firebaseUtils'
+import { _setupFirestore } from '~/assets/dbUtils'
 
 export default ({ app }) => {
   _setupFirestore(app.$fireStore)

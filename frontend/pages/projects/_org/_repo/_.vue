@@ -15,7 +15,7 @@ import {
   Env,
   StoredProjectConfig
 } from '../../../../../shared/types'
-import { getProjectConfig, getProjectContent, getSubpage } from '../../../../assets/firebaseUtils'
+import { getProjectConfig, getProjectContent, getSubpage } from '../../../../assets/dbUtils'
 
 import Projects from '@/components/Projects/index.vue'
 

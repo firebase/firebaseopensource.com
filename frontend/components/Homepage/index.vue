@@ -41,6 +41,7 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import { RepoRelease } from '../../../shared/types'
+import { Category } from '../../types/app'
 import ReleaseItem from './ReleaseItem/index.vue'
 import CategoryCard from './CategoryCard/index.vue'
 import WelcomeCard from './WelcomeCard/index.vue'

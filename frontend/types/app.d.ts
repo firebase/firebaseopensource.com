@@ -1,22 +1,19 @@
+import { StoredProjectConfig } from '~/shared/types'
+
 type Tab = { link: string; text: string }
 
 type ProjectInfo = {
     org: string
     repo: string
-
-    name: string
-    description: string
-
-    letter: string
-    color: string
+    stars: number
   }
 
 type Category = {
     title: string
     platform: string
     icon: string
-    projects: ProjectInfo[]
-    featured: ProjectInfo[]
+    projects: StoredProjectConfig[]
+    featured: StoredProjectConfig[]
   }
 
 type Section = {

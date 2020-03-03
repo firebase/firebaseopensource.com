@@ -13,7 +13,8 @@ import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
 import {
   Env,
-  StoredProjectConfig
+  StoredProjectConfig,
+  PageContent
 } from '../../../../../shared/types'
 import { getProjectConfig, getProjectContent, getSubpage } from '../../../../assets/dbUtils'
 
@@ -66,15 +67,16 @@ function getCleanParams (params: ProjectRouteParams) {
   }
 }
 
-// @ts-ignore - idk why this shows "no overload matches this call..."
 @Component({
   components: { Projects },
   head () {
     const head = {
+      // @ts-ignore - works but throws error that this.pageTitle does not exist...
       title: this.pageTitle,
       meta: [
         {
           property: 'og:title',
+          // @ts-ignore - works but throws error that this.pageTitle does not exist...
           content: this.pageTitle
         }
       ]
@@ -96,7 +98,7 @@ function getCleanParams (params: ProjectRouteParams) {
 
     try {
       const projectConfig: StoredProjectConfig = await getProjectConfig(id, env)
-      let pageContent
+      let pageContent: PageContent
       if (subpageId) {
         pageContent = await getSubpage(id, env, subpageId)
       } else {

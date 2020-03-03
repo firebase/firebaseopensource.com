@@ -17,9 +17,9 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { NuxtError } from '@nuxt/types'
 import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 
-// @ts-ignore - idk why this shows "no overload matches this call..."
 @Component({
   components: { HeaderBar },
   head () {
@@ -48,7 +48,7 @@ import HeaderBar from '@/components/_Shared/HeaderBar/index.vue'
 })
 export default class ErrorLayout extends Vue {
   @Prop()
-  error: any = null // TODO: type
+  error: NuxtError
 }
 </script>
 

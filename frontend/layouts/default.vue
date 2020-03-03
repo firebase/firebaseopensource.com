@@ -8,7 +8,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 
 @Component({
-  // @ts-ignore - idk why this shows "no overload matches this call..."
   head () {
     return {
       title: 'Firebase Open Source',

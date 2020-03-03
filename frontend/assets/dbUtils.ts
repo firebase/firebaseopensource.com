@@ -1,6 +1,7 @@
 import { queryFirestore } from 'firewings'
-import { Env } from '../../shared/types'
+import { Env, PageContent, StoredProjectConfig, RepoRelease } from '../../shared/types'
 import { Util } from '../../shared/util'
+import { Category } from '@/types/app'
 
 // The @/plugins/nuxtFireInit.js plugin initializes Firebase and
 // caslls _setupFirestore() to set the fireStore instance in this file.
@@ -51,33 +52,33 @@ const ALL_CATEGORIES = [
 /**
  * Firebase get() call to retrieve a "config" document by id & env
  */
-export async function getProjectConfig (id: string, env: Env) {
+export async function getProjectConfig (id: string, env: Env): Promise<StoredProjectConfig> {
   const path = Util.configPath(id, env)
   const ref = fireStore.doc(path)
   try {
     return await queryFirestore(ref)
   } catch (e) {
-    Promise.reject(e)
+    return Promise.reject(e)
   }
 }
 
 /**
  * Firebase get() call to retrieve a "content" OR "content-staging" document.
  */
-export async function getProjectContent (id: string, env: Env) {
+export async function getProjectContent (id: string, env: Env): Promise<PageContent> {
   const path = Util.contentPath(id, env)
   const ref = fireStore.doc(path)
   try {
     return await queryFirestore(ref)
   } catch (e) {
-    Promise.reject(e)
+    return Promise.reject(e)
   }
 }
 
 /**
  * Firebase get() call to retrieve the "configs" documents.
  */
-export async function getProjectConfigs (category: Category, limit: number) {
+export async function getProjectConfigs (category: Category, limit: number): Promise<StoredProjectConfig[]> {
   const ref = fireStore.collection('configs').orderBy(`platforms.${category.platform}`)
     .where('blacklist', '==', false)
     .where('fork', '==', false)
@@ -87,14 +88,14 @@ export async function getProjectConfigs (category: Category, limit: number) {
   try {
     return await queryFirestore(ref)
   } catch (e) {
-    Promise.reject(e)
+    return Promise.reject(e)
   }
 }
 
 /**
  * Firebase get() call to retrieve the "pages" (i.e. "subpages") documents for a project.
  */
-export async function getSubpage (id: string, env: Env, pageId: string) {
+export async function getSubpage (id: string, env: Env, pageId: string): Promise<PageContent> {
   const repoContentRef = fireStore.doc(Util.contentPath(id, env))
   if (!pageId.endsWith('.md')) {
     pageId += '.md'
@@ -103,20 +104,20 @@ export async function getSubpage (id: string, env: Env, pageId: string) {
   try {
     return await queryFirestore(pageContentRef)
   } catch (e) {
-    Promise.reject(e)
+    return Promise.reject(e)
   }
 }
 
 /**
  * Firebase get() call to retrieve x-amount of recent "releases" documents.
  */
-export async function getRecentReleases (amount: number) {
+export async function getRecentReleases (amount: number): Promise<RepoRelease> {
   const ref = fireStore.collection('releases').orderBy('created_at', 'desc')
     .limit(amount)
   try {
     return await queryFirestore(ref)
   } catch (e) {
-    Promise.reject(e)
+    return Promise.reject(e)
   }
 }
 

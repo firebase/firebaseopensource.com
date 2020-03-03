@@ -50,6 +50,7 @@ import {
   PageContent
 } from '../../../shared/types'
 import { SelectableLink } from '../../assets/classes'
+import { Section } from '../../types/app'
 import Sidebar from './Sidebar/index.vue'
 import TitleSection from './TitleSection/index.vue'
 import SectionH2 from './SectionH2/index.vue'

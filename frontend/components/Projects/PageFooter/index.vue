@@ -20,15 +20,16 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { formatDistanceToNow } from 'date-fns'
 import { StoredProjectConfig } from '../../../../shared/types'
+import { ProjectInfo } from '../../../types/app'
 
 @Component
 export default class PageFooterComponent extends Vue {
-  @Prop() info!:any // TODO
+  @Prop() info!: ProjectInfo
   @Prop() projectConfig!: StoredProjectConfig
 
   get lastFetchedFromNow () {
     // TODO: Use -> this.projectConfig.last_fetched.toDate()
-    const lastFetched = new Date(this.projectConfig.last_updated)
+    const lastFetched = new Date(this.projectConfig.last_updated!)
     return formatDistanceToNow(lastFetched)
   }
 }

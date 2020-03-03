@@ -71,6 +71,8 @@ export interface ProjectPage {
 }
 
 export interface PageContent {
+  id?: string; // if fetched with firewings
+  ref?: string; // if fetched with firewings
   header: PageSection;
   sections: PageSection[];
 }

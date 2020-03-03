@@ -29,6 +29,7 @@ export default class PageFooterComponent extends Vue {
 
   get lastFetchedFromNow () {
     // TODO: Use -> this.projectConfig.last_fetched.toDate()
+    // I get an error when using toDate() on last_fetched I haven't figured out why yet.
     const lastFetched = new Date(this.projectConfig.last_updated)
     return formatDistanceToNow(lastFetched)
   }

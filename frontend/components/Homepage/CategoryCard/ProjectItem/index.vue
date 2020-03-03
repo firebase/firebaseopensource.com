@@ -30,7 +30,7 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Util } from '../../../../../shared/util'
-import { pickLogoLetter, pickLogoColor } from '../../../../assets/utils'
+import { pickLogoLetter } from '../../../../assets/utils'
 
 @Component
 export default class ProjectItemComponent extends Vue {
@@ -38,12 +38,24 @@ export default class ProjectItemComponent extends Vue {
     @Prop() projectIndex! : number
     @Prop() categoryIndex! : number
 
+    logoCircleColors = [
+      '#039BE5',
+      '#673AB7',
+      '#FBC02D',
+      '#FF7043',
+      '#C2185B',
+      '#009688',
+      '#9C27B0',
+      '#33AC71'
+    ]
+
     get singleLetter () {
       return pickLogoLetter(this.project.name)
     }
 
     get color () {
-      return pickLogoColor(this.projectIndex, this.categoryIndex)
+      const colors = this.logoCircleColors
+      return colors[(this.projectIndex + this.categoryIndex) % colors.length]
     }
 
     get description () {

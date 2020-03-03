@@ -1,17 +1,6 @@
 import { formatDistanceToNow } from 'date-fns'
 import { Timestamp } from '../../shared/types'
 
-const COLORS = [
-  '#039BE5',
-  '#673AB7',
-  '#FBC02D',
-  '#FF7043',
-  '#C2185B',
-  '#009688',
-  '#9C27B0',
-  '#33AC71'
-]
-
 function isLetter (c: string) {
   return c.toLowerCase() !== c.toUpperCase()
 }
@@ -68,8 +57,4 @@ export function pickLogoLetter (name: string) {
 
 export function daysAgo (t: Timestamp) {
   return formatDistanceToNow(new Date(t.seconds * 1000)) + ' ago'
-}
-
-export function pickLogoColor (docIndex: number, categoryIndex: number) {
-  return COLORS[(docIndex + categoryIndex) % COLORS.length]
 }

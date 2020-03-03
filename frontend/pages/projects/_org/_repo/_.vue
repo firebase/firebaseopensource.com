@@ -20,16 +20,15 @@ import { getProjectConfig, getProjectContent, getSubpage } from '../../../../ass
 
 import Projects from '@/components/Projects/index.vue'
 
-// TODO: remove :any's
-function calculatePageTitle (projectContent: any, pageContent: any, repo : string) : string {
+function calculatePageTitle (pageContent: PageContent, projectConfig: StoredProjectConfig, repo : string) : string {
   // Choose the page name depending on available info:
   // Option 0 - title of the header section
   // Option 1 - the name from the config.
   // Option 2 - the repo name
-  if (projectContent.header.name) {
-    return projectContent.header.name
-  } else if (pageContent.name) {
-    return pageContent.name
+  if (pageContent.header.name) {
+    return pageContent.header.name
+  } else if (projectConfig.name) {
+    return projectConfig.name
   } else {
     return repo
   }

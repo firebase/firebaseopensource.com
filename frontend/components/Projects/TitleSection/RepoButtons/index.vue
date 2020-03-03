@@ -61,10 +61,11 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { formatDistanceToNow } from 'date-fns'
 import { ProjectConfig } from '../../../../../shared/types'
+import { ProjectInfo } from '../../../../types/app'
 
 @Component
 export default class RepoButtonsComponent extends Vue {
-  @Prop() info! : any // TODO
+  @Prop() info! : ProjectInfo
   @Prop() projectConfig! : ProjectConfig
 
   showCloneCmd = false // Todo: Needed?

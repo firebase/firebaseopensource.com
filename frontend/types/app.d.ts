@@ -22,3 +22,10 @@ type Section = {
   id?: String
   ref?: String
 }
+
+type BlueBadge = {
+  href: String
+  icon: String,
+  value: String,
+  classes: String
+}

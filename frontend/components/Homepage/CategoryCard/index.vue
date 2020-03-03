@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="section-title">
+    <div class="section-card-title">
       <nuxt-link :to="`/platform/${category.platform}`">
         <span>
           <i class="material-icons">{{ category.icon }}</i>{{ category.title }}

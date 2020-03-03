@@ -31,10 +31,10 @@ export default class ReleaseItemComponent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/base.scss';
+@import '@/assets/styles/global.scss';
 @import '@/assets/styles/variables.scss';
 
-// Wrap text to a single line
+ // Wrap text to a single line
 .wrap-one-line {
   white-space: nowrap;
   overflow: hidden;

@@ -41,4 +41,19 @@ export default class SidebarLinkComponent extends Vue {
   opacity: 0.6;
   margin-left: 3px;
 }
+
+a {
+  color: #212121;
+}
+
+a:hover {
+  color: #039be5;
+  cursor: pointer;
+}
+
+a.selected {
+  color: #039be5;
+  font-weight: bold;
+}
+
 </style>

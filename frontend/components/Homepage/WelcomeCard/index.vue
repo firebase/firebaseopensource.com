@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.path === '/'" class="section">
+  <div v-if="$route.path === '/'" class="section-card">
     <div id="welcome_card" class="content welcomeCard">
       <div class="image">
         <img src="/firebase-github.png">

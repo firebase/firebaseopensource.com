@@ -1,5 +1,5 @@
 <template>
-  <div class="section footer">
+  <div class="section-card footer">
     <div class="content">
       This page was generated approximately
       {{ lastFetchedFromNow }} ago.
@@ -34,5 +34,13 @@ export default class PageFooterComponent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.footer {
+  margin-top: 10px;
+  > .content {
+    padding-top: 24px;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.8em;
+  }
+}
 </style>

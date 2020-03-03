@@ -10,12 +10,12 @@
 
     <div class="page content_grid">
       <div class="col_gutter" />
-      <div class="sections col_main">
+      <div class="col_main">
         <welcomeCard />
 
-        <div v-if="$route.path === '/'" class="section">
+        <div v-if="$route.path === '/'" class="section-card">
           <div id="recent_releases" class="content">
-            <div class="section-title">
+            <div class="section-card-title">
               <span> <i class="material-icons">event</i>Recent Releases </span>
             </div>
             <div class="releases flexible-columns">
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div v-for="(category, index) in categories" :key="category.title" class="section">
+        <div v-for="(category, index) in categories" :key="category.title" class="section-card">
           <categoryCard v-if="isSectionVisible(category.platform)" :category="category" :category-index="index" />
         </div>
       </div>

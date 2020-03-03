@@ -25,10 +25,12 @@ export default async () => {
      ** Customize the progress-bar color
      */
     loading: { color: '#039be5' },
+
     /*
      ** Global CSS
      */
-    css: ['@/assets/styles/base.scss'],
+    css: ['~/assets/styles/global.scss'],
+
     /*
      ** Plugins to load before mounting the App
      */

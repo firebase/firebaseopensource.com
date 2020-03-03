@@ -59,8 +59,7 @@ export default class ProjectItemComponent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/base.scss';
-
+@import '@/assets/styles/global.scss';
 // Wrap text to a single line
 .wrap-one-line {
   white-space: nowrap;

@@ -1,5 +1,5 @@
 <template>
-  <div class="section title-section">
+  <div class="section-card">
     <div class="content toc-grid">
       <div class="body-column">
         <div class="left">
@@ -87,43 +87,122 @@ export default class TitleSectionComponent extends Vue {
 <style lang="scss" scoped>
 @import '@/assets/styles/variables.scss';
 
-.section {
-    margin: 30px auto 0;
-    width: 100%;
+.section-card {
+  margin: 30px auto 0;
+  width: 100%;
 
-     h1 {
-      padding: 16px 0px 0px 0px;
+  > .content {
+    padding: 24px 32px 24px 32px;
+  }
+
+  .img-badge {
+    display: none;
+  }
+
+  h1 {
+    padding: 16px 0px 0px 0px;
+    margin: 0px;
+    line-height: 1.1em;
+  }
+
+  h2 {
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 32px;
+    color: #212121;
+    border-bottom: 1px solid $gray;
+  }
+
+  h3 {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+    color: #212121;
+  }
+
+  h4 {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 32px;
+    color: #212121;
+  }
+
+  h5 {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: #212121;
+  }
+}
+
+.body-column {
+  display: grid;
+  grid-template-columns: minmax(50%, max-content) 1fr;
+  grid-template-areas:
+    'left right'
+    'content content';
+  grid-gap: 12px;
+
+  min-height: 80px;
+
+  > .header_content {
+    grid-area: content;
+
+    p:last-of-type {
       margin: 0px;
-      line-height: 1.1em;
     }
 
-    h2 {
-      font-weight: 300;
-      font-size: 24px;
-      line-height: 32px;
-      color: #212121;
-      border-bottom: 1px solid $gray;
+    &:first-of-type {
+      margin-top: 0px;
+    }
+  }
+
+  @media (max-width: $tablet) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'left'
+      'right'
+      'content';
+    grid-gap: 0px;
+  }
+}
+
+.related {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 16px;
+
+  .title {
+    margin-right: 10px;
+  }
+  .repo {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 100px;
+    padding: 0px 14px;
+    float: left;
+    font-size: 0.8em;
+    margin-right: 10px;
+    margin-bottom: 4px;
+
+    align-items: center;
+    color: black;
+    opacity: 0.5;
+
+    .material-icons {
+      margin-right: 8px;
+      font-size: 1.5em;
+      position: relative;
+      top: 5px;
     }
 
-    h3 {
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 32px;
-      color: #212121;
+    transition: 0.2s;
+    &:hover {
+      cursor: pointer;
+      background-color: $yellow;
+      color: darken($yellow, 50%);
+      border: 1px solid darken($yellow, 5%);
+      opacity: 1;
     }
-
-    h4 {
-      font-weight: 400;
-      font-size: 18px;
-      line-height: 32px;
-      color: #212121;
-    }
-
-    h5 {
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 24px;
-      color: #212121;
-    }
+  }
 }
 </style>

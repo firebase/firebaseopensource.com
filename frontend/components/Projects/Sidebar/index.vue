@@ -82,5 +82,17 @@ export default class SidebarComponent extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+
+// TODO: Make the margin-top unbreakable
+// TODO: Hide in mobile
+.sidebar {
+  float: right;
+  width: $sidebar-width;
+  background: #ffffff;
+  margin-top: 30px;
+  list-style-type: none;
+  padding: 0px;
+}
 
 </style>

@@ -113,6 +113,11 @@ ul {
   padding: 0;
 }
 
+.html-content > ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
 li {
   margin: 0 10px;
 }
@@ -194,6 +199,10 @@ li {
   }
 }
 
+.dropdown a.selected {
+  font-weight: bold;
+}
+
 table {
   margin: 16px 0px;
 }
@@ -232,8 +241,8 @@ table {
   box-shadow: 0 0 2px $shadow;
 }
 
-.section {
-  margin: 30px auto 0px auto;
+.section-card {
+  margin: 30px auto 30px auto;
   width: 100%;
 
   @media (max-width: $phone) {
@@ -346,7 +355,7 @@ blockquote {
   }
 }
 
-.section-title {
+.section-card-title {
   font-size: 24px;
   border-bottom: 1px solid #eceff1;
   height: 50px;
@@ -395,8 +404,4 @@ button {
     background-color: #9edfff;
     cursor: pointer;
   }
-}
-
-.section {
-  margin-bottom: 30px;
 }

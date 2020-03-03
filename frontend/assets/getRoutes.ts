@@ -1,6 +1,7 @@
 
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+// @ts-ignore - typing works, but error nevertheless :/ probabls nuxt error
 import { queryFirestore } from 'firewings'
 import firebaseConfig from '../../shared/firebaseConfig'
 

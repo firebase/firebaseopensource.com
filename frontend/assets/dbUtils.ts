@@ -1,4 +1,3 @@
-// @ts-ignore
 import { queryFirestore } from 'firewings'
 import { Env } from '../../shared/types'
 import { Util } from '../../shared/util'

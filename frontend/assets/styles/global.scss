@@ -23,6 +23,15 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+hr {
+  height: 0.25em;
+  padding: 0;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  background-color: $gray;
+  border: 0;
+}
+
 h1,
 h2 {
   padding: 10px 0px;

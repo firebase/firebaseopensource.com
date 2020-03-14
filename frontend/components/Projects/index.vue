@@ -145,20 +145,6 @@ export default class Projects extends Vue {
   padding-bottom: 8px;
 }
 
-hr {
-  height: 0.25em;
-  padding: 0;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  background-color: $gray;
-  border: 0;
-}
-
-hr:last-child {
-  margin-top: 24px;
-  margin-bottom: 0px;
-}
-
 .icon {
   //font-size: 100px;
   background-color: #eee;

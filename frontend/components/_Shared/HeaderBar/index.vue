@@ -6,7 +6,7 @@
         <div class="content col_main">
           <div class="title">
             <nuxt-link to="/" class="logo">
-              <img src="/oss-logo-small.png">
+              <img :src="require('@/assets/img/oss-logo-small.png')">
             </nuxt-link>
             <!-- <router-link to="/" class="text">Open Source</router-link> -->
           </div>

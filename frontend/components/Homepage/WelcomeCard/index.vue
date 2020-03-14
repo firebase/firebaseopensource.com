@@ -2,7 +2,7 @@
   <div v-if="$route.path === '/'" class="section-card">
     <div id="welcome_card" class="content welcomeCard">
       <div class="image">
-        <img src="/firebase-github.png">
+        <img :src="require('@/assets/img/firebase-github.png')">
       </div>
       <div class="body">
         <h1>Firebase ❤️ Open Source</h1>

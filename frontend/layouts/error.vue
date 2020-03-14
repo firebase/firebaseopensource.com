@@ -4,7 +4,7 @@
     <div class="content">
       <h1>404</h1>
       <h2>{{ error.message }}</h2>
-      <img src="/guy-fireats.png">
+      <img :src="require('@/assets/img/guy-fireats.png')">
       <nuxt-link to="/">
         <div class="footer">
           Go to Homepage

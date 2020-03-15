@@ -5438,10 +5438,10 @@ firebase@^7.11.0:
     "@firebase/storage" "0.3.29"
     "@firebase/util" "0.2.42"
 
-firewings@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/firewings/-/firewings-0.2.4.tgz#ffb3ffe744cdf888908ad70c098f65a4905abc8f"
-  integrity sha512-W3MdEnRyuakJQHGFqI3jVrEZJxtkNycLDHvrabaewR5FgAZ4E1irnwPkJ6A+dyA5wTUt22XeQ41a3hUk2WP34w==
+firewings@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/firewings/-/firewings-0.2.5.tgz#9f403d94e88e8c9594a7726adb3926c57ef91881"
+  integrity sha512-Jpj8DNS5qWR1WOD33VZt6Cmiugl2sb36T/aK7NltKUnHadWuOLILthCmwaqxlLBfJsMx5a0BEuqX52+GLWS8Lg==
 
 flat-cache@^2.0.1:
   version "2.0.1"

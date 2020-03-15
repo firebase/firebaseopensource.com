@@ -22,7 +22,7 @@
     "core-js": "2",
     "date-fns": "^2.11.0",
     "firebase": "^7.11.0",
-    "firewings": "^0.2.4",
+    "firewings": "^0.2.5",
     "node-sass": "^4.13.1",
     "nuxt": "^2.0.0",
     "nuxt-property-decorator": "^2.5.1",

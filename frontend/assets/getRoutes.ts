@@ -1,7 +1,6 @@
 
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-// @ts-ignore - Seems to be a Nuxt Typescript issue, should work with overhaul after Vue 3.
 import { queryFirestore } from 'firewings'
 import firebaseConfig from '../../shared/firebaseConfig'
 

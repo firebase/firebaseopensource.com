@@ -6,17 +6,13 @@
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
-    "build": "npm run fmt && cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate",
     "lint": "eslint --ext .ts,.js,.vue .",
-    "test": "npm run fmt && jest test --no-cache || true",
-    "gen": "nuxt-ts generate",
+    "test": "jest",
     "deploy": "npm run build && firebase --project=default deploy",
-    "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting",
-    "prerender": "ts-node prerender index.ts",
-    "fmt": "prettier --write *.css src/**/**/**.scss src/**/**.scss src/**/**.ts src/**/**/**.ts src/**.ts test/**/**.ts test/**/**.js *.js",
-    "get-routes": "ts-node -O '{\"module\": \"commonjs\"}' src/scripts/routesList.ts"
+    "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.4.0",
@@ -39,11 +35,14 @@
     "@nuxt/typescript-build": "^0.6.0",
     "@nuxtjs/eslint-config-typescript": "^1.0.2",
     "@nuxtjs/eslint-module": "^1.0.0",
+    "@types/jest": "^25.1.4",
     "@vue/test-utils": "^1.0.0-beta.32",
     "babel-jest": "^25.1.0",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
     "jest": "^25.1.0",
-    "vue-jest": "^4.0.0-0"
+    "ts-jest": "^25.2.1",
+    "vue-jest": "^3.0.5",
+    "babel-core": "^6.26.3"
   }
 }

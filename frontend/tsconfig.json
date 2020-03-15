@@ -27,7 +27,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/firebase"
+      "@nuxtjs/firebase",
+      "@types/jest"
     ]
   },
   "exclude": [

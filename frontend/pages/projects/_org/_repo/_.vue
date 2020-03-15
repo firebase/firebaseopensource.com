@@ -42,6 +42,12 @@ function cleanParam (string: string | null) : string | null {
   return string.replace(/\/$/, '')
 }
 
+type ProjectRouteParams = {
+  org: string | null,
+  repo: string | null,
+  pathMatch: string | null,
+}
+
 function getCleanParams (params: ProjectRouteParams) {
   const org = cleanParam(params.org)
   let repo = cleanParam(params.repo)
@@ -68,14 +74,12 @@ function getCleanParams (params: ProjectRouteParams) {
 
 @Component({
   components: { Projects },
-  head () {
+  head (this: RepoPage) {
     const head = {
-      // @ts-ignore - works but throws error that this.pageTitle does not exist...
       title: this.pageTitle,
       meta: [
         {
           property: 'og:title',
-          // @ts-ignore - works but throws error that this.pageTitle does not exist...
           content: this.pageTitle
         }
       ]

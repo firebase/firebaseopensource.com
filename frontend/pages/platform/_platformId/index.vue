@@ -9,7 +9,6 @@ import { Vue, Component } from 'vue-property-decorator'
 import { getCategories, getProjectConfigs } from '../../../assets/dbUtils'
 import Homepage from '@/components/Homepage/index.vue'
 
-// @ts-ignore - idk why this shows "no overload matches this call..."
 @Component({
   components: { Homepage },
   async asyncData (context: any) {

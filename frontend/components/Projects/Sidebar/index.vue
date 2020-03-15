@@ -12,7 +12,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import {
   SidebarSection, SelectableLink
 } from '../../../assets/classes'
-import { StoredProjectConfig, PageContent } from '../../../../shared/types'
+import { ProjectConfig, PageContent } from '../../../../shared/types'
 import SidebarCard from './SiderbarCard/index.vue'
 
 const OSS_SIDEBAR = new SidebarSection('Open Source', [
@@ -43,7 +43,7 @@ const FIREBASE_SIDEBAR = new SidebarSection('Firebase', [
   components: { SidebarCard }
 })
 export default class SidebarComponent extends Vue {
-  @Prop() projectConfig!: StoredProjectConfig
+  @Prop() projectConfig!: ProjectConfig
   @Prop() projectContent!: PageContent
   @Prop() projectPath!: string
 

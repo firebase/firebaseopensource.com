@@ -1,5 +1,4 @@
 import { formatDistanceToNow } from 'date-fns'
-import { Timestamp } from '../../shared/types'
 
 function isLetter (c: string) {
   return c.toLowerCase() !== c.toUpperCase()
@@ -55,6 +54,6 @@ export function pickLogoLetter (name: string) {
   return firstLetter
 }
 
-export function daysAgo (t: Timestamp) {
-  return formatDistanceToNow(new Date(t.seconds * 1000)) + ' ago'
+export function daysAgo (date: Date) {
+  return formatDistanceToNow(date) + ' ago'
 }

@@ -1,4 +1,4 @@
-import { StoredProjectConfig } from '~/shared/types'
+import { ProjectConfig } from '~/shared/types'
 
 type Tab = { link: string; text: string }
 
@@ -12,8 +12,8 @@ type Category = {
     title: string
     platform: string
     icon: string
-    projects: StoredProjectConfig[]
-    featured: StoredProjectConfig[]
+    projects: ProjectConfig[]
+    featured: ProjectConfig[]
   }
 
 type Section = {

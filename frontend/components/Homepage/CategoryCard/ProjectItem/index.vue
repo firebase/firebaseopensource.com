@@ -21,14 +21,14 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Util } from '../../../../../shared/util'
-import { StoredProjectConfig } from '../../../../../shared/types'
+import { ProjectConfig } from '../../../../../shared/types'
 import LogoCircle from './LogoCircle/index.vue'
 
 @Component({
   components: { LogoCircle }
 })
 export default class ProjectItemComponent extends Vue {
-    @Prop() project! : StoredProjectConfig
+    @Prop() project! : ProjectConfig
     @Prop() projectIndex! : number
     @Prop() categoryIndex! : number
 

@@ -19,19 +19,16 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { formatDistanceToNow } from 'date-fns'
-import { StoredProjectConfig } from '../../../../shared/types'
+import { ProjectConfig } from '../../../../shared/types'
 import { ProjectInfo } from '../../../types/app'
 
 @Component
 export default class PageFooterComponent extends Vue {
   @Prop() info!: ProjectInfo
-  @Prop() projectConfig!: StoredProjectConfig
+  @Prop() projectConfig!: ProjectConfig
 
   get lastFetchedFromNow () {
-    // TODO: Use -> this.projectConfig.last_fetched.toDate()
-    // I get an error when using toDate() on last_fetched I haven't figured out why yet.
-    const lastFetched = new Date(this.projectConfig.last_updated)
-    return formatDistanceToNow(lastFetched)
+    return formatDistanceToNow(this.projectConfig.last_fetched)
   }
 }
 </script>

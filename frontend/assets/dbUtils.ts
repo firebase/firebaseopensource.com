@@ -1,5 +1,5 @@
 import { queryFirestore } from 'firewings'
-import { Env, PageContent, StoredProjectConfig, RepoRelease } from '../../shared/types'
+import { Env, PageContent, ProjectConfig, RepoRelease } from '../../shared/types'
 import { Util } from '../../shared/util'
 import { Category } from '@/types/app'
 
@@ -52,11 +52,33 @@ const ALL_CATEGORIES = [
 /**
  * Firebase get() call to retrieve a "config" document by id & env
  */
-export async function getProjectConfig (id: string, env: Env): Promise<StoredProjectConfig> {
+export async function getProjectConfig (id: string, env: Env): Promise<ProjectConfig> {
   const path = Util.configPath(id, env)
   const ref = fireStore.doc(path)
   try {
-    return await queryFirestore(ref)
+    const config = await queryFirestore(ref)
+    return cleanConfig(config)
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
+/**
+ * Firebase get() call to retrieve the "configs" documents.
+ */
+export async function getProjectConfigs (category: Category, limit: number): Promise<ProjectConfig[]> {
+  const ref = fireStore.collection('configs').orderBy(`platforms.${category.platform}`)
+    .where('blacklist', '==', false)
+    .where('fork', '==', false)
+    .orderBy('stars', 'desc')
+    .orderBy('description')
+    .limit(limit)
+  try {
+    const configs = await queryFirestore(ref)
+    for (let config of configs) {
+      config = cleanConfig(config)
+    }
+    return configs
   } catch (e) {
     return Promise.reject(e)
   }
@@ -69,24 +91,8 @@ export async function getProjectContent (id: string, env: Env): Promise<PageCont
   const path = Util.contentPath(id, env)
   const ref = fireStore.doc(path)
   try {
-    return await queryFirestore(ref)
-  } catch (e) {
-    return Promise.reject(e)
-  }
-}
-
-/**
- * Firebase get() call to retrieve the "configs" documents.
- */
-export async function getProjectConfigs (category: Category, limit: number): Promise<StoredProjectConfig[]> {
-  const ref = fireStore.collection('configs').orderBy(`platforms.${category.platform}`)
-    .where('blacklist', '==', false)
-    .where('fork', '==', false)
-    .orderBy('stars', 'desc')
-    .orderBy('description')
-    .limit(limit)
-  try {
-    return await queryFirestore(ref)
+    const content = await queryFirestore(ref)
+    return content
   } catch (e) {
     return Promise.reject(e)
   }
@@ -102,7 +108,8 @@ export async function getSubpage (id: string, env: Env, pageId: string): Promise
   }
   const pageContentRef = repoContentRef.collection('pages').doc(pageId)
   try {
-    return await queryFirestore(pageContentRef)
+    const pageContent = await queryFirestore(pageContentRef)
+    return pageContent
   } catch (e) {
     return Promise.reject(e)
   }
@@ -115,7 +122,11 @@ export async function getRecentReleases (amount: number): Promise<RepoRelease> {
   const ref = fireStore.collection('releases').orderBy('created_at', 'desc')
     .limit(amount)
   try {
-    return await queryFirestore(ref)
+    const releases = await queryFirestore(ref)
+    for (let release of releases) {
+      release = cleanRelease(release)
+    }
+    return releases
   } catch (e) {
     return Promise.reject(e)
   }
@@ -129,4 +140,21 @@ export function getCategories (platform: String | null = null): Category[] {
     return [ALL_CATEGORIES.find(x => x.platform === platform)!]
   }
   return ALL_CATEGORIES
+}
+
+/**
+ * Clean Timestamps
+ * Firebase Timestamps in Nuxt lead to a `WARN Cannot stringify arbitrary non-POJOs Timestamp (repeated 153 times)` warning.
+ * This leads to the fact, that we cannot call toDate() on the Timestamp later on in code.
+ * Therefore, we toDate() all timestamps here.
+ */
+function cleanRelease (release: any): RepoRelease {
+  release.created_at = release.created_at.toDate()
+  return release
+}
+
+function cleanConfig (config: any): ProjectConfig {
+  config.last_updated = new Date(config.last_updated)
+  config.last_fetched = config.last_fetched.toDate()
+  return config
 }

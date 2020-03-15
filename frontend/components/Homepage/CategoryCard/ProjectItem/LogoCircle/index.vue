@@ -15,11 +15,11 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { pickLogoLetter } from '../../../../../assets/utils'
-import { StoredProjectConfig } from '../../../../../../shared/types'
+import { ProjectConfig } from '../../../../../../shared/types'
 
 @Component
 export default class LogoCircleComponent extends Vue {
-    @Prop() project!: StoredProjectConfig
+    @Prop() project!: ProjectConfig
     @Prop() projectIndex!: number
     @Prop() categoryIndex!: number
 

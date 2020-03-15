@@ -13,14 +13,14 @@ import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
 import {
   Env,
-  StoredProjectConfig,
+  ProjectConfig,
   PageContent
 } from '../../../../../shared/types'
 import { getProjectConfig, getProjectContent, getSubpage } from '../../../../assets/dbUtils'
 
 import Projects from '@/components/Projects/index.vue'
 
-function calculatePageTitle (pageContent: PageContent, projectConfig: StoredProjectConfig, repo : string) : string {
+function calculatePageTitle (pageContent: PageContent, projectConfig: ProjectConfig, repo : string) : string {
   // Choose the page name depending on available info:
   // Option 0 - title of the header section
   // Option 1 - the name from the config.
@@ -96,7 +96,7 @@ function getCleanParams (params: ProjectRouteParams) {
     const id = [org, repo].join('::')
 
     try {
-      const projectConfig: StoredProjectConfig = await getProjectConfig(id, env)
+      const projectConfig: ProjectConfig = await getProjectConfig(id, env)
       let pageContent: PageContent
       if (subpageId) {
         pageContent = await getSubpage(id, env, subpageId)

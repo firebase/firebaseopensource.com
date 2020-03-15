@@ -45,7 +45,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Util } from '../../../shared/util'
 import {
   Env,
-  StoredProjectConfig,
+  ProjectConfig,
   TabConfig,
   PageContent
 } from '../../../shared/types'
@@ -65,7 +65,7 @@ const BLOCKED_SECTIONS = ['table of contents']
   components: { HeaderBar, Sidebar, TitleSection, SectionH2, PageFooter, StagingWarning }
 })
 export default class Projects extends Vue {
-  @Prop() projectConfig!: StoredProjectConfig
+  @Prop() projectConfig!: ProjectConfig
   @Prop() projectContent!: PageContent
   @Prop() env: Env
   @Prop() subpageId: String

@@ -21,8 +21,6 @@ export class GetParams {
  */
 export interface StoredProjectConfig {
   // Basic repo information
-  id?: string; // if fetched with firewings
-  ref?: string; // if fetched with firewings
   name: string;
   description?: string;
   stars: number;
@@ -45,17 +43,25 @@ export interface StoredProjectConfig {
   last_fetched: Timestamp;
 }
 
+/**
+ * A ProjectConfig as we use it in the Frontend.
+ */
 export interface ProjectConfig {
-  name?: string;
+  id: string; // if fetched with firewings
+  ref: string; // if fetched with firewings
+  name: string;
+  description: string;
   type?: string;
   platforms?: string[];
   content?: string;
+  stars: number;
 
   pages?: PageConfig[];
   related?: string[];
+  tabs?: Array<TabConfig>;     
 
-  last_fetched?: any;
-  last_updated?: any;
+  last_fetched: Date;  // Timestamps don't go well with Nuxt
+  last_updated: Date;  // Timestamps don't go well with Nuxt
 }
 
 export interface PageConfig {
@@ -94,10 +100,24 @@ export interface RepoMetadata {
   last_updated: any;
 }
 
-export interface RepoRelease {
+/**
+ * A RepoRelease as it is stored in the database.
+ */
+export interface StoredRepoRelease {
   org: string;
   repo: string;
   url: string;
   tag_name: string;
   created_at: Timestamp;
+}
+
+/**
+ * A RepoRelease as we use it in the frontend
+ */
+export interface RepoRelease {
+  org: string;
+  repo: string;
+  url: string;
+  tag_name: string;
+  created_at: Date; // Timestamps don't go well with Nuxt
 }

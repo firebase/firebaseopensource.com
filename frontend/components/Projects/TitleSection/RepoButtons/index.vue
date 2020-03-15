@@ -66,8 +66,7 @@ export default class RepoButtonsComponent extends Vue {
   ]
 
   get lastUpdatedFromNow () {
-  // For some reason lastUpdated is not a timestamp but a datestring
-    return formatDistanceToNow(new Date(this.projectConfig.last_updated))
+    return formatDistanceToNow(this.projectConfig.last_updated)
   }
 }
 </script>

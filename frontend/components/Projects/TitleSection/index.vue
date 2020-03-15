@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import { ProjectConfig, PageContent } from '../../../../shared/types'
 import { ProjectInfo } from '../../../types/app'
 import TableOfContents from './TableOfContents/index.vue'

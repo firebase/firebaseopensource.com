@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import { Route } from 'vue-router'
 import { Category } from '../../../types/app'
 import ProjectItem from './ProjectItem/index.vue'

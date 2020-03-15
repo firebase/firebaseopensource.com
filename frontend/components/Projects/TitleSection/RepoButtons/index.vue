@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import { formatDistanceToNow } from 'date-fns'
 import { ProjectConfig } from '../../../../../shared/types'
 import { ProjectInfo } from '../../../../types/app'

@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import {
   SidebarSection, SelectableLink
 } from '../../../assets/classes'

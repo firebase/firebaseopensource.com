@@ -25,11 +25,11 @@
     "firewings": "^0.2.4",
     "node-sass": "^4.13.1",
     "nuxt": "^2.0.0",
+    "nuxt-property-decorator": "^2.5.1",
     "reflect-metadata": "^0.1.13",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
-    "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^8.4.0"
+    "vue-class-component": "^7.2.3"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.6.0",
@@ -37,12 +37,12 @@
     "@nuxtjs/eslint-module": "^1.0.0",
     "@types/jest": "^25.1.4",
     "@vue/test-utils": "^1.0.0-beta.32",
+    "babel-core": "^6.26.3",
     "babel-jest": "^25.1.0",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
-    "vue-jest": "^3.0.5",
-    "babel-core": "^6.26.3"
+    "vue-jest": "^3.0.5"
   }
 }

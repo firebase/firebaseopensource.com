@@ -7,6 +7,7 @@ import { ProjectConfig, PageContent, PageSection } from "../../shared/types";
 import * as cheerio from "cheerio";
 import * as path from "path";
 import * as url from "url";
+import { reporters } from "mocha";
 
 const urljoin = require("url-join");
 
@@ -72,10 +73,7 @@ export class Content {
     const projectBaseUrl = this.getProjectBaseUrl(repoId);
 
     // TODO: Dynamic branch
-    const renderedBaseUrl = urljoin(
-      this.getRenderedContentBaseUrl(repoId, branch),
-      pageDir
-    );
+    const renderedBaseUrl = this.getRenderedContentBaseUrl(repoId, branch);
     const rawBaseUrl = urljoin(
       Github.getRawContentBaseUrl(repoId, branch),
       pageDir
@@ -132,7 +130,12 @@ export class Content {
         );
         el.attribs["href"] = repoRelative;
 
-        const isProjectPage = pageKeys.indexOf(repoRelative) >= 0;
+        const repoRelativeWithoutHash =
+          repoRelative.indexOf("#") >= 0
+            ? repoRelative.substring(0, repoRelative.indexOf("#"))
+            : repoRelative;
+
+        const isProjectPage = pageKeys.indexOf(repoRelativeWithoutHash) >= 0;
         if (isProjectPage) {
           that.lowercaseLink(el);
           that.deMarkdownLink(el);

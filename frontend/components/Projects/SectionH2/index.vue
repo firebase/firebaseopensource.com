@@ -3,7 +3,7 @@
     <div :id="section.id" class="section-marker" :name="section.name" />
     <div class="content">
       <h2>{{ section.name }}</h2>
-      <div class="html-content" v-html="section.content" />
+      <div class="html-content" v-html="cleanContent" />
     </div>
   </div>
 </template>
@@ -16,6 +16,11 @@ import { PageSection } from '../../../../shared/types'
 @Component
 export default class SidebarSectionH2Component extends Vue {
   @Prop() section!: PageSection
+
+  get cleanContent () {
+    // Removes .md ending of all links that end with .md">
+    return this.section.content.replace(/.md">/g, '">')
+  }
 }
 </script>
 

@@ -69,11 +69,10 @@ export class Content {
       }
     }
 
+    const projectBaseUrl = this.getProjectBaseUrl(repoId);
+
     // TODO: Dynamic branch
-    const renderedBaseUrl = urljoin(
-      this.getRenderedContentBaseUrl(repoId, branch),
-      pageDir
-    );
+    const renderedBaseUrl = this.getRenderedContentBaseUrl(repoId, branch);
     const rawBaseUrl = urljoin(
       Github.getRawContentBaseUrl(repoId, branch),
       pageDir
@@ -102,7 +101,7 @@ export class Content {
           .split("/")
           .filter((seg: string) => seg.trim().length > 0);
 
-        if (pathSegments.length == 2) {
+        if (pathSegments.length === 2) {
           const org = pathSegments[0];
           const repo = pathSegments[1];
 
@@ -130,11 +129,30 @@ export class Content {
         );
         el.attribs["href"] = repoRelative;
 
-        if (pageKeys.indexOf(repoRelative) >= 0) {
-          Logger.debug(repoId, `Lowercasing relative link ${repoRelative}.`);
+        const repoRelativeWithoutHash =
+          repoRelative.indexOf("#") >= 0
+            ? repoRelative.substring(0, repoRelative.indexOf("#"))
+            : repoRelative;
+
+        const isProjectPage = pageKeys.indexOf(repoRelativeWithoutHash) >= 0;
+        if (isProjectPage) {
           that.lowercaseLink(el);
+          that.deMarkdownLink(el);
+          that.sanitizeRelativeLink(el, "href", projectBaseUrl);
+          Logger.debug(
+            repoId,
+            `Sanitizing relative project link ${repoRelative} --> ${
+              el.attribs["href"]
+            }`
+          );
         } else {
           that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
+          Logger.debug(
+            repoId,
+            `Sanitizing relative GitHub link ${repoRelative} --> ${
+              el.attribs["href"]
+            }`
+          );
         }
       }
     });
@@ -224,6 +242,15 @@ export class Content {
   }
 
   /**
+   * Get the base URL for a project on FirebaseOpenSource
+   * Ex: /projects/foo/bar/
+   */
+  private getProjectBaseUrl(id: string) {
+    const idObj = Util.parseProjectId(id);
+    return `/projects/${idObj.owner}/${idObj.repo}/`;
+  }
+
+  /**
    * Get the base github URL for a project.
    */
   private getRenderedContentBaseUrl(id: string, branch: string) {
@@ -257,6 +284,14 @@ export class Content {
         el.attribs[attrName] = newVal.toLowerCase();
       }
     }
+  }
+
+  /**
+   * Remove .md from href.
+   */
+  private deMarkdownLink(el: CheerioElement) {
+    const newVal = el.attribs["href"].replace(/\.md/, "");
+    el.attribs["href"] = newVal;
   }
 
   /**

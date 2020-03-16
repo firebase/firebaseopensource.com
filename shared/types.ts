@@ -60,8 +60,8 @@ export interface ProjectConfig {
   related?: string[];
   tabs?: Array<TabConfig>;     
 
-  last_fetched: Date;  // Timestamps don't go well with Nuxt
-  last_updated: Date;  // Timestamps don't go well with Nuxt
+  last_fetched: Date | any;  // Timestamps don't go well with Nuxt
+  last_updated: Date | any;  // Timestamps don't go well with Nuxt
 }
 
 export interface PageConfig {

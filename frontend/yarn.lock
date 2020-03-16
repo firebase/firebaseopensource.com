@@ -1645,14 +1645,14 @@
     consola "^2.10.1"
     eslint-loader "^3.0.0"
 
-"@nuxtjs/firebase@^4.2.2":
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/firebase/-/firebase-4.2.2.tgz#70099d069f60d32cf55067e8b00f3a1f2e7b7691"
-  integrity sha512-70Q+gcthOeQXEiE9WqODXECocZmmrrr8FmN1UXhO/CszAHakqBaGYYbPZNiPAIn7O99vl+2NjBtCRLM7ZAJqRg==
+"@nuxtjs/firebase@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/firebase/-/firebase-5.0.2.tgz#c39a229a66efb8125c0e850b415aad0f36ddd3dc"
+  integrity sha512-czIMdUBrdKKKBtidJ7oMa8J+uOygUJrF0Kw+4kxOs+ar6iiK4F9Y2ufkNBJp9c1DNBRwg4H7EDHW8Sm1uoXN2w==
   dependencies:
     consola "^2.11.3"
-    firebase-admin "^8.9.2"
-    jwt-decode "^2.2.0"
+  optionalDependencies:
+    firebase-admin "^8.10.0"
 
 "@nuxtjs/pwa@^3.0.0-0":
   version "3.0.0-beta.20"
@@ -5404,10 +5404,10 @@ find-up@^4.0.0, find-up@^4.1.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-firebase-admin@^8.9.2:
-  version "8.9.2"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-8.9.2.tgz#248ba184dc13b4929b043870a2067787a0dd013e"
-  integrity sha512-ix4qcx+hHnr3mnc41Z8EzQa9Mr+2nhogLEv6ktkOCCpdKJ+9HxW9vikRCElSbC8ICHLD0KIH0GVOIZK80vbvqw==
+firebase-admin@^8.10.0:
+  version "8.10.0"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-8.10.0.tgz#4a838aec52df49845eba07ad59a40b4df996e815"
+  integrity sha512-QzJZ1sBh9xzKjb44aP6m1duy0Xe1ixexwh0eaOt1CkJYCOq2b6bievK4GNWMl5yGQ7FFBEbZO6hyDi+5wrctcg==
   dependencies:
     "@firebase/database" "^0.5.17"
     "@types/node" "^8.10.59"
@@ -7338,11 +7338,6 @@ jws@^4.0.0:
   dependencies:
     jwa "^2.0.0"
     safe-buffer "^5.0.1"
-
-jwt-decode@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
-  integrity sha1-fYa9VmefWM5qhHBKZX3TkruoGnk=
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"

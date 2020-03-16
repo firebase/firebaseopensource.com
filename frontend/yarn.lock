@@ -1567,7 +1567,7 @@
     vue-meta "^2.3.1"
     vue-server-renderer "^2.6.11"
 
-"@nuxt/webpack@2.11.0":
+"@nuxt/webpack@2.11.0", "@nuxt/webpack@^2.11.0":
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/@nuxt/webpack/-/webpack-2.11.0.tgz#16d6349e6df10c7671c58ea5948e5f369aeeee84"
   integrity sha512-QRU53bDcdzGhqZf5nfMzyI+n6uftqYUTTtCcF/1c03l258GaJ6m5Ky2UAcPRxK4OdO1PqJ/yaT2lonYOQYUrsg==
@@ -11487,7 +11487,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@~3.8:
+typescript@^3.8.3, typescript@~3.8:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==

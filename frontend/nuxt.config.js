@@ -64,6 +64,14 @@ export default async () => {
       ]
     ],
     /*
+     ** Generate Settings
+     */
+    generate: {
+      fallback: true, // SPA Fallback for spa/non-existing pages
+      routes, // routes to prerender
+      exclude: []
+    },
+    /*
      ** Build configuration
      */
     build: {

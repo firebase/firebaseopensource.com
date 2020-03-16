@@ -3,6 +3,7 @@
   "description": "https://firebaseopensource.com",
   "version": "2.0.0",
   "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
@@ -11,8 +12,8 @@
     "generate": "nuxt-ts generate",
     "lint": "eslint --ext .ts,.js,.vue .",
     "test": "jest",
-    "deploy": "npm run build && firebase --project=default deploy",
-    "deploy:hosting": "npm run build && firebase --project=default deploy --only hosting"
+    "deploy": "npm run generate && firebase --project=default deploy",
+    "deploy:hosting": "npm run generate && firebase --project=default deploy --only hosting"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.4.0",

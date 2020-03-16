@@ -8,7 +8,7 @@ import firebaseConfig from '../../shared/firebaseConfig'
  * Converts an id into a path.
  */
 function getPath (id: string) {
-  return id.replace(/::/g, '/')
+  return id.replace(/::/g, '/').replace('.md', '')
 }
 
 /**
@@ -16,9 +16,10 @@ function getPath (id: string) {
  */
 export default async function () {
   // don't load routes if not in production
-  if (process.env.ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return []
   }
+  console.info('ℹ️ Getting all routes for sitemap & prerendering...')
   // Firebase has to be instantiated here additionally to @nuxtjs/firebase,
   // because at this point we cannot access this.$fireDb yet.
   if (!firebase.apps.length) {
@@ -29,7 +30,6 @@ export default async function () {
 
   const pages = [
     '/',
-    'platform/all',
     'platform/ios',
     'platform/android',
     'platform/web',
@@ -62,5 +62,6 @@ export default async function () {
       throw new Error('Could not load routes for sitemap.xml')
     }
   }
+  console.info('ℹ️ Done getting routes.')
   return pages
 }

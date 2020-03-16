@@ -1,5 +1,5 @@
 <template>
-  <Homepage :platform="platform" :categories="categories" :recent-releases="recentReleases" />
+  <Homepage platform="all" :categories="categories" :recent-releases="recentReleases" />
 </template>
 
 <script lang="ts">
@@ -32,7 +32,6 @@ import Homepage from '@/components/Homepage/index.vue'
   }
 })
 export default class MainPage extends Vue {
-    platform: string = 'all'
 }
 
 </script>

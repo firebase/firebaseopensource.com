@@ -26,8 +26,6 @@
 
         <div>
           <TableOfContents v-if="sections.length > 1" :sections="sections" />
-
-          <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-if="header.content" class="header_content" v-html="header.content" />
         </div>
       </div>

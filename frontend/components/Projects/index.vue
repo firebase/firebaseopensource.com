@@ -1,7 +1,5 @@
 <template>
   <div id="projects">
-    <img src="/background-top.svg" hidden>
-
     <HeaderBar
       ref="header"
       :enable-subheader="true"
@@ -156,9 +154,5 @@ export default class Projects extends Vue {
   border-radius: 100%;
   margin-top: 10px;
   margin-bottom: 20px;
-}
-
-img[hidden] {
-  display: none;
 }
 </style>

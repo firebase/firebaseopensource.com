@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-unused-vars': 'warn',
-    'object-shorthand': 'warn'
+    'object-shorthand': 'warn',
+    "vue/no-v-html": "off"
   }
 }

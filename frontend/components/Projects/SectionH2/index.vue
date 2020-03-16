@@ -3,7 +3,6 @@
     <div :id="section.id" class="section-marker" :name="section.name" />
     <div class="content">
       <h2>{{ section.name }}</h2>
-      <!-- eslint-disable-next-line vue/no-v-html -->
       <div class="html-content" v-html="section.content" />
     </div>
   </div>

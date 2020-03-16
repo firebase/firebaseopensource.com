@@ -7,7 +7,6 @@ import { ProjectConfig, PageContent, PageSection } from "../../shared/types";
 import * as cheerio from "cheerio";
 import * as path from "path";
 import * as url from "url";
-import { utils } from "mocha";
 
 const urljoin = require("url-join");
 

@@ -44,6 +44,12 @@ export default class SidebarSectionH2Component extends Vue {
   color: #212121;
 }
 
+/deep/ table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+}
+
 .section-card {
   width: 100%;
   margin: 0 auto 0;

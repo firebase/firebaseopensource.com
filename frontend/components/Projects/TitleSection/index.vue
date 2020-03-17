@@ -63,9 +63,9 @@ export default class TitleSectionComponent extends Vue {
     }
 
     return Object.keys(config.related).map((repo) => {
-    // Format the name of a related project for display.
-    // Strips the "firebase/" from the name to save space, since
-    // the firebase context is implied on firebaseopensource.com
+      // Format the name of a related project for display.
+      // Strips the "firebase/" from the name to save space, since
+      // the firebase context is implied on firebaseopensource.com
       let name = repo
       if (repo.includes('firebase/')) {
         name = repo.substring('firebase/'.length, repo.length)
@@ -93,7 +93,7 @@ export default class TitleSectionComponent extends Vue {
 }
 
 .content {
-    padding: 24px 32px 24px 32px;
+  padding: 24px 32px 24px 32px;
 }
 
 .img-badge {
@@ -167,11 +167,22 @@ h5 {
   }
 }
 
-/deep/ h3 {
-    font-weight: 400;
-    line-height: 32px;
-    color: #212121;
-    font-size: 20px;
+.header_content {
+  margin-top: 20px;
+}
+
+/deep/ .header_content > h3 {
+  font-weight: 400;
+  line-height: 32px;
+  color: #212121;
+  font-size: 20px;
+}
+
+/deep/ .header_content > blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  background: white;
 }
 
 .related {

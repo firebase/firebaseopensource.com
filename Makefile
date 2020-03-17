@@ -15,8 +15,7 @@ deploy-functions: build-functions
 build-hosting:
 	cd frontend \
 		&& npm install \
-		&& npm run get-routes \
-		&& npm run gen \
+		&& npm run generate \
 		&& cd -
 
 deploy-hosting: build-hosting

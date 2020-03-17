@@ -1,34 +1,84 @@
-const routes = require("./routes.json").routes;
+import firebaseConfig from '../shared/firebaseConfig'
+import getRoutes from './assets/getRoutes'
 
-module.exports = {
-  mode: "universal",
-  router: {
-    extendRoutes(routes, resolve) {
-      routes.push({
-        path: "/projects/:org/:repo/:page(.+)",
-        component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
-      });
+export default async () => {
+  const routes = await getRoutes()
+  return {
+    mode: 'universal',
+    /*
+     ** Headers of the page
+     */
+    head: {
+      title: process.env.npm_package_name || '',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          hid: 'description',
+          name: 'description',
+          content: process.env.npm_package_description || ''
+        }
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    },
+    /*
+     ** Customize the progress-bar color
+     */
+    loading: { color: '#039be5' },
 
-      routes.push({
-        path: "/projects-staging/:org/:repo/",
-        component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
-      });
-      routes.push({
-        path: "/projects-staging/:org/:repo/:page(.+)",
-        component: resolve(__dirname, "pages/projects/_org/_repo/index.vue")
-      });
+    /*
+     ** Global CSS
+     */
+    css: ['~/assets/styles/global.scss'],
+
+    /*
+     ** Plugins to load before mounting the App
+     */
+    plugins: ['~/plugins/firebaseInit'],
+    /*
+     ** Nuxt.js dev-modules
+     */
+    buildModules: ['@nuxtjs/eslint-module', '@nuxt/typescript-build'],
+    /*
+     ** Nuxt.js modules
+     */
+    modules: [
+      '@nuxtjs/pwa',
+      [
+        '@nuxtjs/sitemap',
+        {
+          path: '/sitemap.xml',
+          hostname: 'https://firebaseopensource.com',
+          cacheTime: 1000 * 60 * 60 * 24,
+          routes
+        }
+      ],
+      [
+        '@nuxtjs/firebase',
+        {
+          config: firebaseConfig,
+          services: {
+            firestore: true
+          }
+        }
+      ]
+    ],
+    /*
+     ** Generate Settings
+     */
+    generate: {
+      fallback: true, // SPA Fallback for spa/non-existing pages
+      routes, // routes to prerender
+      exclude: []
+    },
+    /*
+     ** Build configuration
+     */
+    build: {
+      /*
+       ** You can extend webpack config here
+       */
+      extend () {}
     }
-  },
-  generate: {
-    fallback: true,
-    routes: routes
-  },
-  modules: ["~/modules/typescript.js", "@nuxtjs/sitemap"],
-  sitemap: {
-    path: "/sitemap.xml",
-    hostname: "https://firebaseopensource.com",
-    cacheTime: 1000 * 60 * 60 * 24,
-    generate: true,
-    routes: routes
   }
-};
+}

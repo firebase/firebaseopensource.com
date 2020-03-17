@@ -1,28 +1,40 @@
 {
-    "compilerOptions": {
-        "types": [
-            "chai",
-            "mocha",
-            "node"
-        ],
-        "module": "es2015",
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-        "experimentalDecorators": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "sourceMap": true,
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        }
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "esnext.asynciterable",
+      "dom"
+    ],
+    "esModuleInterop": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./../*"
+      ],
+      "@/*": [
+        "./*"
+      ]
     },
-    "include": [
-        "pages/**/*",
-        "src/**/*",
-        "../shared/**/*"
+    "types": [
+      "@types/node",
+      "@nuxt/types",
+      "@nuxtjs/firebase",
+      "@types/jest",
+      "firewings/types/client"
     ]
+  },
+  "exclude": [
+    "node_modules",
+    ".nuxt",
+    "dist"
+  ]
 }

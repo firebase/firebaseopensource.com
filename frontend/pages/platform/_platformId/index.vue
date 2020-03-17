@@ -1,28 +1,30 @@
 <template>
-  <Homepage platform="all" :categories="categories" :recent-releases="recentReleases" />
+  <Homepage :platform="platform" :categories="categories" />
 </template>
 
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component } from 'nuxt-property-decorator'
-import { getRecentReleases, getCategories, getProjectConfigs } from '../assets/dbUtils'
+
+import { getCategories, getProjectConfigs } from '../../../assets/dbUtils'
 import Homepage from '@/components/Homepage/index.vue'
 
 @Component({
   components: { Homepage },
   async asyncData (context: any) {
-    try {
-      const recentReleases = await getRecentReleases(3)
+    const platform = context.params.platformId
 
-      const categories = getCategories()
+    try {
+      const categories = getCategories(platform)
       const enrichedCategories = []
       for (const category of categories) {
-        category.projects = await getProjectConfigs(category, 6)
+        // TODO: Do we want the 100 limit? Add Pagination?
+        category.projects = await getProjectConfigs(category, 100)
         enrichedCategories.push(category)
       }
 
       return {
-        recentReleases,
+        platform,
         categories: enrichedCategories
       }
     } catch (e) {
@@ -31,7 +33,7 @@ import Homepage from '@/components/Homepage/index.vue'
     }
   }
 })
-export default class MainPage extends Vue {
+export default class PlatformPage extends Vue {
 }
 
 </script>

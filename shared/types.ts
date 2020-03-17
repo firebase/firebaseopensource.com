@@ -1,3 +1,7 @@
+import firebase from 'firebase'
+
+export type Timestamp = firebase.firestore.Timestamp
+
 export interface StringMap<T> {
   [s: string]: T;
 }
@@ -35,22 +39,29 @@ export interface StoredProjectConfig {
   fork: boolean;
 
   // Timestamps
-  last_updated?: string;
-  // TODO: This is a timestamp
-  last_fetched?: any;
+  last_updated: string;
+  last_fetched: Timestamp;
 }
 
+/**
+ * A ProjectConfig as we use it in the Frontend.
+ */
 export interface ProjectConfig {
-  name?: string;
+  id: string; // if fetched with firewings
+  ref: string; // if fetched with firewings
+  name: string;
+  description: string;
   type?: string;
   platforms?: string[];
   content?: string;
+  stars: number;
 
   pages?: PageConfig[];
   related?: string[];
+  tabs?: Array<TabConfig>;     
 
-  last_fetched?: any;
-  last_updated?: any;
+  last_fetched: Date | any;  // Timestamps don't go well with Nuxt
+  last_updated: Date | any;  // Timestamps don't go well with Nuxt
 }
 
 export interface PageConfig {
@@ -69,11 +80,15 @@ export interface ProjectPage {
 }
 
 export interface PageContent {
+  id?: string; // if fetched with firewings
+  ref?: string; // if fetched with firewings
   header: PageSection;
   sections: PageSection[];
 }
 
 export interface PageSection {
+  id?: string; // if fetched with firewings
+  ref?: string; // if fetched with firewings
   name: string;
   content: string;
 }
@@ -85,7 +100,10 @@ export interface RepoMetadata {
   last_updated: any;
 }
 
-export interface RepoRelease {
+/**
+ * A RepoRelease as it is stored in the database.
+ */
+export interface StoredRepoRelease {
   org: string;
   repo: string;
   url: string;
@@ -93,6 +111,13 @@ export interface RepoRelease {
   created_at: Timestamp;
 }
 
-export interface Timestamp {
-  seconds: number;
+/**
+ * A RepoRelease as we use it in the frontend
+ */
+export interface RepoRelease {
+  org: string;
+  repo: string;
+  url: string;
+  tag_name: string;
+  created_at: Date; // Timestamps don't go well with Nuxt
 }

@@ -90,49 +90,49 @@ export default class TitleSectionComponent extends Vue {
 .section-card {
   margin: 30px auto 0;
   width: 100%;
+}
 
-  > .content {
+.content {
     padding: 24px 32px 24px 32px;
-  }
+}
 
-  .img-badge {
-    display: none;
-  }
+.img-badge {
+  display: none;
+}
 
-  h1 {
-    padding: 16px 0px 0px 0px;
-    margin: 0px;
-    line-height: 1.1em;
-  }
+h1 {
+  padding: 16px 0px 0px 0px;
+  margin: 0px;
+  line-height: 1.1em;
+}
 
-  h2 {
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 32px;
-    color: #212121;
-    border-bottom: 1px solid $gray;
-  }
+h2 {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 32px;
+  color: #212121;
+  border-bottom: 1px solid $gray;
+}
 
-  h3 {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 32px;
-    color: #212121;
-  }
+h3 {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  color: #212121;
+}
 
-  h4 {
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 32px;
-    color: #212121;
-  }
+h4 {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 32px;
+  color: #212121;
+}
 
-  h5 {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 24px;
-    color: #212121;
-  }
+h5 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #212121;
 }
 
 .body-column {
@@ -165,6 +165,13 @@ export default class TitleSectionComponent extends Vue {
       'content';
     grid-gap: 0px;
   }
+}
+
+/deep/ h3 {
+    font-weight: 400;
+    line-height: 32px;
+    color: #212121;
+    font-size: 20px;
 }
 
 .related {

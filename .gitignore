@@ -29,3 +29,5 @@ appengine/lib
 frontend/static/sitemap.xml
 
 *debug.log
+
+sw.js

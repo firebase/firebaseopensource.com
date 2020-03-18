@@ -63,9 +63,9 @@ export default class TitleSectionComponent extends Vue {
     }
 
     return Object.keys(config.related).map((repo) => {
-    // Format the name of a related project for display.
-    // Strips the "firebase/" from the name to save space, since
-    // the firebase context is implied on firebaseopensource.com
+      // Format the name of a related project for display.
+      // Strips the "firebase/" from the name to save space, since
+      // the firebase context is implied on firebaseopensource.com
       let name = repo
       if (repo.includes('firebase/')) {
         name = repo.substring('firebase/'.length, repo.length)
@@ -90,49 +90,49 @@ export default class TitleSectionComponent extends Vue {
 .section-card {
   margin: 30px auto 0;
   width: 100%;
+}
 
-  > .content {
-    padding: 24px 32px 24px 32px;
-  }
+.content {
+  padding: 24px 32px 24px 32px;
+}
 
-  .img-badge {
-    display: none;
-  }
+.img-badge {
+  display: none;
+}
 
-  h1 {
-    padding: 16px 0px 0px 0px;
-    margin: 0px;
-    line-height: 1.1em;
-  }
+h1 {
+  padding: 16px 0px 0px 0px;
+  margin: 0px;
+  line-height: 1.1em;
+}
 
-  h2 {
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 32px;
-    color: #212121;
-    border-bottom: 1px solid $gray;
-  }
+h2 {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 32px;
+  color: #212121;
+  border-bottom: 1px solid $gray;
+}
 
-  h3 {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 32px;
-    color: #212121;
-  }
+h3 {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  color: #212121;
+}
 
-  h4 {
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 32px;
-    color: #212121;
-  }
+h4 {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 32px;
+  color: #212121;
+}
 
-  h5 {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 24px;
-    color: #212121;
-  }
+h5 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #212121;
 }
 
 .body-column {
@@ -165,6 +165,24 @@ export default class TitleSectionComponent extends Vue {
       'content';
     grid-gap: 0px;
   }
+}
+
+.header_content {
+  margin-top: 20px;
+}
+
+/deep/ .header_content > h3 {
+  font-weight: 400;
+  line-height: 32px;
+  color: #212121;
+  font-size: 20px;
+}
+
+/deep/ .header_content > blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  background: white;
 }
 
 .related {

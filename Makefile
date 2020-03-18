@@ -3,7 +3,10 @@ PROD_PROJECT="fir-oss"
 cloud-build:
 	gcloud --project=$(PROD_PROJECT) builds submit --config static/cloudbuild.yaml static
 
-build-functions:
+build-shared:
+	npm install
+
+build-functions: build-shared
 	cd functions \
 		&& npm install \
 		&& npm run build \
@@ -12,7 +15,7 @@ build-functions:
 deploy-functions: build-functions
 	firebase --project=$(PROD_PROJECT) deploy --only functions
 
-build-hosting:
+build-hosting: build-shared
 	cd frontend \
 		&& npm install \
 		&& npm run generate \

@@ -35,6 +35,7 @@
     "prescottprue::generator-react-firebase",
     "sejr::firegraph",
     "PatilShreyas::FCM-OnDeviceNotificationScheduler",
-    "rosariopfernandes::firecoil"
+    "rosariopfernandes::firecoil",
+    "GitLiveApp::firebase-kotlin-sdk"
   ]
 }

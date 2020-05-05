@@ -36,6 +36,7 @@
     "sejr::firegraph",
     "PatilShreyas::FCM-OnDeviceNotificationScheduler",
     "rosariopfernandes::firecoil",
-    "GitLiveApp::firebase-kotlin-sdk"
+    "GitLiveApp::firebase-kotlin-sdk",
+    "raipankaj::kotfirebase"
   ]
 }

@@ -1,16 +1,16 @@
 <template>
   <div class="content">
     <div class="section-card-title">
-      <nuxt-link :to="`/platform/${category.platform}`">
+      <a :href="`/platform/${category.platform}`">
         <span>
           <i class="material-icons">{{ category.icon }}</i>{{ category.title }}
         </span>
-      </nuxt-link>
-      <nuxt-link :to="`/platform/${category.platform}`">
+      </a>
+      <a :href="`/platform/${category.platform}`">
         <button v-if="onHomepage()" class="button-right">
           SEE ALL
         </button>
-      </nuxt-link>
+      </a>
     </div>
     <div class="projects flexible-columns">
       <projectItem v-for="(project, index) in category.projects" :key="project.id" :project="project" :category-index="categoryIndex" :project-index="index" />

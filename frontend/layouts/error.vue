@@ -5,11 +5,11 @@
       <h1>404</h1>
       <h2>{{ error.message }}</h2>
       <img :src="require('@/assets/img/guy-fireats.png')">
-      <nuxt-link to="/">
+      <a href="/">
         <div class="footer">
           Go to Homepage
         </div>
-      </nuxt-link>
+      </a>
     </div>
   </div>
 </template>

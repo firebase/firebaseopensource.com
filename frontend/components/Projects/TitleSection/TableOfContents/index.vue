@@ -1,14 +1,14 @@
 <template>
   <div class="dropdown">
     <span>Contents</span>
-    <nuxt-link
+    <a
       v-for="section in sections"
       :key="section.id"
-      :to="section.ref"
+      :href="section.ref"
       class="ellipsize"
     >
       {{ section.name }}
-    </nuxt-link>
+    </a>
   </div>
 </template>
 

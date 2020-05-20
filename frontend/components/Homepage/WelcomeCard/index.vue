@@ -9,7 +9,7 @@
         <span>
           The Firebase community runs on open source. Our SDKs, libraries,
           samples, and demos all live on GitHub. On
-          <nuxt-link to="/">firebaseopensource.com</nuxt-link> you can discover all of the
+          <a href="/">firebaseopensource.com</a> you can discover all of the
           tools you need to build a great app. <br><br>
           Is there a great open source Firebase project that should be
           included here?

@@ -2,21 +2,21 @@
   <span>
     <a
       v-if="page.outbound"
+      :class="{ selected: isActive }"
       :href="link"
       target="_blank"
-      exact-active-class="selected"
     >
       {{ page.title }}
       <i class="material-icons outboundIcon">open_in_new</i>
     </a>
-    <nuxt-link
+    <a
       v-else
-      :to="link"
+      :class="{ selected: isActive }"
+      :href="link"
       :target="page.outbound ? '_blank' : ''"
-      exact-active-class="selected"
     >
       {{ page.title }}
-    </nuxt-link>
+    </a>
   </span>
 </template>
 
@@ -32,6 +32,10 @@ export default class SidebarLinkComponent extends Vue {
   get link () {
     // remove .md in the link
     return this.page.href.replace('.md', '')
+  }
+
+  get isActive () {
+    return this.link === this.$route.fullPath || (this.link + '/') === this.$route.fullPath
   }
 }
 </script>

@@ -164,7 +164,7 @@ export class Content {
         return;
       }
 
-      const badgeKeywords = [
+      const badgePatterns = [
         "travis-ci.org",
         "shields.io",
         "coveralls.io",
@@ -175,14 +175,12 @@ export class Content {
         "cirrus-ci.com",
         "sonarcloud.io",
         "codecov.io",
-        "release-notes.com"
+        "release-notes.com",
+        /github\.com\/.*\/workflows\/.*\.svg/
       ];
 
-      let isBadge = false;
-      badgeKeywords.forEach(word => {
-        if (src.indexOf(word) >= 0) {
-          isBadge = true;
-        }
+      const isBadge = badgePatterns.some(pattern => {
+        return !!src.match(pattern);
       });
 
       if (isBadge) {

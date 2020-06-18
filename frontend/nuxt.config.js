@@ -4,6 +4,8 @@ import getRoutes from './assets/getRoutes'
 export default async () => {
   const routes = await getRoutes()
   return {
+    // https://nuxtjs.org/blog/going-full-static
+    target: 'static',
     mode: 'universal',
     /*
      ** Headers of the page

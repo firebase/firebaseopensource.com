@@ -2,17 +2,17 @@
   <div class="project">
     <div class="grid">
       <LogoCircle v-bind="$props" />
-      <a :href="link" class="project-title">
+      <nuxt-link :to="link" class="project-title">
         {{ project.name }}
-      </a>
+      </nuxt-link>
       <p class="project-description">
         {{ description }}
       </p>
-      <a :href="link">
+      <nuxt-link :to="link">
         <button class="button-right">
           LEARN MORE
         </button>
-      </a>
+      </nuxt-link>
     </div>
   </div>
 </template>

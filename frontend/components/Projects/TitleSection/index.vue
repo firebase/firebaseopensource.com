@@ -7,15 +7,15 @@
 
           <div v-if="!isSubpage" class="related">
             <div class="repos">
-              <a
+              <nuxt-link
                 v-for="repo in relatedRepos"
                 :key="repo.id"
                 class="repo test"
-                :href="`/projects/${repo.path}`"
+                :to="`/projects/${repo.path}`"
               >
                 <i class="material-icons">link</i>
                 <span>{{ repo.name }}</span>
-              </a>
+              </nuxt-link>
             </div>
           </div>
         </div>

@@ -18,7 +18,7 @@ deploy-functions: build-functions
 build-hosting: build-shared
 	cd frontend \
 		&& npm install \
-		&& npm run generate \
+		&& npm run export \
 		&& cd -
 
 deploy-hosting: build-hosting

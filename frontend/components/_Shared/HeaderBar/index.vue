@@ -5,9 +5,9 @@
         <div class="col_gutter" />
         <div class="content col_main">
           <div class="title">
-            <a href="/" class="logo">
+            <nuxt-link to="/" class="logo">
               <img :src="require('@/assets/img/oss-logo-small.png')">
-            </a>
+            </nuxt-link>
             <!-- <router-link to="/" class="text">Open Source</router-link> -->
           </div>
 
@@ -42,16 +42,16 @@
                 {{ tab.title }}
                 <i class="material-icons">open_in_new</i>
               </a>
-              <a
+              <nuxt-link
                 v-else
                 :key="tab.title"
                 :class="{selected: subheaderTabSelection == tab.title.toLowerCase()}"
                 :target="tab.outbound ? '_blank' : ''"
-                :href="tab.href"
+                :to="tab.href"
                 class="tab"
               >
                 {{ tab.title }}
-              </a>
+              </nuxt-link>
             </template>
           </div>
         </div>

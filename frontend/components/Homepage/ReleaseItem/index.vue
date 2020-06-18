@@ -1,8 +1,8 @@
 <template>
   <div class="grid">
-    <a :href="`/projects/${release.org}/${release.repo}/`" class="release-title">
+    <nuxt-link :to="`/projects/${release.org}/${release.repo}/`" class="release-title">
       {{ release.repo }}
-    </a>
+    </nuxt-link>
     <p class="release-description">
       <code>{{ release.tag_name }}</code> released
       {{ releaseTime }}.

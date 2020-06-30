@@ -37,6 +37,7 @@
     "PatilShreyas::FCM-OnDeviceNotificationScheduler",
     "rosariopfernandes::firecoil",
     "GitLiveApp::firebase-kotlin-sdk",
-    "raipankaj::kotfirebase"
+    "raipankaj::kotfirebase",
+    "dalenguyen::firestore-backup-restore"
   ]
 }

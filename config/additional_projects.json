@@ -38,6 +38,7 @@
     "rosariopfernandes::firecoil",
     "GitLiveApp::firebase-kotlin-sdk",
     "raipankaj::kotfirebase",
-    "dalenguyen::firestore-backup-restore"
+    "dalenguyen::firestore-backup-restore",
+    "devskope::apollo-firesource"
   ]
 }

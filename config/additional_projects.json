@@ -40,6 +40,6 @@
     "raipankaj::kotfirebase",
     "dalenguyen::firestore-backup-restore",
     "devskope::apollo-firesource",
-    "wovalle:fireorm"
+    "wovalle::fireorm"
   ]
 }

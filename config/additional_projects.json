@@ -39,6 +39,7 @@
     "GitLiveApp::firebase-kotlin-sdk",
     "raipankaj::kotfirebase",
     "dalenguyen::firestore-backup-restore",
-    "devskope::apollo-firesource"
+    "devskope::apollo-firesource",
+    "wovalle:fireorm"
   ]
 }

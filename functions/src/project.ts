@@ -264,13 +264,24 @@ export class Project {
 
     const batch = db.batch();
 
+    const pagesRef = contentRef.collection("pages");
     content.forEach((page: ProjectPage) => {
       const slug = Util.pathToSlug(page.name);
-      const ref = contentRef.collection("pages").doc(slug);
+      const ref = pagesRef.doc(slug);
 
       Logger.debug(id, `Storing ${page.name} content at path ${ref.path}`);
       batch.set(ref, page.content);
     });
+
+    // Get a list of current pages and delete them if they're no longer relevant
+    const currentPages = await pagesRef.get();
+    const currentPageSlugs = currentPages.docs.map(p => p.id);
+    const newPageSlugs = content.map(p => Util.pathToSlug(p.name));
+    for (const c of currentPageSlugs) {
+      if (newPageSlugs.indexOf(c) < 0) {
+        batch.delete(pagesRef.doc(c));
+      }
+    }
 
     return batch.commit();
   }

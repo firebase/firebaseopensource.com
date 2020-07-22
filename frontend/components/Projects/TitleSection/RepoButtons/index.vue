@@ -65,7 +65,7 @@ export default class RepoButtonsComponent extends Vue {
     }
   ]
 
-  get lastUpdatedFromNow () {
+  get lastUpdatedFromNow (): string {
     return formatDistanceToNow(this.projectConfig.last_updated)
   }
 }

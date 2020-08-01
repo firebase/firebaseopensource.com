@@ -41,6 +41,7 @@
     "dalenguyen::firestore-backup-restore",
     "devskope::apollo-firesource",
     "wovalle::fireorm",
-    "runningcode::fladle"
+    "runningcode::fladle",
+    "sgr-ksmt::Lobster"
   ]
 }

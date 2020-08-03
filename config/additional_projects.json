@@ -42,6 +42,7 @@
     "devskope::apollo-firesource",
     "wovalle::fireorm",
     "runningcode::fladle",
-    "sgr-ksmt::Lobster"
+    "sgr-ksmt::Lobster",
+    "1amageek::Ballcap-iOS"
   ]
 }

@@ -21,6 +21,13 @@ import * as request from "request-promise-native";
 const parselh = require("parse-link-header");
 const urljoin = require("url-join");
 
+const _GH_OPTIONS_ANONYMOUS = {
+  headers: {
+    "user-agent": "node.js"
+  },
+  json: true
+};
+
 export class Github {
   token: string;
   branch: string;
@@ -28,6 +35,16 @@ export class Github {
   constructor(token: string, branch: string) {
     this.token = token;
     this.branch = branch;
+  }
+
+  /**
+   * Get the default branch for a repo.
+   */
+  static async getDefaultBranch(org: string, repo: string): Promise<string> {
+    const url = `https://api.github.com/repos/${org}/${repo}`;
+
+    const res = await request(url, _GH_OPTIONS_ANONYMOUS);
+    return res.default_branch;
   }
 
   /**

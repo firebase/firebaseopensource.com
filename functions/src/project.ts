@@ -43,6 +43,14 @@ export class Project {
   params: GetParams;
   github: Github;
 
+  static async getForId(id: string): Promise<Project> {
+    const { owner, repo } = Util.parseProjectId(id);
+    const defaultBranch = await Github.getDefaultBranch(owner, repo);
+
+    Logger.debug(id, `Default branch for ${id} is ${defaultBranch}`);
+    return new Project({ branch: defaultBranch, env: Env.PROD });
+  }
+
   constructor(params: GetParams) {
     this.params = params;
     this.github = new Github(Config.get("github.token"), params.branch);

@@ -35,10 +35,6 @@ const DEFAULT_PARAMS: GetParams = {
   branch: "master"
 };
 
-// TODO: This should be created per-function with
-//       dynamic params.
-const project = new Project(DEFAULT_PARAMS);
-
 /**
  * Stage a project.
  *
@@ -79,8 +75,10 @@ exports.stageProject = functions
 exports.getProject = functions
   .runWith(RUNTIME_OPTS)
   .pubsub.topic("get-project")
-  .onPublish(message => {
+  .onPublish(async message => {
     const id = message.json.id;
+
+    const project = await Project.getForId(id);
     return project.recursiveStoreProject(id);
   });
 
@@ -95,6 +93,7 @@ exports.getProjectWebhook = functions
     const id = request.query["id"];
 
     try {
+      const project = await Project.getForId(id);
       await project.recursiveStoreProject(id);
       response.status(200).send(`Stored project ${id}.\n`);
     } catch (e) {
@@ -109,6 +108,7 @@ exports.getProjectWebhook = functions
 exports.getAllProjects = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
+    const project = new Project(DEFAULT_PARAMS);
     let allIds = await project.listAllProjectIds();
 
     const publisher = pubsubClient.topic("get-project").publisher();

@@ -63,5 +63,10 @@ export default async function () {
     }
   }
   console.info('ℹ️ Done getting routes.')
+  console.info('Rendering the following pages: ');
+  for (const page of pages) {
+    console.info('  - ' + page);
+  }
+
   return pages
 }

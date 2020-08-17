@@ -58,7 +58,7 @@ export async function getProjectConfig (id: string, env: Env): Promise<ProjectCo
   try {
     const config = await queryFirestore(ref)
     if (!config) {
-      return Promise.reject(`No config exists for "${id}" at "${path}"`)
+      return Promise.reject(new Error(`No config exists for "${id}" at "${path}"`))
     }
     return cleanConfig(config)
   } catch (e) {

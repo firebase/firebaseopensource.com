@@ -21,7 +21,13 @@ export default async () => {
           content: process.env.npm_package_description || ''
         }
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+      script: [
+        { type: "text/javascript", src: "https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js" }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css' }
+      ]
     },
     /*
      ** Customize the progress-bar color
@@ -45,7 +51,6 @@ export default async () => {
      ** Nuxt.js modules
      */
     modules: [
-      '@nuxtjs/pwa',
       [
         '@nuxtjs/sitemap',
         {

@@ -8,16 +8,16 @@
             <nuxt-link to="/" class="logo">
               <img :src="require('@/assets/img/oss-logo-small.png')">
             </nuxt-link>
-            <!-- <router-link to="/" class="text">Open Source</router-link> -->
           </div>
 
-          <div class="link">
-            <a href="https://firebase.google.com/docs/">
-              <div class="icon_button">
-                <div>Docs </div>
-                <i class="material-icons">open_in_new</i>
-              </div>
-            </a>
+          <!-- Need to render this client-side only or Nuxt gets mad -->
+          <div class="search">
+            <client-only>
+              <span class="search-input">
+                <i class="material-icons">search</i>
+                <input class="algolia" type="text" placeholder="Find a project">
+              </span>
+            </client-only>
           </div>
         </div>
         <div class="col_gutter" />
@@ -72,7 +72,32 @@ export default class HeaderBarComponent extends Vue {
     @Prop() subheaderTabs: any[]
     @Prop() subheaderTabSelection: String
 
+    searchExpanded = false;
+
     headers = [{ id: 0 }, { id: 1, spacer: true }]
+
+    mounted () {
+      const docsearch = (window as any).docsearch
+      if (docsearch) {
+        this.waitForSelector('.algolia').then(() => {
+          docsearch({
+            apiKey: '1f64b5546043241736496d3b1e0980a6',
+            indexName: 'firebaseopensource',
+            inputSelector: '.algolia',
+            debug: false
+          })
+        })
+      } else {
+        console.warn('Could not initialize docsearch')
+      }
+    }
+
+    private async waitForSelector (selector: string): Promise<void> {
+      while (document.querySelectorAll(selector).length === 0) {
+        // eslint-disable-next-line
+        await new Promise((resolve, reject) => this.$nextTick(resolve))
+      }
+    }
 }
 
 </script>
@@ -113,21 +138,73 @@ export default class HeaderBarComponent extends Vue {
       grid-template-columns: 1fr fit-content(100%);
       justify-content: space-between;
       padding: 0px 20px;
+
+      @media (max-width: $phone) {
+        grid-template-columns: fit-content(100%) 1fr;
+      }
     }
 
-    .link {
-      line-height: $header-height;
+    .search {
+      display: inline-flex;
+      align-items: center;
+
+      margin-left: 16px;
+
+      .search-input {
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(0,0,0,0.075);
+        border-radius: 9999px;
+
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-right: 4px;
+        padding-left: 4px;
+
+        background: rgba(0,0,0,0.025);
+
+        transition: border 0.2s ease-out;
+        transition: box-shadow 0.2s ease-out;
+      }
+
+      .search-input:focus-within {
+        border: 1px solid #039be5;
+        box-shadow: 0px 0px 4px 1px rgba(3,155,229,0.37);
+
+        i {
+          color: #039be5;
+        }
+      }
+
+      i {
+        font-size: 1.2rem;
+        margin-top: 1px;
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      input {
+        appearance: none;
+        outline: none;
+        border: none;
+        background: none;
+        font-size: .9rem;
+        line-height: 1.5rem;
+      }
     }
 
     .title {
       a.logo {
         display: block;
-        width: 250px;
         overflow: hidden;
       }
       img {
         margin-top: 4px;
         height: $header-height - 8px;
+
+        @media (max-width: $phone) {
+          content:url('../../../assets/img/oss-logo-icon-only.png')
+        }
       }
     }
 

@@ -47,6 +47,7 @@
     "hukusuke1007::flamingo",
     "Flank::flank",
     "prescottprue::cypress-firebase",
-    "radi-cho::tfjs-firebase"
+    "radi-cho::tfjs-firebase",
+    "david-asher::electron-firebase"
   ]
 }

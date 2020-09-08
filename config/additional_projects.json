@@ -46,6 +46,7 @@
     "1amageek::Ballcap-iOS",
     "hukusuke1007::flamingo",
     "Flank::flank",
-    "prescottprue::cypress-firebase"
+    "prescottprue::cypress-firebase",
+    "radi-cho::tfjs-firebase"
   ]
 }

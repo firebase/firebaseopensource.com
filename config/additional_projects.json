@@ -49,6 +49,7 @@
     "Flank::flank",
     "prescottprue::cypress-firebase",
     "radi-cho::tfjs-firebase",
-    "david-asher::electron-firebase"
+    "david-asher::electron-firebase",
+    "AntlerVC::firetable"
   ]
 }

@@ -50,6 +50,7 @@
     "prescottprue::cypress-firebase",
     "radi-cho::tfjs-firebase",
     "david-asher::electron-firebase",
-    "AntlerVC::firetable"
+    "AntlerVC::firetable",
+    "matsu0228::fsrpl"
   ]
 }

@@ -176,7 +176,8 @@ export class Content {
         "sonarcloud.io",
         "codecov.io",
         "release-notes.com",
-        /github\.com\/.*\/workflows\/.*\.svg/
+        /github\.com\/.*\/workflows\/.*\.svg/,
+        "awesome.re"
       ];
 
       const isBadge = badgePatterns.some(pattern => {

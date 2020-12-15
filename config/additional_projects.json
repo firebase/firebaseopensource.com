@@ -51,6 +51,7 @@
     "radi-cho::tfjs-firebase",
     "david-asher::electron-firebase",
     "AntlerVC::firetable",
-    "matsu0228::fsrpl"
+    "matsu0228::fsrpl",
+    "FirebaseExtended::emberfire"
   ]
 }

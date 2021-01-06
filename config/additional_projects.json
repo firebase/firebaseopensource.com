@@ -52,6 +52,7 @@
     "david-asher::electron-firebase",
     "AntlerVC::firetable",
     "matsu0228::fsrpl",
-    "FirebaseExtended::emberfire"
+    "FirebaseExtended::emberfire",
+    "octabytes::fireo"
   ]
 }

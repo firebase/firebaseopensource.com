@@ -53,6 +53,7 @@
     "AntlerVC::firetable",
     "matsu0228::fsrpl",
     "FirebaseExtended::emberfire",
-    "octabytes::fireo"
+    "octabytes::fireo",
+    "Waddah-JD::moleculer-db-firebase"
   ]
 }

@@ -54,6 +54,7 @@
     "matsu0228::fsrpl",
     "FirebaseExtended::emberfire",
     "octabytes::fireo",
-    "Waddah-JD::moleculer-db-firebase"
+    "Waddah-JD::moleculer-db-firebase",
+    "yarnaimo::fireschema"
   ]
 }

@@ -55,6 +55,7 @@
     "FirebaseExtended::emberfire",
     "octabytes::fireo",
     "Waddah-JD::moleculer-db-firebase",
-    "yarnaimo::fireschema"
+    "yarnaimo::fireschema",
+    "ridedott::firestore-extensions"
   ]
 }

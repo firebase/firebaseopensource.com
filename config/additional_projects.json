@@ -57,6 +57,7 @@
     "Waddah-JD::moleculer-db-firebase",
     "yarnaimo::fireschema",
     "merlinnot::firestore-extensions",
-    "complexorganizations::firestore-manager"
+    "complexorganizations::firestore-manager",
+    "Camberi::firecms"
   ]
 }

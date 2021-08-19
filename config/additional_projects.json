@@ -58,6 +58,7 @@
     "yarnaimo::fireschema",
     "merlinnot::firestore-extensions",
     "complexorganizations::firestore-manager",
-    "Camberi::firecms"
+    "Camberi::firecms",
+    "ngxs-labs::firestore-plugin"
   ]
 }

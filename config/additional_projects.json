@@ -59,6 +59,9 @@
     "merlinnot::firestore-extensions",
     "complexorganizations::firestore-manager",
     "Camberi::firecms",
-    "ngxs-labs::firestore-plugin"
+    "ngxs-labs::firestore-plugin",
+    "kawamataryo::firepl",
+    "invertase::react-query-firebase",
+    "mikkopaderes::ember-cloud-firestore-adapter"
   ]
 }

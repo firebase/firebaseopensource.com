@@ -15,7 +15,7 @@
     "googleapis": "^35.0.0",
     "html-minifier": "3.5.19",
     "isomorphic-fetch": "2.2.1",
-    "marked": "^0.3.9",
+    "marked": "^4.0.10",
     "parse-link-header": "^1.0.1",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",

@@ -2,25 +2,33 @@ const { google } = require("googleapis");
 
 // TODO: This could be in a JSON file somewhere
 const buildConfig = {
+  timeout: "1800s",
   steps: [
     {
-      name: "gcr.io/cloud-builders/docker",
-      args: ["build", "-t", "fir-oss/static-renderer", "."]
+      name: "node:12",
+      entrypoint: "npm",
+      args: ["install"]
     },
     {
-      name: "gcr.io/cloud-builders/docker",
-      entrypoint: "bash",
-      args: [
-        "-c",
-        "docker run -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS fir-oss/static-renderer"
-      ]
-    }
+      name: "node:12",
+      entrypoint: "npm",
+      args: ["--prefix=frontend", "install"]
+    },
+    {
+      name: "node:12",
+      entrypoint: "npm",
+      args: ["--prefix=frontend", "run", "build"]
+    },
+    {
+      name: "node:12",
+      entrypoint: "npm",
+      args: ["--prefix=frontend", "run", "deploy:hosting"]
+    },
   ],
   source: {
     repoSource: {
       projectId: "fir-oss",
       repoName: "firebaseopensource",
-      dir: "static",
       branchName: "master"
     }
   }

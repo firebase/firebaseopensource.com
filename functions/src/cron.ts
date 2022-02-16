@@ -12,7 +12,7 @@ const buildConfig = {
       entrypoint: "bash",
       args: [
         "-c",
-        "docker run fir-oss/static-renderer"
+        "docker run -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS fir-oss/static-renderer"
       ]
     }
   ],

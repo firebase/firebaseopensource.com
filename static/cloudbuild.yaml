@@ -4,5 +4,3 @@ steps:
 - name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
   args: ['-c', 'docker run -e fir-oss/static-renderer']
-  secretEnv:
-    - TOKEN

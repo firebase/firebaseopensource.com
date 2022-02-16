@@ -22,7 +22,7 @@
     "url-join": "^2.0.2"
   },
   "engines": {
-    "node": "8"
+    "node": "12"
   },
   "scripts": {
     "dev": "npm run build && firebase functions:config:get > .runtimeconfig.json && firebase serve --only functions",

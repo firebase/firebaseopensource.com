@@ -2,16 +2,6 @@ const { google } = require("googleapis");
 
 // TODO: This could be in a JSON file somewhere
 const buildConfig = {
-  secrets: [
-    {
-      kmsKeyName:
-        "projects/fir-oss/locations/global/keyRings/fosdc/cryptoKeys/FIREBASE_TOKEN",
-      secretEnv: {
-        TOKEN:
-          "CiQAltNzF1b8brQlHk459IJtppdVRodjYeQuDTulm/LYXL58GccSVwBAMMXeQ1IcfJaL7A7W7Rub/uF+31za3AiYGzcPsal59NZAzb4MOznrp5dl4aOYirKzs7DTwmDA2+qMS1eDv4Iet7I4obbpX5pdYqv5rAjVW1ktxCYo6Q=="
-      }
-    }
-  ],
   steps: [
     {
       name: "gcr.io/cloud-builders/docker",
@@ -22,9 +12,8 @@ const buildConfig = {
       entrypoint: "bash",
       args: [
         "-c",
-        "docker run -e FIREBASE_TOKEN=$$TOKEN fir-oss/static-renderer"
-      ],
-      secretEnv: ["TOKEN"]
+        "docker run -e fir-oss/static-renderer"
+      ]
     }
   ],
   source: {

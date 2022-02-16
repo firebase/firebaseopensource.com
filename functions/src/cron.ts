@@ -12,7 +12,7 @@ const buildConfig = {
       entrypoint: "bash",
       args: [
         "-c",
-        "docker run -e fir-oss/static-renderer"
+        "docker run fir-oss/static-renderer"
       ]
     }
   ],

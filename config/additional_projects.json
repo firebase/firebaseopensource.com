@@ -62,6 +62,12 @@
     "ngxs-labs::firestore-plugin",
     "kawamataryo::firepl",
     "invertase::react-query-firebase",
-    "mikkopaderes::ember-cloud-firestore-adapter"
+    "mikkopaderes::ember-cloud-firestore-adapter",
+    "bennycheung::PyFireSQL",
+    "tylim88::firelord",
+    "thanhlmm::refi-app",
+    "cleanflo::firebase-fx",
+    "fumito-ito::SwiftyInAppMessaging",
+    "fumito-ito::SwiftyRemoteConfig"
   ]
 }

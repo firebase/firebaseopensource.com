@@ -68,6 +68,9 @@
     "thanhlmm::refi-app",
     "cleanflo::firebase-fx",
     "fumito-ito::SwiftyInAppMessaging",
-    "fumito-ito::SwiftyRemoteConfig"
+    "fumito-ito::SwiftyRemoteConfig",
+    "tylim88::Firelordjs",
+    "horaciocome1::fireflow",
+    "tylim88::FireCall"
   ]
 }

@@ -23,7 +23,7 @@
     "date-fns": "^2.11.0",
     "firebase": "^7.11.0",
     "firewings": "^0.3.1",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "nuxt": "^2.13.0",
     "nuxt-property-decorator": "^2.5.1",
     "reflect-metadata": "^0.1.13",

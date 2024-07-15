@@ -14,7 +14,7 @@
     "google-auth-library": "^2.0.1",
     "googleapis": "^35.0.0",
     "html-minifier": "3.5.19",
-    "isomorphic-fetch": "2.2.1",
+    "isomorphic-fetch": "3.0.0",
     "marked": "^0.3.9",
     "parse-link-header": "^1.0.1",
     "request": "^2.83.0",

@@ -21,7 +21,7 @@
     "@nuxtjs/sitemap": "^2.0.1",
     "core-js": "2",
     "date-fns": "^2.11.0",
-    "firebase": "^7.11.0",
+    "firebase": "^10.12.3",
     "firewings": "^0.3.1",
     "node-sass": "^4.13.1",
     "nuxt": "^2.13.0",

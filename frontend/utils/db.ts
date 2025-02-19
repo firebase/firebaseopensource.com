@@ -116,28 +116,27 @@ const ALL_CATEGORIES = [
 /**
  * Firebase get() call to retrieve a "config" document by id & env
  */
-export async function getProjectConfig (id: string, env: Env): Promise<ProjectConfig> {
+export async function getProjectConfig (id: string, env: Env): Promise<ProjectConfig|null> {
   const path = Util.configPath(id, env)
   const ref = doc(firestore, path)
   try {
     const snapshot = await getDoc(ref);
-    if (!snapshot.exists()) {
-      return Promise.reject(new Error(`No config exists for "${id}" at "${path}"`))
-    }
+    if (!snapshot.exists()) return null;
     return cleanConfig({
       ...snapshot.data(),
       id: snapshot.id,
       ref: snapshot.ref.toString(),
     })
   } catch (e) {
-    return Promise.reject(e)
+    console.error(e);
+    return null;
   }
 }
 
 /**
  * Firebase get() call to retrieve the "configs" documents.
  */
-export async function getProjectConfigs (category: Category, limit: number): Promise<ProjectConfig[]> {
+export async function getProjectConfigs(category: Category, limit: number): Promise<ProjectConfig[]> {
   try {
     const snapshot = await getDocs(
         query(
@@ -158,33 +157,35 @@ export async function getProjectConfigs (category: Category, limit: number): Pro
       })
     );
   } catch (e) {
-    return Promise.reject(e)
+    console.error(e);
+    return [];
   }
 }
 
 /**
  * Firebase get() call to retrieve a "content" OR "content-staging" document.
  */
-export async function getProjectContent (id: string, env: Env): Promise<PageContent> {
+export async function getProjectContent (id: string, env: Env): Promise<PageContent|null> {
   const path = Util.contentPath(id, env)
   const ref = doc(firestore, path)
   try {
     const snapshot = await getDoc(ref);
-    if (!snapshot.exists()) throw "foo";
+    if (!snapshot.exists()) return null
     return {
       ...snapshot.data(),
       id: snapshot.id,
       ref: snapshot.ref.toString()
     } as PageContent;
   } catch (e) {
-    return Promise.reject(e)
+    console.error(e);
+    return null;
   }
 }
 
 /**
  * Firebase get() call to retrieve the "pages" (i.e. "subpages") documents for a project.
  */
-export async function getSubpage(id: string, env: Env, pageId: string): Promise<PageContent> {
+export async function getSubpage(id: string, env: Env, pageId: string): Promise<PageContent|null> {
   const repoContentRef = doc(firestore, Util.contentPath(id, env))
   if (!pageId.endsWith('.md')) {
     pageId += '.md'
@@ -192,14 +193,15 @@ export async function getSubpage(id: string, env: Env, pageId: string): Promise<
   const pageContentRef = doc(collection(repoContentRef, 'pages'), pageId);
   try {
     const snapshot = await getDoc(pageContentRef);
-    if (!snapshot.exists()) throw "foo";
+    if (!snapshot.exists()) return null;
     return {
       ...snapshot.data(),
       id: snapshot.id,
       ref: snapshot.ref.toString()
     } as PageContent;
   } catch (e) {
-    return Promise.reject(e)
+    console.error(e);
+    return null
   }
 }
 
@@ -220,7 +222,8 @@ export async function getRecentReleases (amount: number): Promise<RepoRelease[]>
       ref: it.ref.toString(),
     }));
   } catch (e) {
-    return Promise.reject(e)
+    console.error(e);
+    return []
   }
 }
 
@@ -249,4 +252,18 @@ function cleanConfig (config: any): ProjectConfig {
   config.last_updated = new Date(config.last_updated)
   config.last_fetched = config.last_fetched.toDate()
   return config
+}
+
+export function calculatePageTitle(pageContent: PageContent, projectConfig: ProjectConfig, repo: string): string {
+  // Choose the page name depending on available info:
+  // Option 0 - title of the header section
+  // Option 1 - the name from the config.
+  // Option 2 - the repo name
+  if (pageContent.header.name) {
+      return pageContent.header.name
+  } else if (projectConfig.name) {
+      return projectConfig.name
+  } else {
+      return repo
+  }
 }

@@ -52,16 +52,15 @@
         recentReleases,
     } = defineProps({
         platform: { type: String, },
-        categories: { type: Array, },
-        recentReleases: { type: Array, },
+        categories: { type: Array as Array<Category>, },
+        recentReleases: { type: Array as Array<RepoRelease>, },
     })
 
     function isSectionVisible(section: string) {
-        if (!this.platform || this.platform === 'all') {
-        return true
+        if (!platform || platform === 'all') {
+          return true
         }
-
-        return section === this.platform
+        return section === platform
     }
 
 </script>

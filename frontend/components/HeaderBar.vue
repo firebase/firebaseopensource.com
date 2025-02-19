@@ -70,7 +70,7 @@
     } = defineProps({
       subheaderTitle: { type: String, },
       enableSubheader: { type: Boolean, },
-      subheaderTabs: { type: Array, },
+      subheaderTabs: { type: Array as any[], },
       subheaderTabSelection: { type: String, },
     })
 

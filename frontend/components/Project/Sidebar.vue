@@ -37,8 +37,8 @@
     projectContent,
     projectPath,
   } = defineProps({
-      projectConfig: { required: true, type: Object },
-      projectContent: { required: true, type: Object },
+      projectConfig: { required: true, type: Object as ProjectConfig },
+      projectContent: { required: true, type: Object as PageContent },
       projectPath: { required: true, type: String, },
   })
 

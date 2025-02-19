@@ -43,10 +43,11 @@
     subpageId,
    } = defineProps({
     sections: { required: true, type: Array },
-    projectConfig: { required: true, type: Object },
-    projectContent: { required: true, type: Object },
-    info: { required: true, type: Object },
+    projectConfig: { required: true, type: Object as ProjectConfig },
+    projectContent: { required: true, type: Object as PageContent },
+    info: { required: true, type: Object as ProjectInfo },
     pageTitle: { required: true, type: String },
+    subpageId: { type: String },
   })
 
   const isSubpage = subpageId != null;

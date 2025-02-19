@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-    const { section } = defineProps({ section: { required: true, type: Object }});
+    const { section } = defineProps({ section: { required: true, type: Object as SidebarSection }});
     const expanded = useState(`expanded/${section.title}`, () => section.title === 'Project');
 </script>
 

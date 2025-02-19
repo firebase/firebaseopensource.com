@@ -24,7 +24,7 @@
         category,
         categoryIndex,
     } = defineProps({
-        category: { required: true, type: Object, },
+        category: { required: true, type: Object as Category, },
         categoryIndex: { required: true, type: Number, },
     })
   

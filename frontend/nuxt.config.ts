@@ -5,22 +5,25 @@ export default async () => {
   return defineNuxtConfig({
     compatibilityDate: '2024-11-01',
     devtools: { enabled: true },
-    ssr: false,
+
     generate: {
       routes,
     },
+
     css: [
       "~/assets/styles/global.scss",
     ],
+
     app: {
       head: {
-        title: 'Firebase Open Source',
+        title: process.env.npm_package_name || 'Firebase Open Source',
         link: [{
           rel: "stylesheet",
           href: "//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700|Material+Icons&display=swap",
         }, {
-          rel: "icon",
-          href: "/logo-small.png",
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon.ico'
         }, {
           rel: "preconnect",
           href: "https://www.google-analytics.com",
@@ -44,8 +47,14 @@ gtag('js', new Date());
 gtag('config', 'UA-110728272-1');`
         }],
         meta: [{
+          charset: 'utf-8',
+        }, {
           name: "viewport",
           content: "width=device-width, initial-scale=1",
+        }, {
+          hid: 'description',
+          name: 'description',
+          content: process.env.npm_package_description || ''
         }, {
           property: 'og:image',
           content: 'https://firebaseopensource.com/logo-small.png'
@@ -60,6 +69,20 @@ gtag('config', 'UA-110728272-1');`
           content: 'Check out this project on firebaseopensource.com!'
         }]
       },
-    }
+    },
+
+    modules: ['@nuxtjs/sitemap', '@nuxt/eslint'],
+
+    eslint: {
+      config: {
+        stylistic: true
+      }
+    },
+
+    site: {
+      name: 'Firebase Open Source',
+      url: 'https://firebaseopensource.com/'
+    },
+
   });
 };

@@ -48,8 +48,8 @@ const BLOCKED_SECTIONS = ['table of contents']
     subpageId,
     pageTitle,
   } = defineProps({
-      projectConfig: { required: true, type: Object },
-      projectContent: { required: true, type: Object },
+      projectConfig: { required: true, type: Object as ProjectConfig },
+      projectContent: { required: true, type: Object as PageContent },
       env: { type: String },
       subpageId: { type: String },
       pageTitle: { required: true, type: String, },

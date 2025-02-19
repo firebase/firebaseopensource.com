@@ -41,7 +41,7 @@ const {
   projectPath,
 } = defineProps({
   projectConfig: { required: true, type: Object as ProjectConfig },
-  // projectContent: { required: true, type: Object as PageContent },
+  //projectContent: { required: true, type: Object as PageContent },
   projectPath: { required: true, type: String },
 })
 

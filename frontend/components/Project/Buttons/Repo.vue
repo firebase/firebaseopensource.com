@@ -38,7 +38,6 @@ const {
   projectConfig: { required: true, type: Object as ProjectConfig },
 })
 
-const lastUpdatedFromNow = formatDistanceToNow(projectConfig.last_updated)
 const showCloneCmd = false // TODO: Needed?
 const badges = [
   {
@@ -50,7 +49,7 @@ const badges = [
   {
     href: `https://github.com/${info.org}/${info.repo}/commits/master`,
     icon: 'access_time',
-    value: `${lastUpdatedFromNow} ago`,
+    value: `${formatDistanceToNow(projectConfig.last_updated)} ago`,
     classes: '',
   },
   {

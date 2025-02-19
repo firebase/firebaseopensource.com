@@ -9,14 +9,15 @@
       {{ page.title }}
       <i class="material-icons outboundIcon">open_in_new</i>
     </a>
-    <nuxt-link
+    <NuxtLink
       v-else
       :to="link"
       :target="page.outbound ? '_blank' : ''"
+      prefetch-on="interaction"
       exact-active-class="selected"
     >
       {{ page.title }}
-    </nuxt-link>
+    </NuxtLink>
   </span>
 </template>
 

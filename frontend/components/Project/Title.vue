@@ -13,6 +13,7 @@
               <NuxtLink
                 v-for="repo in relatedRepos"
                 :key="repo.id"
+                prefetch-on="interaction"
                 class="repo test"
                 :to="`/projects/${repo.path}`"
               >

@@ -1,27 +1,22 @@
 <template>
   <HomePage
     platform="all"
-    :categories="data.categories"
-    :recent-releases="data.recentReleases"
+    :categories="categories"
+    :recent-releases="recentReleases"
   />
 </template>
 
 <script setup lang="ts">
-const { data } = await useAsyncData('homepage', async () => {
-  const resolveRecentReleases = getRecentReleases(3)
-
-  const categories = await getCategories()
-
-  await Promise.all(
-    categories.map(async (category) => {
-      category.projects = await getProjectConfigs(category, 6)
-      return category
-    }),
-  )
-
-  return {
-    recentReleases: await resolveRecentReleases,
-    categories,
-  }
-})
+const [{ data: recentReleases }, { data: categories }] = await Promise.all([
+  useAsyncData('recentReleases', () => getRecentReleases(3)),
+  useAsyncData('categories', async () => {
+    const categories = await getCategories()
+    return await Promise.all(
+      categories.map(async (category) => {
+        const projects = await getProjectConfigs(category, 6)
+        return { ...category, projects }
+      }),
+    )
+  }),
+])
 </script>

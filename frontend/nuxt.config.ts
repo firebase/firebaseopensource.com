@@ -14,6 +14,12 @@ export default async () => {
       '~/assets/styles/global.scss',
     ],
 
+    experimental: {
+      treeshakeClientOnly: true,
+      payloadExtraction: true,
+      sharedPrerenderData: true,
+    },
+
     app: {
       head: {
         title: process.env.npm_package_name || 'Firebase Open Source',
@@ -27,12 +33,6 @@ export default async () => {
         }, {
           rel: 'preconnect',
           href: 'https://www.google-analytics.com',
-        }, {
-          rel: 'preconnect',
-          href: 'https://img.shields.io',
-        }, {
-          rel: 'preconnect',
-          href: 'https://firestore.googleapis.com',
         }, {
           rel: 'preconnect',
           href: 'http://fonts.gstatic.com',

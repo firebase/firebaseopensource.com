@@ -1,46 +1,36 @@
 <template>
   <ProjectDetail
-    v-if="!data.redirectTo"
-    :project-config="data.projectConfig"
-    :project-content="data.projectContent"
+    v-if="!redirectTo"
+    :project-config="config"
+    :project-content="content"
     :env="env"
     :subpage-id="null"
-    :page-title="data.pageTitle"
+    :page-title="pageTitle"
   />
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
-const org = route.params.org
-const repo = route.params.repo
+const org = route.params.org!
+const repo = route.params.repo!
 
 const id = [org, repo].join('::')
 
 const env = route.path.includes('-staging') ? Env.STAGING : Env.PROD
 
-const { data } = await useAsyncData(`projects/${org}/${repo}`, async () => {
-  const [
-    projectConfig,
-    projectContent,
-  ] = await Promise.all([
-    getProjectConfig(id, env),
-    getProjectContent(id, env),
-  ])
+const [{ data: config }, { data: content }] = await Promise.all([
+  useAsyncData(`projects/${org}/${repo}`, () => getProjectConfig(id, env)),
+  useAsyncData(`projects/${org}/${repo}:content`, () => getProjectContent(id, env)),
+])
 
-  if (!projectConfig || !projectContent) {
-    return {
-      redirectTo: `https://github.com/${org}/${repo}`,
-    }
-  }
+let pageTitle = ''
+let redirectTo: string | undefined
 
-  return {
-    projectConfig,
-    projectContent,
-    pageTitle: calculatePageTitle(projectContent, projectConfig, repo!),
-  }
-})
-
-if (data.value.redirectTo) {
-  navigateTo(data.value.redirectTo, { external: true })
+if (config.value && content.value) {
+  pageTitle = calculatePageTitle(content.value, config.value, repo)
+}
+else {
+  redirectTo = `http://github.com/${org}/${repo}`
+  navigateTo(redirectTo, { external: true })
 }
 </script>

@@ -16,14 +16,16 @@
 </template>
 
 <script setup lang="ts">
+import { formatDistanceToNow } from 'date-fns'
+
 const {
   info,
-  // projectConfig,
+  projectConfig,
 } = defineProps({
   info: { required: true, type: Object as ProjectInfo },
-  // projectConfig: { required: true, type: Object as ProjectConfig },
+  projectConfig: { required: true, type: Object as ProjectConfig },
 })
-const lastFetchedFromNow = '1 hour'
+const lastFetchedFromNow = formatDistanceToNow(projectConfig.last_fetched)
 </script>
 
 <style lang="scss" scoped>

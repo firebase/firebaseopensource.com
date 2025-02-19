@@ -10,12 +10,13 @@
         <div class="col_gutter" />
         <div class="content col_main">
           <div class="title">
-            <nuxt-link
+            <NuxtLink
+              prefetch-on="interaction"
               to="/"
               class="logo"
             >
               <img src="@/assets/img/oss-logo-small.png">
-            </nuxt-link>
+            </NuxtLink>
           </div>
 
           <!-- Need to render this client-side only or Nuxt gets mad -->
@@ -50,15 +51,16 @@
                 {{ tab.title }}
                 <i class="material-icons">open_in_new</i>
               </a>
-              <nuxt-link
+              <NuxtLink
                 v-else
+                prefetch-on="interaction"
                 :class="{ selected: subheaderTabSelection == tab.title.toLowerCase() }"
                 :target="tab.outbound ? '_blank' : ''"
                 :to="tab.href"
                 class="tab"
               >
                 {{ tab.title }}
-              </nuxt-link>
+              </NuxtLink>
             </template>
           </div>
         </div>

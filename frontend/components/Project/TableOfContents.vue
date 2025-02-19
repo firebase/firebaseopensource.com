@@ -4,6 +4,7 @@
     <NuxtLink
       v-for="section in sections"
       :key="section.id"
+      prefetch-on="interaction"
       :to="section.ref"
       class="ellipsize"
     >

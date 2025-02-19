@@ -8,7 +8,7 @@
     </nuxt-link>
     <p class="release-description">
       <code>{{ release.tag_name }}</code> released
-      {{ releaseTime }}.
+      {{ releaseTime }} ago.
     </p>
     <a
       :href="release.url"
@@ -22,11 +22,13 @@
 </template>
 
 <script setup lang="ts">
+import { formatDistanceToNow } from 'date-fns'
+
 const { release } = defineProps({
   release: { required: true, type: Object },
 })
 
-const releaseTime = daysAgo(release.created_at)
+const releaseTime = formatDistanceToNow(release.created_at)
 </script>
 
   <style lang="scss" scoped>

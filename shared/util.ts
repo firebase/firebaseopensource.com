@@ -45,7 +45,7 @@ export class Util {
     const owner = sections[0];
     const repo = sections[1];
 
-    let path = undefined;
+    let path: string|undefined = undefined;
     if (sections.length > 2) {
       const pathSections = sections.slice(2, sections.length);
       path = pathSections.join("/");
@@ -58,3 +58,4 @@ export class Util {
     };
   }
 }
+

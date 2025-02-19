@@ -6,20 +6,24 @@
         :project-index="projectIndex"
         :category-index="categoryIndex"
       />
-      <nuxt-link
+      <NuxtLink
+        prefetch-on="interaction"
         :to="link"
         class="project-title"
       >
         {{ project.name }}
-      </nuxt-link>
+      </NuxtLink>
       <p class="project-description">
         {{ description }}
       </p>
-      <nuxt-link :to="link">
+      <NuxtLink
+        :to="link"
+        prefetch-on="interaction"
+      >
         <button class="button-right">
           LEARN MORE
         </button>
-      </nuxt-link>
+      </NuxtLink>
     </div>
   </div>
 </template>

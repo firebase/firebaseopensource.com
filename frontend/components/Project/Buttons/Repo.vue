@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatDistanceToNow } from 'date-fns'
+
 const {
   info,
   projectConfig,

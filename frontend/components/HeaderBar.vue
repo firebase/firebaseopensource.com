@@ -21,14 +21,7 @@
           <!-- Need to render this client-side only or Nuxt gets mad -->
           <div class="search">
             <client-only>
-              <span class="search-input">
-                <i class="material-icons">search</i>
-                <input
-                  class="algolia"
-                  type="text"
-                  placeholder="Find a project"
-                >
-              </span>
+              <SearchInput />
             </client-only>
           </div>
         </div>
@@ -91,31 +84,7 @@ const {
   subheaderTabSelection: { type: String },
 })
 
-// const searchExpanded = false
-
 const headers = [{ id: 0 }, { id: 1, spacer: true }]
-/*
-    // TODO let's do this in a more native way
-    onMounted(async () => {
-      const docsearch = (window as any).docsearch
-      if (docsearch) return
-      await this.waitForSelector('.algolia')
-      docsearch({
-        apiKey: '1f64b5546043241736496d3b1e0980a6',
-        indexName: 'firebaseopensource',
-        inputSelector: '.algolia',
-        debug: false
-      })
-    })
-
-    // Gross
-    async function waitForSelector(selector: string): Promise<void> {
-      while (document.querySelectorAll(selector).length === 0) {
-        // eslint-disable-next-line
-        await new Promise((resolve, reject) => this.$nextTick(resolve))
-      }
-    }
-*/
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,7 @@
 <template>
   <div
-    class="logo-circle"  >
+    class="logo-circle"
+  >
     <!--
           TODO: Need to find an SVG letter font free for commercial use
           ex: https://www.behance.net/gallery/48597451/Free-SVG-Alphabet
@@ -35,7 +36,7 @@ const colors = [
 ]
 
 const singleLetter = pickLogoLetter(project.name)
-const backgroundColor = ref(colors[(projectIndex + categoryIndex) % colors.length]);
+const backgroundColor = ref(colors[(projectIndex + categoryIndex) % colors.length])
 </script>
 
   <style lang="scss" scoped>

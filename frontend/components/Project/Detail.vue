@@ -58,20 +58,20 @@ const {
   env: { type: String },
   subpageId: { type: String },
   pageTitle: { required: true, type: String },
-});
+})
 
 useHead({
   title: pageTitle,
   meta: [
     {
       property: 'og:title',
-      content: pageTitle
-    }
+      content: pageTitle,
+    },
   ],
   script: [
-    { src: 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js', defer: true }
-  ]
-});
+    { src: 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js', defer: true },
+  ],
+})
 
 function getSections(): Section[] {
   const sections: Section[] = []

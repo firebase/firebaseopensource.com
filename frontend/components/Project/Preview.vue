@@ -1,7 +1,11 @@
 <template>
   <div class="project">
     <div class="grid">
-      <LogoCircle :project="project" :project-index="projectIndex" :category-index="categoryIndex" />
+      <LogoCircle
+        :project="project"
+        :project-index="projectIndex"
+        :category-index="categoryIndex"
+      />
       <nuxt-link
         :to="link"
         class="project-title"

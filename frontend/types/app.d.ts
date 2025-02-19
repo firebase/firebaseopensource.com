@@ -1,31 +1,31 @@
-import { ProjectConfig } from '~/shared/types'
+import type { ProjectConfig } from '~/shared/types'
 
-type Tab = { link: string; text: string }
+type Tab = { link: string, text: string }
 
 type ProjectInfo = {
-    org: string
-    repo: string
-    stars: number
-  }
+  org: string
+  repo: string
+  stars: number
+}
 
 type Category = {
-    title: string
-    platform: string
-    icon: string
-    projects: ProjectConfig[]
-    featured: ProjectConfig[]
-  }
+  title: string
+  platform: string
+  icon: string
+  projects: ProjectConfig[]
+  featured: ProjectConfig[]
+}
 
 type Section = {
-  content?: String
-  name?: String
-  id?: String
-  ref?: String
+  content?: string
+  name?: string
+  id?: string
+  ref?: string
 }
 
 type BlueBadge = {
-  href: String
-  icon: String,
-  value: String,
-  classes: String
+  href: string
+  icon: string
+  value: string
+  classes: string
 }

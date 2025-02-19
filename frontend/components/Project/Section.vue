@@ -1,15 +1,23 @@
 <template>
   <div class="section-card">
-    <div :id="section.id" class="section-marker" :name="section.name" />
+    <div
+      :id="section.id"
+      class="section-marker"
+      :name="section.name"
+    />
     <div class="content">
       <h2>{{ section.name }}</h2>
-      <div v-html="section.content" />
+      <!-- eslint-disable vue/no-v-html -->
+      <div v-html="DOMPurify.sanitize(section.content)" />
+      <!-- eslint-enable -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  const { section } = defineProps({ section: { required: true, type: Object }});
+import DOMPurify from 'isomorphic-dompurify'
+
+const { section } = defineProps({ section: { required: true, type: Object } })
 </script>
 
 <style lang="scss" scoped>

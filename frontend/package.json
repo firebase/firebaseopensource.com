@@ -1,7 +1,10 @@
 {
-  "name": "nuxt-app",
+  "name": "firebaseopensource",
+  "description": "https://firebaseopensource.com",
+  "version": "3.0.0",
+  "author": "Abraham Haskins <abeisgreat@abeisgreat.com>",
+  "license": "Apache-2.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -9,13 +12,16 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "deploy": "npm run generate && firebase --project=default deploy",
+    "deploy:hosting": "npm run generate && firebase --project=default deploy --only hosting"
   },
   "devDependencies": {
     "@docsearch/js": "^3.9.0",
     "@nuxt/eslint": "^1.1.0",
     "@nuxtjs/sitemap": "^7.2.6",
     "eslint": "^9.20.1",
+    "isomorphic-dompurify": "^2.21.0",
     "nuxt": "^3.15.4",
     "sass": "^1.85.0",
     "vue": "latest",

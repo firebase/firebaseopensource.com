@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-  const { sections } = defineProps({ sections: { required: true, type: Array }});
+const { sections } = defineProps({ sections: { required: true, type: Array } })
 </script>
 
 <style lang="scss" scoped>

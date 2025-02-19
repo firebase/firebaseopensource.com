@@ -1,13 +1,28 @@
 <template>
   <li class="sidebar-section">
-    <div class="header" @click="expanded = !expanded">
+    <div
+      class="header"
+      @click="expanded = !expanded"
+    >
       <span class="title">{{ section.title }}</span>
-      <i v-if="expanded" class="material-icons">expand_less</i>
-      <i v-else class="material-icons">expand_more</i>
+      <i
+        v-if="expanded"
+        class="material-icons"
+      >expand_less</i>
+      <i
+        v-else
+        class="material-icons"
+      >expand_more</i>
     </div>
 
-    <ul v-if="expanded" class="subsection">
-      <li v-for="page in section.pages" :key="page.id">
+    <ul
+      v-if="expanded"
+      class="subsection"
+    >
+      <li
+        v-for="page in section.pages"
+        :key="page.id"
+      >
         <ProjectSidebarLink :page="page" />
       </li>
     </ul>
@@ -15,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-    const { section } = defineProps({ section: { required: true, type: Object as SidebarSection }});
-    const expanded = useState(`expanded/${section.title}`, () => section.title === 'Project');
+const { section } = defineProps({ section: { required: true, type: Object as SidebarSection } })
+const expanded = useState(`expanded/${section.title}`, () => section.title === 'Project')
 </script>
 
 <style lang="scss" scoped>

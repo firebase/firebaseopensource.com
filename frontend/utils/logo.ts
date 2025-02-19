@@ -1,13 +1,12 @@
-
-function isLetter (c: string) {
+function isLetter(c: string) {
   return c.toLowerCase() !== c.toUpperCase()
 }
 
-function isCapital (c: string) {
+function isCapital(c: string) {
   return c === c.toUpperCase()
 }
 
-function splitWords (name: string) {
+function splitWords(name: string) {
   const words = []
   let currWord = ''
 
@@ -19,12 +18,12 @@ function splitWords (name: string) {
     // Word breaks are:
     //  * Non letter characters
     //  * Changes in case after the second letter
-    const wordStart =
-      isLetter(prev) &&
-      isLetter(c) &&
-      isCapital(c) &&
-      !isCapital(next) &&
-      i !== 1
+    const wordStart
+      = isLetter(prev)
+        && isLetter(c)
+        && isCapital(c)
+        && !isCapital(next)
+        && i !== 1
 
     const exclude = !isLetter(c)
     const wordBreak = !isLetter(c) || wordStart

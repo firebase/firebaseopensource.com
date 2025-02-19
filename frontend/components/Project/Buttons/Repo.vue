@@ -1,7 +1,14 @@
 <template>
   <div class="badges">
-    <ProjectButtonsBadge v-for="badge in badges" :key="badge.icon" :badge="badge" />
-    <div v-if="showCloneCmd" class="copy-code-container">
+    <ProjectButtonsBadge
+      v-for="badge in badges"
+      :key="badge.icon"
+      :badge="badge"
+    />
+    <div
+      v-if="showCloneCmd"
+      class="copy-code-container"
+    >
       <input
         id="git-clone-copy-txt"
         type="text"
@@ -21,45 +28,42 @@
 </template>
 
 <script setup lang="ts">
+const {
+  info,
+  projectConfig,
+} = defineProps({
+  info: { required: true, type: Object as ProjectInfo },
+  projectConfig: { required: true, type: Object as ProjectConfig },
+})
 
-  const {
-    info,
-    projectConfig,
-  } = defineProps({
-    info: { required: true, type: Object as ProjectInfo },
-    projectConfig: { required: true, type: Object as ProjectConfig },
-  })
-
-  const lastUpdatedFromNow = formatDistanceToNow(projectConfig.last_updated);
-  const showCloneCmd = false // TODO: Needed?
-  const badges = [
-    {
-      href: `https://github.com/${info.org}/${info.repo}/stargazers`,
-      icon: 'star',
-      value: info.stars,
-      classes: ''
-    },
-    {
-      href: `https://github.com/${info.org}/${info.repo}/commits/master`,
-      icon: 'access_time',
-      value: `${lastUpdatedFromNow} ago`,
-      classes: ''
-    },
-    {
-      href: `https://github.com/${info.org}/${info.repo}/`,
-      icon: 'code',
-      value: 'View Source',
-      classes: 'badge-action'
-    },
-    {
-      href: `https://github.com/${info.org}/${info.repo}/issues`,
-      icon: 'bug_report',
-      value: 'File Bug',
-      classes: 'badge-action'
-    }
-  ]
-
-
+const lastUpdatedFromNow = formatDistanceToNow(projectConfig.last_updated)
+const showCloneCmd = false // TODO: Needed?
+const badges = [
+  {
+    href: `https://github.com/${info.org}/${info.repo}/stargazers`,
+    icon: 'star',
+    value: info.stars,
+    classes: '',
+  },
+  {
+    href: `https://github.com/${info.org}/${info.repo}/commits/master`,
+    icon: 'access_time',
+    value: `${lastUpdatedFromNow} ago`,
+    classes: '',
+  },
+  {
+    href: `https://github.com/${info.org}/${info.repo}/`,
+    icon: 'code',
+    value: 'View Source',
+    classes: 'badge-action',
+  },
+  {
+    href: `https://github.com/${info.org}/${info.repo}/issues`,
+    icon: 'bug_report',
+    value: 'File Bug',
+    classes: 'badge-action',
+  },
+]
 </script>
 
 <style lang="scss" scoped>
@@ -118,5 +122,4 @@
     }
   }
 }
-
 </style>

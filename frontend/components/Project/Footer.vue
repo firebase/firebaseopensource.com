@@ -16,15 +16,14 @@
 </template>
 
 <script setup lang="ts">
-
-  const {
-    info,
-    projectConfig,
-  } = defineProps({
-    info: {required: true, type: Object as ProjectInfo },
-    projectConfig: { required: true, type: Object as ProjectConfig },
-  })
-
+const {
+  info,
+  // projectConfig,
+} = defineProps({
+  info: { required: true, type: Object as ProjectInfo },
+  // projectConfig: { required: true, type: Object as ProjectConfig },
+})
+const lastFetchedFromNow = '1 hour';
 </script>
 
 <style lang="scss" scoped>

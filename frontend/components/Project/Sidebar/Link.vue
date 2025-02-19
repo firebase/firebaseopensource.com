@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-  const { page } = defineProps({ page: { required: true, type: Object as SelectableLink }});
-  const link = page.href.replace('.md', '');
+const { page } = defineProps({ page: { required: true, type: Object as SelectableLink } })
+const link = page.href.replace('.md', '')
 </script>
 
 <style lang="scss" scoped>
@@ -45,5 +45,4 @@ a.selected {
   color: #039be5;
   font-weight: bold;
 }
-
 </style>

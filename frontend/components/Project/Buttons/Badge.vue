@@ -1,6 +1,12 @@
 <template>
-  <a :href="badge.href" target="_blank">
-    <div class="badge" :class="badge.classes">
+  <a
+    :href="badge.href"
+    target="_blank"
+  >
+    <div
+      class="badge"
+      :class="badge.classes"
+    >
       <div class="key">
         <i class="material-icons">{{ badge.icon }}</i>
       </div>
@@ -10,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  const { badge } = defineProps({ badge: { required: true, type: Object as BlueBadge }});
+const { badge } = defineProps({ badge: { required: true, type: Object as BlueBadge } })
 </script>
 
 <style lang="scss" scoped>

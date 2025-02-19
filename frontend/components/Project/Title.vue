@@ -5,7 +5,10 @@
         <div class="left">
           <h1>{{ pageTitle }}</h1>
 
-          <div v-if="!isSubpage" class="related">
+          <div
+            v-if="!isSubpage"
+            class="related"
+          >
             <div class="repos">
               <NuxtLink
                 v-for="repo in relatedRepos"
@@ -21,12 +24,25 @@
         </div>
 
         <div class="right">
-          <ProjectButtonsRepo v-if="!isSubpage" :info="info" :project-config="projectConfig" />
+          <ProjectButtonsRepo
+            v-if="!isSubpage"
+            :info="info"
+            :project-config="projectConfig"
+          />
         </div>
 
         <div>
-          <ProjectTableOfContents v-if="sections.length > 1" :sections="sections" />
-          <div v-if="header?.content" class="header_content" v-html="header.content" />
+          <ProjectTableOfContents
+            v-if="sections.length > 1"
+            :sections="sections"
+          />
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            v-if="header?.content"
+            class="header_content"
+            v-html="DOMPurify.sanitize(header.content)"
+          />
+          <!-- eslint-enable -->
         </div>
       </div>
     </div>
@@ -34,49 +50,50 @@
 </template>
 
 <script setup lang="ts">
-  const {
-    sections,
-    projectConfig,
-    projectContent,
-    info,
-    pageTitle,
-    subpageId,
-   } = defineProps({
-    sections: { required: true, type: Array },
-    projectConfig: { required: true, type: Object as ProjectConfig },
-    projectContent: { required: true, type: Object as PageContent },
-    info: { required: true, type: Object as ProjectInfo },
-    pageTitle: { required: true, type: String },
-    subpageId: { type: String },
-  })
+import DOMPurify from 'isomorphic-dompurify'
 
-  const isSubpage = subpageId != null;
+const {
+  sections,
+  projectConfig,
+  projectContent,
+  info,
+  pageTitle,
+  subpageId,
+} = defineProps({
+  sections: { required: true, type: Array },
+  projectConfig: { required: true, type: Object as ProjectConfig },
+  projectContent: { required: true, type: Object as PageContent },
+  info: { required: true, type: Object as ProjectInfo },
+  pageTitle: { required: true, type: String },
+  subpageId: { type: String },
+})
 
-  function getRelatedRepos() {
-    const config = projectConfig
-    if (!config.related) {
-      return []
-    }
+const isSubpage = subpageId != null
 
-    return Object.keys(config.related).map((repo) => {
-      // Format the name of a related project for display.
-      // Strips the "firebase/" from the name to save space, since
-      // the firebase context is implied on firebaseopensource.com
-      let name = repo
-      if (repo.includes('firebase/')) {
-        name = repo.substring('firebase/'.length, repo.length)
-      }
-
-      return {
-        name,
-        path: repo
-      }
-    })
+function getRelatedRepos() {
+  const config = projectConfig
+  if (!config.related) {
+    return []
   }
 
-  const relatedRepos = getRelatedRepos();
-  const header = projectContent.header;
+  return Object.keys(config.related).map((repo) => {
+    // Format the name of a related project for display.
+    // Strips the "firebase/" from the name to save space, since
+    // the firebase context is implied on firebaseopensource.com
+    let name = repo
+    if (repo.includes('firebase/')) {
+      name = repo.substring('firebase/'.length, repo.length)
+    }
 
+    return {
+      name,
+      path: repo,
+    }
+  })
+}
+
+const relatedRepos = getRelatedRepos()
+const header = projectContent.header
 </script>
 
 <style lang="scss" scoped>

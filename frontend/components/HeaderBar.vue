@@ -1,11 +1,19 @@
 <template>
   <div id="header-bar">
-    <div v-for="header in headers" :key="header.id" class="header-clone" :class="header">
+    <div
+      v-for="header in headers"
+      :key="header.id"
+      class="header-clone"
+      :class="header"
+    >
       <header class="content_grid">
         <div class="col_gutter" />
         <div class="content col_main">
           <div class="title">
-            <nuxt-link to="/" class="logo">
+            <nuxt-link
+              to="/"
+              class="logo"
+            >
               <img src="@/assets/img/oss-logo-small.png">
             </nuxt-link>
           </div>
@@ -15,14 +23,21 @@
             <client-only>
               <span class="search-input">
                 <i class="material-icons">search</i>
-                <input class="algolia" type="text" placeholder="Find a project">
+                <input
+                  class="algolia"
+                  type="text"
+                  placeholder="Find a project"
+                >
               </span>
             </client-only>
           </div>
         </div>
         <div class="col_gutter" />
       </header>
-      <div v-if="enableSubheader" class="subheader content_grid">
+      <div
+        v-if="enableSubheader"
+        class="subheader content_grid"
+      >
         <div class="col_gutter" />
         <div class="content col_main">
           <h2 v-if="subheaderTitle">
@@ -44,7 +59,7 @@
               </a>
               <nuxt-link
                 v-else
-                :class="{selected: subheaderTabSelection == tab.title.toLowerCase()}"
+                :class="{ selected: subheaderTabSelection == tab.title.toLowerCase() }"
                 :target="tab.outbound ? '_blank' : ''"
                 :to="tab.href"
                 class="tab"
@@ -54,29 +69,31 @@
             </template>
           </div>
         </div>
-        <div v-if="!subheaderTabs" class="tab-spacer" />
+        <div
+          v-if="!subheaderTabs"
+          class="tab-spacer"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const {
+  subheaderTitle,
+  enableSubheader,
+  subheaderTabs,
+  subheaderTabSelection,
+} = defineProps({
+  subheaderTitle: { type: String },
+  enableSubheader: { type: Boolean },
+  subheaderTabs: { type: Array as Array<object> },
+  subheaderTabSelection: { type: String },
+})
 
-    const {
-      subheaderTitle,
-      enableSubheader,
-      subheaderTabs,
-      subheaderTabSelection,
-    } = defineProps({
-      subheaderTitle: { type: String, },
-      enableSubheader: { type: Boolean, },
-      subheaderTabs: { type: Array as any[], },
-      subheaderTabSelection: { type: String, },
-    })
+// const searchExpanded = false
 
-    let searchExpanded = false
-
-    const headers = [{ id: 0 }, { id: 1, spacer: true }]
+const headers = [{ id: 0 }, { id: 1, spacer: true }]
 /*
     // TODO let's do this in a more native way
     onMounted(async () => {
@@ -292,5 +309,4 @@
 }
 
 }
-
 </style>

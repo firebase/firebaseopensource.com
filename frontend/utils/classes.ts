@@ -1,21 +1,21 @@
 export class SidebarSection {
-    title: String = ''
-    pages: SelectableLink[] = []
+  title: string = ''
+  pages: SelectableLink[] = []
 
-    constructor (title: String, pages: SelectableLink[]) {
-      this.title = title
-      this.pages = pages
-    }
+  constructor(title: string, pages: SelectableLink[]) {
+    this.title = title
+    this.pages = pages
+  }
 }
 
 export class SelectableLink {
-    title: String = ''
-    href: String = ''
-    outbound: Boolean = false
+  title: string = ''
+  href: string = ''
+  outbound: boolean = false
 
-    constructor (title: String, href: String, outbound = false) {
-      this.title = title
-      this.href = href
-      this.outbound = outbound
-    }
+  constructor(title: string, href: string, outbound = false) {
+    this.title = title
+    this.href = href
+    this.outbound = outbound
+  }
 }

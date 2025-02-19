@@ -15,13 +15,11 @@
 </template>
 
 <script setup lang="ts">
-  import type { NuxtError } from '#app'
+import type { NuxtError } from '#app'
 
-  const { error } = defineProps({
-    error: Object as () => NuxtError,
-  });
+const { error } = defineProps({
+  error: Object as () => NuxtError,
+})
 
-  console.error(error);
-
-  const handleError = () => clearError({ redirect: '/' });
+console.error(error)
 </script>

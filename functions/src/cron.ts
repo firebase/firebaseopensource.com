@@ -5,25 +5,25 @@ const buildConfig = {
   timeout: "1800s",
   steps: [
     {
-      name: "node:12",
+      name: "node:22",
       entrypoint: "npm",
       args: ["install"]
     },
     {
-      name: "node:12",
+      name: "node:22",
       entrypoint: "npm",
       args: ["--prefix=frontend", "install"]
     },
     {
-      name: "node:12",
+      name: "node:22",
       entrypoint: "npm",
       args: ["--prefix=frontend", "run", "build"]
     },
     {
-      name: "node:12",
+      name: "node:22",
       entrypoint: "npm",
       args: ["--prefix=frontend", "run", "deploy:hosting"]
-    },
+    }
   ],
   source: {
     repoSource: {

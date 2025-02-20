@@ -1,6 +1,8 @@
-import firebase from 'firebase'
+// import firebase from 'firebase/compat'
 
-export type Timestamp = firebase.firestore.Timestamp
+//export type Timestamp = firebase.firestore.Timestamp
+
+export type Timestamp = any
 
 export interface StringMap<T> {
   [s: string]: T;

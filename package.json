@@ -1,7 +1,5 @@
 {
   "license": "Apache-2.0",
   "dependencies": {
-    "@firebase/app": "^0.11.1",
-    "firebase": "^11.3.1"
   }
 }

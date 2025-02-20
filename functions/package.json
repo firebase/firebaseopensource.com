@@ -25,10 +25,11 @@
     "node": "12"
   },
   "scripts": {
-    "dev": "npm run build && firebase functions:config:get > .runtimeconfig.json && firebase serve --only functions",
+    "dev": "npm run build && npx -y firebase-tools functions:config:get > .runtimeconfig.json && npx -y firebase-tools serve --only functions",
     "build": "npm run fmt && tsc",
     "build:watch": "tsc -w",
-    "fmt": "prettier --write src/*.ts src/test/*.ts"
+    "fmt": "prettier --write src/*.ts src/test/*.ts",
+    "deploy:functions": "npm run build && npx -y firebase-tools --project=default deploy --only functions"
   },
   "private": true,
   "devDependencies": {

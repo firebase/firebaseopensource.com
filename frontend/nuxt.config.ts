@@ -23,14 +23,23 @@ export default async () => {
 
     app: {
       head: {
-        title: process.env.npm_package_name || 'Firebase Open Source',
+        title: 'Firebase Open Source',
         link: [{
           rel: 'stylesheet',
-          href: '//fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700|Material+Icons&display=swap',
+          href: '//fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;1,700&family=Roboto+Mono:ital,wght@0,400;&display=swap',
+        }, {
+          rel: 'stylesheet',
+          href: '//fonts.googleapis.com/css2?family=Material+Icons&display=block',
         }, {
           rel: 'icon',
           type: 'image/x-icon',
           href: '/favicon.ico',
+        }, {
+          rel: "shortcut icon",
+          href: "https://www.gstatic.com/devrel-devsite/prod/v38a693baeb774512feb42f10aac8f755d8791ed41119b5be7a531f8e16f8279f/firebase/images/favicon.png",
+        }, {
+          rel: "apple-touch-icon",
+          href: "https://www.gstatic.com/devrel-devsite/prod/v38a693baeb774512feb42f10aac8f755d8791ed41119b5be7a531f8e16f8279f/firebase/images/touchicon-180.png",
         }, {
           rel: 'preconnect',
           href: 'https://www.google-analytics.com',
@@ -53,12 +62,18 @@ gtag('config', 'UA-110728272-1');`,
           name: 'viewport',
           content: 'width=device-width, initial-scale=1',
         }, {
+          content: "https://firebase.google.com/images/social.png",
+          name: "image"
+        }, {
           hid: 'description',
           name: 'description',
           content: process.env.npm_package_description || '',
         }, {
           property: 'og:image',
-          content: 'https://firebaseopensource.com/logo-small.png',
+          content: 'https://firebase.google.com/images/social.png',
+        }, {
+          property: 'twitter:image',
+          content: 'https://firebase.google.com/images/social.png',
         }, {
           property: 'og:site_name',
           content: 'Firebase Open Source',

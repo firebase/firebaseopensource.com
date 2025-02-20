@@ -15,15 +15,14 @@
               to="/"
               class="logo"
             >
-              <img src="@/assets/img/oss-logo-small.png">
+              <img src="@/assets/img/firebase-icon.svg" width="32" height="32">
+              <span><strong>Firebase</strong> Open Source</span>
             </NuxtLink>
           </div>
 
           <!-- Need to render this client-side only or Nuxt gets mad -->
           <div class="search">
-            <client-only>
-              <SearchInput />
-            </client-only>
+            <SearchInput />
           </div>
         </div>
         <div class="col_gutter" />
@@ -125,73 +124,27 @@ const headers = [{ id: 0 }, { id: 1, spacer: true }]
       grid-template-columns: 1fr fit-content(100%);
       justify-content: space-between;
       padding: 0px 20px;
-
-      @media (max-width: $phone) {
-        grid-template-columns: fit-content(100%) 1fr;
-      }
     }
 
     .search {
       display: inline-flex;
       align-items: center;
-
       margin-left: 16px;
-
-      .search-input {
-        display: flex;
-        align-items: center;
-        border: 1px solid rgba(0,0,0,0.075);
-        border-radius: 9999px;
-
-        padding-top: 2px;
-        padding-bottom: 2px;
-        padding-right: 4px;
-        padding-left: 4px;
-
-        background: rgba(0,0,0,0.025);
-
-        transition: border 0.2s ease-out;
-        transition: box-shadow 0.2s ease-out;
-      }
-
-      .search-input:focus-within {
-        border: 1px solid #039be5;
-        box-shadow: 0px 0px 4px 1px rgba(3,155,229,0.37);
-
-        i {
-          color: #039be5;
-        }
-      }
-
-      i {
-        font-size: 1.2rem;
-        margin-top: 1px;
-        margin-left: 2px;
-        margin-right: 2px;
-      }
-
-      input {
-        appearance: none;
-        outline: none;
-        border: none;
-        background: none;
-        font-size: .9rem;
-        line-height: 1.5rem;
-      }
     }
 
     .title {
       a.logo {
         display: block;
         overflow: hidden;
+        margin: 12px 0 12px -12px;
+        span {
+          font-size: $header-height - 16px;
+          color: #5e5e5e;
+        }
       }
       img {
-        margin-top: 4px;
+        margin: 0 4px -6px 0;
         height: $header-height - 8px;
-
-        @media (max-width: $phone) {
-          content:url('../../../assets/img/oss-logo-icon-only.png')
-        }
       }
     }
 

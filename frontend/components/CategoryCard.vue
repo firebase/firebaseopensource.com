@@ -32,10 +32,7 @@
 const {
   category,
   categoryIndex,
-} = defineProps({
-  category: { required: true, type: Object as Category },
-  categoryIndex: { required: true, type: Number },
-})
+} = defineProps<{ category: Category, categoryIndex: number }>();
 
 const route = useRoute()
 

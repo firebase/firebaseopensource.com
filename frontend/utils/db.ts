@@ -3,7 +3,9 @@ import { doc, getFirestore, getDoc, collection, orderBy, query, where, limit as 
 
 import type { PageContent, ProjectConfig, RepoRelease } from '../../shared/types'
 import firebaseConfig from '../../shared/firebaseConfig'
-import type { Category } from '@/types/app'
+import type { Category } from './classes'
+
+export type { RepoRelease, ProjectConfig, PageContent };
 
 const firebaseApp = initializeApp(firebaseConfig)
 export const firestore = getFirestore(firebaseApp)
@@ -221,7 +223,10 @@ export async function getRecentReleases(amount: number): Promise<RepoRelease[]> 
   )
   try {
     const snapshot = await getDocs(ref)
-    return snapshot.docs.map(it => cleanRelease(it.data()))
+    return snapshot.docs.map(it => cleanRelease({
+      ...it.data(),
+      id: it.id,
+    }))
   }
   catch (e) {
     console.error(e)

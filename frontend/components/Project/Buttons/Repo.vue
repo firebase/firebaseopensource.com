@@ -33,17 +33,17 @@ import { formatDistanceToNow } from 'date-fns'
 const {
   info,
   projectConfig,
-} = defineProps({
-  info: { required: true, type: Object as ProjectInfo },
-  projectConfig: { required: true, type: Object as ProjectConfig },
-})
+} = defineProps<{
+  info: ProjectInfo,
+  projectConfig: ProjectConfig,
+}>()
 
 const showCloneCmd = false // TODO: Needed?
 const badges = [
   {
     href: `https://github.com/${info.org}/${info.repo}/stargazers`,
     icon: 'star',
-    value: info.stars,
+    value: info.stars.toString(),
     classes: '',
   },
   {

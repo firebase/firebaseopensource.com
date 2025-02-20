@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-const { badge } = defineProps({ badge: { required: true, type: Object as BlueBadge } })
+const { badge } = defineProps<{ badge: BlueBadge }>()
 </script>
 
 <style lang="scss" scoped>

@@ -52,13 +52,13 @@ const {
   env,
   subpageId,
   pageTitle,
-} = defineProps({
-  projectConfig: { required: true, type: Object as ProjectConfig },
-  projectContent: { required: true, type: Object as PageContent },
-  env: { type: String },
-  subpageId: { type: String },
-  pageTitle: { required: true, type: String },
-})
+} = defineProps<{
+  projectConfig: ProjectConfig|Readonly<ProjectConfig>,
+  projectContent: PageContent|Readonly<PageContent>,
+  env?: string|null,
+  subpageId?: string|null,
+  pageTitle: string,
+}>()
 
 useHead({
   title: pageTitle,
@@ -112,7 +112,7 @@ function getSubheaderTabs() {
     ),
   ]
   if (projectConfig.tabs) {
-    projectConfig.tabs.forEach((tab: TabConfig) => {
+    projectConfig.tabs.forEach((tab) => {
       tabs.push(
         new SelectableLink(tab.title, tab.href, true),
       )

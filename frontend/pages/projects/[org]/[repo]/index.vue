@@ -1,8 +1,8 @@
 <template>
   <ProjectDetail
     v-if="!redirectTo"
-    :project-config="config"
-    :project-content="content"
+    :project-config="config!"
+    :project-content="content!"
     :env="env"
     :subpage-id="null"
     :page-title="pageTitle"
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
+const route = useRoute("projects-org-repo")
 const org = route.params.org!
 const repo = route.params.repo!
 

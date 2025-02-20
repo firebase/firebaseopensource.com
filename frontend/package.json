@@ -13,6 +13,7 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck .",
     "deploy": "npm run generate && firebase --project=default deploy",
     "deploy:hosting": "npm run generate && firebase --project=default deploy --only hosting"
   },

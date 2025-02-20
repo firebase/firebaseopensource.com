@@ -115,6 +115,7 @@ export interface StoredRepoRelease {
  * A RepoRelease as we use it in the frontend
  */
 export interface RepoRelease {
+  id?: string;
   org: string;
   repo: string;
   url: string;

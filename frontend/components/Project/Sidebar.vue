@@ -3,7 +3,7 @@
     <ul class="sidebar shadow_all">
       <ProjectSidebarCard
         v-for="section in sidebarData"
-        :key="section.id"
+        :key="section.title"
         :section="section"
       />
     </ul>
@@ -37,13 +37,11 @@ const FIREBASE_SIDEBAR = new SidebarSection('Firebase', [
 
 const {
   projectConfig,
-  // projectContent,
   projectPath,
-} = defineProps({
-  projectConfig: { required: true, type: Object as ProjectConfig },
-  //projectContent: { required: true, type: Object as PageContent },
-  projectPath: { required: true, type: String },
-})
+} = defineProps<{
+  projectConfig: ProjectConfig,
+  projectPath: string,
+}>()
 
 function getSidebarData() {
   const selectableLink = new SelectableLink('Home', projectPath)

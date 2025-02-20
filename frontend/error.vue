@@ -2,8 +2,8 @@
   <div id="four-oh-four">
     <HeaderBar />
     <div class="content">
-      <h1>{{ error.statusCode }}</h1>
-      <h2>{{ error.message }}</h2>
+      <h1>{{ error?.statusCode || 404 }}</h1>
+      <h2>{{ error?.message || "Page not found." }}</h2>
       <img src="~/assets/img/guy-fireats.png">
       <NuxtLink to="/">
         <div class="footer">

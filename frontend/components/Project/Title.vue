@@ -12,7 +12,7 @@
             <div class="repos">
               <NuxtLink
                 v-for="repo in relatedRepos"
-                :key="repo.id"
+                :key="repo.path"
                 prefetch-on="interaction"
                 class="repo test"
                 :to="`/projects/${repo.path}`"
@@ -60,14 +60,14 @@ const {
   info,
   pageTitle,
   subpageId,
-} = defineProps({
-  sections: { required: true, type: Array },
-  projectConfig: { required: true, type: Object as ProjectConfig },
-  projectContent: { required: true, type: Object as PageContent },
-  info: { required: true, type: Object as ProjectInfo },
-  pageTitle: { required: true, type: String },
-  subpageId: { type: String },
-})
+} = defineProps<{
+  sections: Section[],
+  projectConfig: ProjectConfig,
+  projectContent: PageContent,
+  info: ProjectInfo,
+  pageTitle: string,
+  subpageId?: string|null,
+}>()
 
 const isSubpage = subpageId != null
 

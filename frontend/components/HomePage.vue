@@ -27,7 +27,7 @@
             <div class="releases flexible-columns">
               <div
                 v-for="release in recentReleases"
-                :key="release.name"
+                :key="release.id"
                 class="release"
               >
                 <ReleaseItem :release="release" />
@@ -67,11 +67,11 @@ const {
   platform,
   categories,
   recentReleases,
-} = defineProps({
-  platform: { type: String },
-  categories: { type: Array as Array<Category> },
-  recentReleases: { type: Array as Array<RepoRelease> },
-})
+} = defineProps<{
+  platform?: string|null,
+  categories?: Array<Category>|null,
+  recentReleases?:  Array<RepoRelease>|null,
+}>()
 
 function isSectionVisible(section: string) {
   if (!platform || platform === 'all') {

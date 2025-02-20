@@ -18,11 +18,11 @@ const {
   project,
   projectIndex,
   categoryIndex,
-} = defineProps({
-  project: { required: true, type: Object as ProjectConfig },
-  projectIndex: { required: true, type: Number },
-  categoryIndex: { required: true, type: Number },
-})
+} = defineProps<{
+  project: ProjectConfig,
+  projectIndex: number,
+  categoryIndex: number,
+}>()
 
 const colors = [
   '#039BE5',

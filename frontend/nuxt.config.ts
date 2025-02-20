@@ -18,6 +18,7 @@ export default async () => {
       treeshakeClientOnly: true,
       payloadExtraction: true,
       sharedPrerenderData: true,
+      typedPages: true,
     },
 
     app: {

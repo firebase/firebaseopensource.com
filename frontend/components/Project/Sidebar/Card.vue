@@ -21,7 +21,7 @@
     >
       <li
         v-for="page in section.pages"
-        :key="page.id"
+        :key="page.href"
       >
         <ProjectSidebarLink :page="page" />
       </li>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-const { section } = defineProps({ section: { required: true, type: Object as SidebarSection } })
+const { section } = defineProps<{ section: SidebarSection }>()
 const expanded = useState(`expanded/${section.title}`, () => section.title === 'Project')
 </script>
 

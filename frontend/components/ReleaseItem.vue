@@ -24,9 +24,7 @@
 <script setup lang="ts">
 import { formatDistanceToNow } from 'date-fns'
 
-const { release } = defineProps({
-  release: { required: true, type: Object },
-})
+const { release } = defineProps<{ release: RepoRelease }>()
 
 const releaseTime = formatDistanceToNow(release.created_at)
 </script>

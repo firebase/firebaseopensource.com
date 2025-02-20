@@ -21,10 +21,10 @@ import { formatDistanceToNow } from 'date-fns'
 const {
   info,
   projectConfig,
-} = defineProps({
-  info: { required: true, type: Object as ProjectInfo },
-  projectConfig: { required: true, type: Object as ProjectConfig },
-})
+} = defineProps<{
+  info: ProjectInfo,
+  projectConfig: ProjectConfig,
+}>()
 const lastFetchedFromNow = formatDistanceToNow(projectConfig.last_fetched)
 </script>
 

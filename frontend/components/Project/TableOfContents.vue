@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-const { sections } = defineProps({ sections: { required: true, type: Array } })
+const { sections } = defineProps<{ sections: Section[] }>()
 </script>
 
 <style lang="scss" scoped>

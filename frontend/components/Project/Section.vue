@@ -8,7 +8,7 @@
     <div class="content">
       <h2>{{ section.name }}</h2>
       <!-- eslint-disable vue/no-v-html -->
-      <div v-html="DOMPurify.sanitize(section.content)" />
+      <div v-html="DOMPurify.sanitize(section.content || '')" />
       <!-- eslint-enable -->
     </div>
   </div>
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import DOMPurify from 'isomorphic-dompurify'
 
-const { section } = defineProps({ section: { required: true, type: Object } })
+const { section } = defineProps<{ section: Section }>()
 </script>
 
 <style lang="scss" scoped>

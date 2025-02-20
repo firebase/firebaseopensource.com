@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 import { Project } from "./project";
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v1";
 import { Cron } from "./cron";
 import { Env, GetParams } from "../../shared/types";
 import { Util } from "../../shared/util";
-
-const PubSub = require("@google-cloud/pubsub");
+import { PubSub } from "@google-cloud/pubsub";
 
 const pubsubClient = new PubSub({
   projectId: process.env.GCLOUD_PROJECT
@@ -43,9 +42,9 @@ const DEFAULT_PARAMS: GetParams = {
 exports.stageProject = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
-    const org = request.param("org");
-    const repo = request.param("repo");
-    const branch = request.param("branch") || "master";
+    const org = request.params.org;
+    const repo = request.params.repo;
+    const branch = request.params.branch || "master";
     console.log(`stageProject(${org}, ${repo}, ${branch})`);
 
     const p = new Project({
@@ -91,6 +90,10 @@ exports.getProjectWebhook = functions
   .https.onRequest(async (request, response) => {
     // TODO: This should just send the PubSub
     const id = request.query["id"];
+    if (typeof id !== "string") {
+      response.status(400).send(`id param required\n`);
+      return;
+    }
 
     try {
       const project = await Project.getForId(id);
@@ -111,7 +114,7 @@ exports.getAllProjects = functions
     const project = new Project(DEFAULT_PARAMS);
     let allIds = await project.listAllProjectIds();
 
-    const publisher = pubsubClient.topic("get-project").publisher();
+    const publisher = pubsubClient.topic("get-project").publisher;
     const promises: Promise<any>[] = [];
 
     allIds.forEach((id: string) => {

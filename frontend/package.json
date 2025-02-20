@@ -14,8 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck .",
-    "deploy": "npm run generate &&  npx -y firebase-tools --project=default deploy",
-    "deploy:hosting": "npm run generate && npx -y firebase-tools --project=default deploy --only hosting"
+    "deploy": "npm run generate && npx -y firebase-tools --project=default deploy",
+    "deploy:hosting": "npx -y firebase-tools --project=default deploy --only hosting"
   },
   "devDependencies": {
     "@docsearch/js": "^3.9.0",

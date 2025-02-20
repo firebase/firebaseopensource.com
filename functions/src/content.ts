@@ -141,17 +141,13 @@ export class Content {
           that.sanitizeRelativeLink(el, "href", projectBaseUrl);
           Logger.debug(
             repoId,
-            `Sanitizing relative project link ${repoRelative} --> ${
-              el.attribs["href"]
-            }`
+            `Sanitizing relative project link ${repoRelative} --> ${el.attribs["href"]}`
           );
         } else {
           that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
           Logger.debug(
             repoId,
-            `Sanitizing relative GitHub link ${repoRelative} --> ${
-              el.attribs["href"]
-            }`
+            `Sanitizing relative GitHub link ${repoRelative} --> ${el.attribs["href"]}`
           );
         }
       }
@@ -258,9 +254,7 @@ export class Content {
 
     // Get the URL to the root folder
     const pathPrefix = idObj.path ? idObj.path + "/" : "";
-    const url = `https://github.com/${idObj.owner}/${
-      idObj.repo
-    }/tree/${branch}/${pathPrefix}`;
+    const url = `https://github.com/${idObj.owner}/${idObj.repo}/tree/${branch}/${pathPrefix}`;
 
     return url;
   }

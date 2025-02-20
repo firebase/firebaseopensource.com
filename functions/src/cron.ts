@@ -17,7 +17,7 @@ const buildConfig = {
     {
       name: "node:22",
       entrypoint: "npm",
-      args: ["--prefix=frontend", "run", "build"]
+      args: ["--prefix=frontend", "run", "generate"]
     },
     {
       name: "node:22",
@@ -29,7 +29,8 @@ const buildConfig = {
     repoSource: {
       projectId: "fir-oss",
       repoName: "firebaseopensource",
-      branchName: "master"
+      branchName: "jamesdaniels_nuxt3",
+      // branchName: "master"
     }
   }
 };

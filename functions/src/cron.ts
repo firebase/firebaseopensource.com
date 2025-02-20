@@ -29,8 +29,7 @@ const buildConfig = {
     repoSource: {
       projectId: "fir-oss",
       repoName: "firebaseopensource",
-      branchName: "jamesdaniels_nuxt3",
-      // branchName: "master"
+      branchName: "master"
     }
   }
 };

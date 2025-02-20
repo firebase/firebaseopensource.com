@@ -35,11 +35,11 @@ export default async () => {
           type: 'image/x-icon',
           href: '/favicon.ico',
         }, {
-          rel: "shortcut icon",
-          href: "https://www.gstatic.com/devrel-devsite/prod/v38a693baeb774512feb42f10aac8f755d8791ed41119b5be7a531f8e16f8279f/firebase/images/favicon.png",
+          rel: 'shortcut icon',
+          href: 'https://www.gstatic.com/devrel-devsite/prod/v38a693baeb774512feb42f10aac8f755d8791ed41119b5be7a531f8e16f8279f/firebase/images/favicon.png',
         }, {
-          rel: "apple-touch-icon",
-          href: "https://www.gstatic.com/devrel-devsite/prod/v38a693baeb774512feb42f10aac8f755d8791ed41119b5be7a531f8e16f8279f/firebase/images/touchicon-180.png",
+          rel: 'apple-touch-icon',
+          href: 'https://www.gstatic.com/devrel-devsite/prod/v38a693baeb774512feb42f10aac8f755d8791ed41119b5be7a531f8e16f8279f/firebase/images/touchicon-180.png',
         }, {
           rel: 'preconnect',
           href: 'https://www.google-analytics.com',
@@ -62,8 +62,8 @@ gtag('config', 'UA-110728272-1');`,
           name: 'viewport',
           content: 'width=device-width, initial-scale=1',
         }, {
-          content: "https://firebase.google.com/images/social.png",
-          name: "image"
+          content: 'https://firebase.google.com/images/social.png',
+          name: 'image',
         }, {
           hid: 'description',
           name: 'description',

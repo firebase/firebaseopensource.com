@@ -8,7 +8,11 @@
       class="content welcomeCard"
     >
       <div class="image">
-        <img src="@/assets/img/firebase-github.png" width="213" height="160">
+        <img
+          src="@/assets/img/firebase-github.png"
+          width="213"
+          height="160"
+        >
       </div>
       <div class="body">
         <h1>Firebase ❤️ Open Source</h1>

@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute("platform-id")
+const route = useRoute('platform-id')
 const platform = route.params.id
 const { data: categories } = await useAsyncData(`platform/${platform}`, async () => {
   const categories = await getCategories(platform)

@@ -5,7 +5,7 @@ import type { PageContent, ProjectConfig, RepoRelease } from '../../shared/types
 import firebaseConfig from '../../shared/firebaseConfig'
 import type { Category } from './classes'
 
-export type { RepoRelease, ProjectConfig, PageContent };
+export type { RepoRelease, ProjectConfig, PageContent }
 
 const firebaseApp = initializeApp(firebaseConfig)
 export const firestore = getFirestore(firebaseApp)

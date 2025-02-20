@@ -53,11 +53,11 @@ const {
   subpageId,
   pageTitle,
 } = defineProps<{
-  projectConfig: ProjectConfig|Readonly<ProjectConfig>,
-  projectContent: PageContent|Readonly<PageContent>,
-  env?: string|null,
-  subpageId?: string|null,
-  pageTitle: string,
+  projectConfig: ProjectConfig | Readonly<ProjectConfig>
+  projectContent: PageContent | Readonly<PageContent>
+  env?: string | null
+  subpageId?: string | null
+  pageTitle: string
 }>()
 
 useHead({

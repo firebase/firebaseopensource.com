@@ -22,8 +22,8 @@ const {
   info,
   projectConfig,
 } = defineProps<{
-  info: ProjectInfo,
-  projectConfig: ProjectConfig,
+  info: ProjectInfo
+  projectConfig: ProjectConfig
 }>()
 const lastFetchedFromNow = formatDistanceToNow(projectConfig.last_fetched)
 </script>

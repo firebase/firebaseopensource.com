@@ -61,12 +61,12 @@ const {
   pageTitle,
   subpageId,
 } = defineProps<{
-  sections: Section[],
-  projectConfig: ProjectConfig,
-  projectContent: PageContent,
-  info: ProjectInfo,
-  pageTitle: string,
-  subpageId?: string|null,
+  sections: Section[]
+  projectConfig: ProjectConfig
+  projectContent: PageContent
+  info: ProjectInfo
+  pageTitle: string
+  subpageId?: string | null
 }>()
 
 const isSubpage = subpageId != null

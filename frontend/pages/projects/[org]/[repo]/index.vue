@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute("projects-org-repo")
+const route = useRoute('projects-org-repo')
 const org = route.params.org!
 const repo = route.params.repo!
 

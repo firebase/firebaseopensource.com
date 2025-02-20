@@ -39,8 +39,8 @@ const {
   projectConfig,
   projectPath,
 } = defineProps<{
-  projectConfig: ProjectConfig,
-  projectPath: string,
+  projectConfig: ProjectConfig
+  projectPath: string
 }>()
 
 function getSidebarData() {

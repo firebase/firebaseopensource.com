@@ -34,9 +34,9 @@ const {
   projectIndex,
   categoryIndex,
 } = defineProps<{
-  project: ProjectConfig,
-  projectIndex: number,
-  categoryIndex: number,
+  project: ProjectConfig
+  projectIndex: number
+  categoryIndex: number
 }>()
 
 // TODO extract into util

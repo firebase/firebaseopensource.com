@@ -4,7 +4,7 @@ export type Tab = { link: string, text: string }
 
 export type HeaderTab = {
   title: string
-  outbound?: Boolean
+  outbound?: boolean
   href: string
 }
 

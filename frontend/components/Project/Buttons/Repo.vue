@@ -34,8 +34,8 @@ const {
   info,
   projectConfig,
 } = defineProps<{
-  info: ProjectInfo,
-  projectConfig: ProjectConfig,
+  info: ProjectInfo
+  projectConfig: ProjectConfig
 }>()
 
 const showCloneCmd = false // TODO: Needed?

@@ -68,9 +68,9 @@ const {
   categories,
   recentReleases,
 } = defineProps<{
-  platform?: string|null,
-  categories?: Array<Category>|null,
-  recentReleases?:  Array<RepoRelease>|null,
+  platform?: string | null
+  categories?: Array<Category> | null
+  recentReleases?: Array<RepoRelease> | null
 }>()
 
 function isSectionVisible(section: string) {

@@ -80,11 +80,11 @@ const {
   subheaderTabs,
   subheaderTabSelection,
 } = defineProps<{
-  subheaderTitle?: string|null,
-  enableSubheader?: Boolean|null,
-  subheaderTabs?: Array<HeaderTab>|Readonly<Array<HeaderTab>>|null,
-  subheaderTabSelection?: string|null,
-}>();
+  subheaderTitle?: string | null
+  enableSubheader?: boolean | null
+  subheaderTabs?: Array<HeaderTab> | Readonly<Array<HeaderTab>> | null
+  subheaderTabSelection?: string | null
+}>()
 
 const headers = [{ id: 0 }, { id: 1, spacer: true }]
 </script>

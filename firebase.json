@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "frontend/dist",
+    "public": "frontend/.output/public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -16,6 +16,9 @@
         "destination": "/404.html"
       }
     ]
+  },
+  "functions": {
+    "source": "functions"
   },
   "firestore": {
     "rules": "firestore.rules",

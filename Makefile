@@ -13,15 +13,15 @@ build-functions: build-shared
 		&& cd -
 
 deploy-functions: build-functions
-	firebase --project=$(PROD_PROJECT) deploy --only functions
+	npx -y firebase-tools --project=$(PROD_PROJECT) deploy --only functions
 
 build-hosting: build-shared
 	cd frontend \
 		&& npm install \
-		&& npm run export \
+		&& npm run generate \
 		&& cd -
 
 deploy-hosting: build-hosting
-	firebase --project=$(PROD_PROJECT) deploy --only hosting
+	npx -y firebase-tools --project=$(PROD_PROJECT) deploy --only hosting
 
 deploy: deploy-functions deploy-hosting

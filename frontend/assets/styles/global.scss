@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@use "./variables.scss" as *;
 
 html {
   box-sizing: border-box;
@@ -21,7 +21,7 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Roboto", sans-serif;
+  font-family: "Google Sans", Helvetica, Arial, sans-serif;
 }
 
 h1,
@@ -297,7 +297,7 @@ blockquote {
 
   span {
     color: #656565;
-    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Google Sans", Helvetica, Arial, sans-serif;
   }
 
   button {

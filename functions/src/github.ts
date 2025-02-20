@@ -16,7 +16,6 @@
 import { Util } from "../../shared/util";
 import { Timestamp } from "@google-cloud/firestore";
 import { ProjectConfig, RepoMetadata, RepoRelease } from "../../shared/types";
-import * as request from "request-promise-native";
 
 const parselh = require("parse-link-header");
 const urljoin = require("url-join");
@@ -24,8 +23,7 @@ const urljoin = require("url-join");
 const _GH_OPTIONS_ANONYMOUS = {
   headers: {
     "user-agent": "node.js"
-  },
-  json: true
+  }
 };
 
 export class Github {
@@ -43,8 +41,9 @@ export class Github {
   static async getDefaultBranch(org: string, repo: string): Promise<string> {
     const url = `https://api.github.com/repos/${org}/${repo}`;
 
-    const res = await request(url, _GH_OPTIONS_ANONYMOUS);
-    return res.default_branch;
+    const res = await fetch(url, _GH_OPTIONS_ANONYMOUS);
+    const json = await res.json();
+    return json.default_branch;
   }
 
   /**
@@ -121,14 +120,16 @@ export class Github {
   getRepoMetadata(org: string, repo: string): Promise<RepoMetadata> {
     const url = `https://api.github.com/repos/${org}/${repo}`;
 
-    return request(url, this.getStandardOptions()).then(repo => {
-      return {
-        description: repo.description,
-        fork: repo.fork,
-        stars: repo.stargazers_count,
-        last_updated: repo.pushed_at
-      };
-    });
+    return fetch(url, this.getStandardOptions())
+      .then(res => res.json())
+      .then(repo => {
+        return {
+          description: repo.description,
+          fork: repo.fork,
+          stars: repo.stargazers_count,
+          last_updated: repo.pushed_at
+        };
+      });
   }
 
   /**
@@ -137,9 +138,11 @@ export class Github {
   getRepoReadmeFile(org: string, repo: string): Promise<string> {
     const url = `https://api.github.com/repos/${org}/${repo}/readme`;
 
-    return request(url, this.getStandardOptions()).then(resp => {
-      return resp.path;
-    });
+    return fetch(url, this.getStandardOptions())
+      .then(res => res.json())
+      .then(resp => {
+        return resp.path;
+      });
   }
 
   /**
@@ -147,17 +150,19 @@ export class Github {
    */
   getRepoReleases(org: string, repo: string): Promise<RepoRelease[]> {
     const url = `https://api.github.com/repos/${org}/${repo}/releases`;
-    return request(url, this.getStandardOptions()).then(resp => {
-      return resp.map((release: any) => {
-        return {
-          org,
-          repo,
-          url: release.html_url,
-          tag_name: release.tag_name,
-          created_at: Timestamp.fromDate(new Date(release.created_at))
-        };
+    return fetch(url, this.getStandardOptions())
+      .then(res => res.json())
+      .then(resp => {
+        return resp.map((release: any) => {
+          return {
+            org,
+            repo,
+            url: release.html_url,
+            tag_name: release.tag_name,
+            created_at: Timestamp.fromDate(new Date(release.created_at))
+          };
+        });
       });
-    });
   }
 
   /**
@@ -167,23 +172,25 @@ export class Github {
     const res = results ? results : [];
 
     var that = this;
-    return request(url, this.getFullOptions()).then(response => {
-      const data = response.body;
-      const headers = response.headers;
+    return fetch(url, this.getFullOptions())
+      .then(res => res.json())
+      .then(response => {
+        const data = response.body;
+        const headers = response.headers;
 
-      const newResults = res.concat(data);
+        const newResults = res.concat(data);
 
-      if (headers.link) {
-        const linkHeader = parselh(headers.link);
-        if (linkHeader.next) {
-          return that.readAllPages(linkHeader.next.url, newResults);
+        if (headers.link) {
+          const linkHeader = parselh(headers.link);
+          if (linkHeader.next) {
+            return that.readAllPages(linkHeader.next.url, newResults);
+          } else {
+            return newResults;
+          }
         } else {
           return newResults;
         }
-      } else {
-        return newResults;
-      }
-    });
+      });
   }
 
   /**
@@ -214,7 +221,7 @@ export class Github {
    * URL should be a raw.githubusercontent page.
    */
   getRawContent(url: string) {
-    return request(url, this.getContentGetOptions());
+    return fetch(url, this.getContentGetOptions()).then(res => res.text());
   }
 
   /**
@@ -222,7 +229,7 @@ export class Github {
    * URL should be a raw.githubusercontent page.
    */
   pageExists(url: string): Promise<boolean> {
-    return request(url, this.getContentHeadOptions())
+    return fetch(url, this.getContentHeadOptions())
       .then(() => {
         return true;
       })
@@ -236,8 +243,7 @@ export class Github {
       headers: {
         "user-agent": "node.js",
         Authorization: `token ${this.token}`
-      },
-      json: true
+      }
     };
     return _GH_OPTIONS_STANDARD;
   }
@@ -247,9 +253,7 @@ export class Github {
       headers: {
         "user-agent": "node.js",
         Authorization: `token ${this.token}`
-      },
-      json: true,
-      resolveWithFullResponse: true
+      }
     };
 
     return _GH_OPTIONS_FULL;
@@ -267,7 +271,7 @@ export class Github {
   private getContentHeadOptions() {
     const _GH_OPTIONS_CONTENT_HEAD = {
       method: "HEAD",
-      headers: this.getContentHeaders
+      headers: this.getContentHeaders()
     };
 
     return _GH_OPTIONS_CONTENT_HEAD;

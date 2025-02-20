@@ -15,7 +15,11 @@
               to="/"
               class="logo"
             >
-              <img src="@/assets/img/firebase-icon.svg" width="32" height="32">
+              <img
+                src="@/assets/img/firebase-icon.svg"
+                width="32"
+                height="32"
+              >
               <span><strong>Firebase</strong> Open Source</span>
             </NuxtLink>
           </div>

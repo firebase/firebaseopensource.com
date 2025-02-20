@@ -98,9 +98,8 @@ const info = {
   stars: projectConfig.stars,
 }
 
-const projectPath = `/projects/${org}/${repo}`.toLowerCase()
-
 const isStaging = env === Env.STAGING
+const projectPath = `/projects${isStaging ? '-staging' : ''}/${org}/${repo}`.toLowerCase()
 
 function getSubheaderTabs() {
   const tabs = [

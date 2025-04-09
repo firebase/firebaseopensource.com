@@ -57,7 +57,7 @@
               <NuxtLink
                 v-else
                 prefetch-on="interaction"
-                :class="{ selected: subheaderTabSelection == tab.title.toLowerCase() }"
+                :class="{ selected: subheaderTabSelection == tab.title.replace(' ', '_').toLowerCase() }"
                 :target="tab.outbound ? '_blank' : ''"
                 :to="tab.href"
                 class="tab"

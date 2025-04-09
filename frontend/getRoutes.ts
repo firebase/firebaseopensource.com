@@ -5,7 +5,7 @@ import { firestore } from './utils/db'
  * Converts an id into a path.
  */
 function getPath(id: string) {
-  return id.replace(/::/g, '/').replace('.md', '')
+  return id.replace(/::/, '/').replace('.md', '')
 }
 
 /**

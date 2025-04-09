@@ -172,25 +172,25 @@ export class Github {
     const res = results ? results : [];
 
     var that = this;
-    return fetch(url, this.getFullOptions())
-      .then(res => res.json())
-      .then(response => {
-        const data = response.body;
-        const headers = response.headers;
-
-        const newResults = res.concat(data);
-
-        if (headers.link) {
-          const linkHeader = parselh(headers.link);
-          if (linkHeader.next) {
-            return that.readAllPages(linkHeader.next.url, newResults);
-          } else {
-            return newResults;
-          }
+    return fetch(url, this.getFullOptions()).then(async response => {
+      if (!response.ok) {
+        console.error("Failed to fetch", url);
+        return res;
+      }
+      const data = await response.json();
+      const headers = response.headers;
+      const newResults = res.concat(data);
+      if (headers.get("link")) {
+        const linkHeader = parselh(headers.get("link"));
+        if (linkHeader.next) {
+          return that.readAllPages(linkHeader.next.url, newResults);
         } else {
           return newResults;
         }
-      });
+      } else {
+        return newResults;
+      }
+    });
   }
 
   /**

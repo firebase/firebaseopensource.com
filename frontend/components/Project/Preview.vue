@@ -57,7 +57,9 @@ const description = getDescription()
 const parsedIdObj = Util.parseProjectId(project.id!)
 const org = parsedIdObj.owner
 const repo = parsedIdObj.repo
-const link = `/projects/${org}/${repo}/`
+const path = parsedIdObj.path;
+const pathPart = path ? `::${path.split("/").join("::")}` : ""
+const link = `/projects/${org}/${repo}${pathPart}`
 </script>
 
   <style lang="scss" scoped>

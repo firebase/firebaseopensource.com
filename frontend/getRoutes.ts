@@ -27,6 +27,7 @@ export default async function () {
     '/platform/web',
     '/platform/games',
     '/platform/admin',
+    '/platform/app_hosting',
   ]
 
   const ref = collection(firestore, 'content')

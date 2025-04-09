@@ -42,23 +42,29 @@ const DEFAULT_PARAMS: GetParams = {
 exports.stageProject = functions
   .runWith(RUNTIME_OPTS)
   .https.onRequest(async (request, response) => {
-    const org = request.params.org;
-    const repo = request.params.repo;
-    const branch = request.params.branch || "master";
-    console.log(`stageProject(${org}, ${repo}, ${branch})`);
+    const org = request.query.org as string;
+    const repo = request.query.repo as string;
+    const branch = (request.query.branch as string | undefined) || "master";
+    const path = request.query.path as string | undefined;
+    console.log(`stageProject(${org}, ${repo}, ${branch}, ${path || "/"})`);
 
     const p = new Project({
       env: Env.STAGING,
       branch
     });
 
-    const id = Util.normalizeId(`${org}::${repo}`);
+    const pathParts = path?.split("/");
+    const id = Util.normalizeId(
+      `${org}::${repo}${pathParts ? "::" + pathParts.join("::") : ""}`
+    );
     try {
       await p.recursiveStoreProject(id);
       response
         .status(200)
         .send(
-          `Visit https://firebaseopensource.com/projects-staging/${org}/${repo}`
+          `Visit https://firebaseopensource.com/projects-staging/${org}/${repo}${
+            path ? `::${pathParts.join("::")}` : ""
+          } to see the staged project.\n`
         );
     } catch (e) {
       console.warn(e);

@@ -61,6 +61,7 @@ const subheaderTabs = [
   { title: 'Web', href: '/platform/web' },
   { title: 'Admin', href: '/platform/admin' },
   { title: 'Games', href: '/platform/games' },
+  { title: 'App Hosting', href: '/platform/app_hosting' },
 ] as const
 
 const {

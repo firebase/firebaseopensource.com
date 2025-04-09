@@ -1,5 +1,11 @@
 {
   "projects": [
+    "FirebaseExtended::firebase-framework-tools::docs::angular",
+    "FirebaseExtended::firebase-framework-tools::docs::nextjs",
+    "FirebaseExtended::firebase-framework-tools::docs::astro",
+    "FirebaseExtended::firebase-framework-tools::docs::nitro",
+    "FirebaseExtended::firebase-framework-tools::docs::nuxt",
+    "angular::angularfire2",
     "angular::angularfire2",
     "googlesamples::easypermissions",
     "tylermcginnis::re-base",

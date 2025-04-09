@@ -80,6 +80,13 @@ export class Util {
 // Categories used for the subheader
 const ALL_CATEGORIES = [
   {
+    title: 'App Hosting',
+    icon: 'web',
+    platform: 'app_hosting',
+    projects: [],
+    featured: [],
+  },
+  {
     title: 'Android',
     icon: 'android',
     platform: 'android',

@@ -28,6 +28,7 @@ import {
 } from "../../shared/types";
 
 import * as admin from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 
 const cjson = require("comment-json");
 
@@ -199,7 +200,7 @@ export class Project {
         return this.github
           .getRepoMetadata(idParsed.owner, idParsed.repo)
           .then(meta => {
-            if (meta.description) {
+            if (meta.description && !config.description) {
               config.description = meta.description;
             }
 
@@ -223,7 +224,7 @@ export class Project {
     const docId = Util.normalizeId(id);
 
     // Add server timestamp
-    data.last_fetched = admin.firestore.FieldValue.serverTimestamp();
+    data.last_fetched = Timestamp.now();
 
     // Get path to the config document in the database
     const configPath = Util.configPath(docId, this.params.env);

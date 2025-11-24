@@ -16,7 +16,7 @@
     "typecheck": "nuxt typecheck .",
     "deploy": "npm run generate && npx -y firebase-tools --project=default deploy",
     "deploy:hosting": "npx -y firebase-tools --project=default deploy --only hosting",
-    "shadcn:copy": "npx @invertase/firebaseui-shadcn copy --outDir=public/r"
+    "shadcn:copy": "npx @firebase-oss/ui-shadcn@beta copy --outDir=public/r"
   },
   "devDependencies": {
     "@docsearch/js": "^3.9.0",

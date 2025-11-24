@@ -15,7 +15,8 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck .",
     "deploy": "npm run generate && npx -y firebase-tools --project=default deploy",
-    "deploy:hosting": "npx -y firebase-tools --project=default deploy --only hosting"
+    "deploy:hosting": "npx -y firebase-tools --project=default deploy --only hosting",
+    "shadcn:copy": "npx @firebase-oss/ui-shadcn@beta copy --outDir=public/r"
   },
   "devDependencies": {
     "@docsearch/js": "^3.9.0",

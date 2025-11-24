@@ -22,6 +22,11 @@ const buildConfig = {
     {
       name: "node:22",
       entrypoint: "npm",
+      args: ["--prefix=frontend", "run", "shadcn:copy"]
+    },
+    {
+      name: "node:22",
+      entrypoint: "npm",
       args: ["--prefix=frontend", "run", "deploy:hosting"]
     }
   ],

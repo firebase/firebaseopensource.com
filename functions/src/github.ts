@@ -22,8 +22,8 @@ const urljoin = require("url-join");
 
 const _GH_OPTIONS_ANONYMOUS = {
   headers: {
-    "user-agent": "node.js"
-  }
+    "user-agent": "node.js",
+  },
 };
 
 export class Github {
@@ -60,7 +60,7 @@ export class Github {
     owner: string,
     repo: string,
     path: string,
-    branch: string
+    branch: string,
   ): string {
     return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
   }
@@ -84,7 +84,7 @@ export class Github {
   private static getConfigUrl(id: string, branch: string) {
     return urljoin(
       Github.getRawContentBaseUrl(id, branch),
-      ".opensource/project.json"
+      ".opensource/project.json",
     );
   }
 
@@ -94,7 +94,7 @@ export class Github {
   private static getMainContentUrl(
     id: string,
     config: ProjectConfig,
-    branch: string
+    branch: string,
   ) {
     // Path to content, relative to the project
     const contentPath = config.content;
@@ -107,8 +107,8 @@ export class Github {
   listAllRepos(org: string): Promise<string[]> {
     const url = `https://api.github.com/orgs/${org}/repos?per_page=1000`;
 
-    return this.readAllPages(url).then(data => {
-      return data.map(repo => {
+    return this.readAllPages(url).then((data) => {
+      return data.map((repo) => {
         return repo.full_name;
       });
     });
@@ -121,13 +121,13 @@ export class Github {
     const url = `https://api.github.com/repos/${org}/${repo}`;
 
     return fetch(url, this.getStandardOptions())
-      .then(res => res.json())
-      .then(repo => {
+      .then((res) => res.json())
+      .then((repo) => {
         return {
           description: repo.description,
           fork: repo.fork,
           stars: repo.stargazers_count,
-          last_updated: repo.pushed_at
+          last_updated: repo.pushed_at,
         };
       });
   }
@@ -139,8 +139,8 @@ export class Github {
     const url = `https://api.github.com/repos/${org}/${repo}/readme`;
 
     return fetch(url, this.getStandardOptions())
-      .then(res => res.json())
-      .then(resp => {
+      .then((res) => res.json())
+      .then((resp) => {
         return resp.path;
       });
   }
@@ -151,15 +151,15 @@ export class Github {
   getRepoReleases(org: string, repo: string): Promise<RepoRelease[]> {
     const url = `https://api.github.com/repos/${org}/${repo}/releases`;
     return fetch(url, this.getStandardOptions())
-      .then(res => res.json())
-      .then(resp => {
+      .then((res) => res.json())
+      .then((resp) => {
         return resp.map((release: any) => {
           return {
             org,
             repo,
             url: release.html_url,
             tag_name: release.tag_name,
-            created_at: Timestamp.fromDate(new Date(release.created_at))
+            created_at: Timestamp.fromDate(new Date(release.created_at)),
           };
         });
       });
@@ -172,7 +172,7 @@ export class Github {
     const res = results ? results : [];
 
     var that = this;
-    return fetch(url, this.getFullOptions()).then(async response => {
+    return fetch(url, this.getFullOptions()).then(async (response) => {
       if (!response.ok) {
         console.error("Failed to fetch", url);
         return res;
@@ -221,7 +221,7 @@ export class Github {
    * URL should be a raw.githubusercontent page.
    */
   getRawContent(url: string) {
-    return fetch(url, this.getContentGetOptions()).then(res => res.text());
+    return fetch(url, this.getContentGetOptions()).then((res) => res.text());
   }
 
   /**
@@ -242,8 +242,8 @@ export class Github {
     const _GH_OPTIONS_STANDARD = {
       headers: {
         "user-agent": "node.js",
-        Authorization: `token ${this.token}`
-      }
+        Authorization: `token ${this.token}`,
+      },
     };
     return _GH_OPTIONS_STANDARD;
   }
@@ -252,8 +252,8 @@ export class Github {
     const _GH_OPTIONS_FULL = {
       headers: {
         "user-agent": "node.js",
-        Authorization: `token ${this.token}`
-      }
+        Authorization: `token ${this.token}`,
+      },
     };
 
     return _GH_OPTIONS_FULL;
@@ -262,7 +262,7 @@ export class Github {
   private getContentHeaders() {
     const _GH_CONTENT_HEADERS = {
       "Cache-Control": "max-age=0",
-      Authorization: `token ${this.token}`
+      Authorization: `token ${this.token}`,
     };
 
     return _GH_CONTENT_HEADERS;
@@ -271,7 +271,7 @@ export class Github {
   private getContentHeadOptions() {
     const _GH_OPTIONS_CONTENT_HEAD = {
       method: "HEAD",
-      headers: this.getContentHeaders()
+      headers: this.getContentHeaders(),
     };
 
     return _GH_OPTIONS_CONTENT_HEAD;
@@ -279,7 +279,7 @@ export class Github {
 
   private getContentGetOptions() {
     const _GH_OPTIONS_CONTENT_GET = {
-      headers: this.getContentHeaders()
+      headers: this.getContentHeaders(),
     };
 
     return _GH_OPTIONS_CONTENT_GET;

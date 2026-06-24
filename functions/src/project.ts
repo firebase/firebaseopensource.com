@@ -24,7 +24,7 @@ import {
   ProjectPage,
   Env,
   GetParams,
-  PageConfig
+  PageConfig,
 } from "../../shared/types";
 
 import * as admin from "firebase-admin";
@@ -65,14 +65,14 @@ export class Project {
     await Config.loadGlobalConfig();
 
     const repos = await this.github.listAllRepos("firebase");
-    const ids = repos.map(repo => {
+    const ids = repos.map((repo) => {
       return Util.pathToSlug(repo);
     });
 
     Logger.debug("listAllProjectIds", `Number of base projects: ${ids.length}`);
     Logger.debug(
       "listAllProjectIds",
-      `Additional Projects: ${Config.ADDITIONAL_PROJECTS}`
+      `Additional Projects: ${Config.ADDITIONAL_PROJECTS}`,
     );
     const allIds = ids.concat(Config.ADDITIONAL_PROJECTS);
     return allIds;
@@ -109,14 +109,14 @@ export class Project {
       ios: ["ios", "objc", "swift", "apple"],
       android: ["android", "kotlin"],
       web: ["web", "js", "angular", "react"],
-      games: ["cpp", "unity"]
+      games: ["cpp", "unity"],
     };
 
     const result: any = {};
 
     for (let key in platforms) {
       const keywords = platforms[key] as string[];
-      keywords.forEach(keyword => {
+      keywords.forEach((keyword) => {
         if (id.indexOf(keyword) >= 0) {
           result[key] = true;
         }
@@ -137,7 +137,7 @@ export class Project {
       .then((exists: boolean) => {
         if (exists) {
           // Config exists, fetch and parse it
-          return this.github.getProjectConfig(id).then(data => {
+          return this.github.getProjectConfig(id).then((data) => {
             // Parse and remove comments
             const contents = data.toString();
             return cjson.parse(contents, null, true);
@@ -152,12 +152,12 @@ export class Project {
               return {
                 name: idParsed.repo,
                 type: "library",
-                content: readme
+                content: readme,
               };
             });
         }
       })
-      .then(config => {
+      .then((config) => {
         // Add inferred platforms
         if (!config.platforms) {
           config.platforms = this.inferPlatforms(id);
@@ -178,7 +178,7 @@ export class Project {
             // In v0 pages was just an array of paths
             for (const path of config.pages) {
               normalizedPages.push({
-                path
+                path,
               });
             }
           } else {
@@ -187,7 +187,7 @@ export class Project {
               const name = config.pages[path];
               normalizedPages.push({
                 name,
-                path
+                path,
               });
             });
           }
@@ -199,7 +199,7 @@ export class Project {
         // and updated time.
         return this.github
           .getRepoMetadata(idParsed.owner, idParsed.repo)
-          .then(meta => {
+          .then((meta) => {
             if (meta.description && !config.description) {
               config.description = meta.description;
             }
@@ -211,7 +211,7 @@ export class Project {
             return config;
           });
       })
-      .then(config => {
+      .then((config) => {
         return this.sanitizeForStorage(config);
       });
   }
@@ -284,8 +284,8 @@ export class Project {
 
     // Get a list of current pages and delete them if they're no longer relevant
     const currentPages = await pagesRef.get();
-    const currentPageSlugs = currentPages.docs.map(p => p.id);
-    const newPageSlugs = content.map(p => Util.pathToSlug(p.name));
+    const currentPageSlugs = currentPages.docs.map((p) => p.id);
+    const newPageSlugs = content.map((p) => Util.pathToSlug(p.name));
     for (const c of currentPageSlugs) {
       if (newPageSlugs.indexOf(c) < 0) {
         batch.delete(pagesRef.doc(c));
@@ -302,16 +302,16 @@ export class Project {
     const content = new Content();
     return this.github
       .getRawProjectContent(id, config)
-      .then(data => {
+      .then((data) => {
         return content.processMarkdown(
           data,
           id,
           config.content,
           config,
-          this.params.branch
+          this.params.branch,
         );
       })
-      .then(content => {
+      .then((content) => {
         content.sections = this.filterProjectSections(content.sections);
         return content;
       });
@@ -326,10 +326,10 @@ export class Project {
       "licensing",
       "contribute",
       "contributing",
-      "build status"
+      "build status",
     ];
 
-    return sections.filter(section => {
+    return sections.filter((section) => {
       if (!section.name) {
         return true;
       }
@@ -349,7 +349,7 @@ export class Project {
    */
   getProjectPagesContent(
     id: string,
-    config: ProjectConfig
+    config: ProjectConfig,
   ): Promise<ProjectPage[]> {
     if (!config.pages || config.pages.length == 0) {
       Logger.debug(id, `Project has no extra pages.`);
@@ -367,31 +367,31 @@ export class Project {
       const pageUrl = Github.getPageContentUrl(
         id,
         page.path,
-        this.params.branch
+        this.params.branch,
       );
       Logger.debug(
         id,
-        `Rendering page name=${page.name}, path=${page.path}, url=${pageUrl}`
+        `Rendering page name=${page.name}, path=${page.path}, url=${pageUrl}`,
       );
 
       const pagePromise = this.github
         .getRawContent(pageUrl)
-        .catch(e => {
+        .catch((e) => {
           throw `Failed to get content for ${pageUrl}: ${JSON.stringify(e)}`;
         })
-        .then(data => {
+        .then((data) => {
           return content.processMarkdown(
             data,
             id,
             page.path,
             config,
-            this.params.branch
+            this.params.branch,
           );
         })
-        .then(sections => {
+        .then((sections) => {
           pages.push({
             name: page.path,
-            content: sections
+            content: sections,
           });
         });
 
@@ -460,7 +460,7 @@ export class Project {
   arraysToMaps(obj: any, lowercase: string[] = []) {
     const newobj: any = {};
 
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       const arr = obj[key];
 
       // Only sanitize if it's a non-empty

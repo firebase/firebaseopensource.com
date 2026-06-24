@@ -24,14 +24,14 @@ export class Config {
     "firebase",
     "firebaseopensource.com",
     "config/feature_blacklist_projects.json",
-    "master"
+    "master",
   );
 
   static readonly ADDITIONAL_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",
     "firebaseopensource.com",
     "config/additional_projects.json",
-    "master"
+    "master",
   );
 
   static ADDITIONAL_PROJECTS: string[] = [];
@@ -46,12 +46,12 @@ export class Config {
     }
 
     const additionalData = await this.github.getRawContent(
-      this.ADDITIONAL_PROJECTS_URL
+      this.ADDITIONAL_PROJECTS_URL,
     );
     this.ADDITIONAL_PROJECTS = JSON.parse(additionalData).projects;
 
     const blacklistData = await this.github.getRawContent(
-      this.FEATURED_BLACKLIST_PROJECTS_URL
+      this.FEATURED_BLACKLIST_PROJECTS_URL,
     );
     this.FEATURED_BLACKLIST_PROJECTS = JSON.parse(blacklistData).projects;
   }
@@ -71,7 +71,7 @@ export class Config {
   static _getNestedProperty(obj: any, name: string): string {
     const pieces = name.split(".");
     let val = obj;
-    pieces.forEach(piece => {
+    pieces.forEach((piece) => {
       val = val[piece];
     });
 

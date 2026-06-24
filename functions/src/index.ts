@@ -21,17 +21,17 @@ import { Util } from "../../shared/util";
 import { PubSub } from "@google-cloud/pubsub";
 
 const pubsubClient = new PubSub({
-  projectId: process.env.GCLOUD_PROJECT
+  projectId: process.env.GCLOUD_PROJECT,
 });
 
 const RUNTIME_OPTS = {
   timeoutSeconds: 540,
-  memory: "2GB" as "2GB"
+  memory: "2GB" as "2GB",
 };
 
 const DEFAULT_PARAMS: GetParams = {
   env: Env.PROD,
-  branch: "master"
+  branch: "master",
 };
 
 /**
@@ -50,12 +50,12 @@ exports.stageProject = functions
 
     const p = new Project({
       env: Env.STAGING,
-      branch
+      branch,
     });
 
     const pathParts = path?.split("/");
     const id = Util.normalizeId(
-      `${org}::${repo}${pathParts ? "::" + pathParts.join("::") : ""}`
+      `${org}::${repo}${pathParts ? "::" + pathParts.join("::") : ""}`,
     );
     try {
       await p.recursiveStoreProject(id);
@@ -64,7 +64,7 @@ exports.stageProject = functions
         .send(
           `Visit https://firebaseopensource.com/projects-staging/${org}/${repo}${
             path ? `::${pathParts.join("::")}` : ""
-          } to see the staged project.\n`
+          } to see the staged project.\n`,
         );
     } catch (e) {
       console.warn(e);
@@ -80,7 +80,7 @@ exports.stageProject = functions
 exports.getProject = functions
   .runWith(RUNTIME_OPTS)
   .pubsub.topic("get-project")
-  .onPublish(async message => {
+  .onPublish(async (message) => {
     const id = message.json.id;
 
     const project = await Project.getForId(id);

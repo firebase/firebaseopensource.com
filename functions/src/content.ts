@@ -5,6 +5,9 @@ import { Util } from "../../shared/util";
 import { ProjectConfig, PageContent, PageSection } from "../../shared/types";
 
 import * as cheerio from "cheerio";
+import { Element as CheerioElement } from "domhandler";
+type CheerioStatic = cheerio.CheerioAPI;
+
 import * as path from "path";
 import * as url from "url";
 
@@ -16,7 +19,7 @@ marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,
   tables: true,
-  breaks: false
+  breaks: false,
 });
 
 const log = new Logger();
@@ -33,7 +36,7 @@ export class Content {
     repoId: string,
     page: string | undefined,
     config: ProjectConfig,
-    branch: string
+    branch: string,
   ): PageContent {
     const html: string = marked(data);
     const sanitizedHtml = this.sanitizeHtml(repoId, page, config, html, branch);
@@ -50,7 +53,7 @@ export class Content {
     page: string,
     config: ProjectConfig,
     html: string,
-    branch: string
+    branch: string,
   ): string {
     // Links
     // * Links to page content files should go to our page
@@ -75,7 +78,7 @@ export class Content {
     const renderedBaseUrl = this.getRenderedContentBaseUrl(repoId, branch);
     const rawBaseUrl = urljoin(
       Github.getRawContentBaseUrl(repoId, branch),
-      pageDir
+      pageDir,
     );
 
     const $: CheerioStatic = cheerio.load(html);
@@ -120,12 +123,12 @@ export class Content {
         // Check if the link is to a page within the repo
         const repoRelative = path.join(pageDir, href);
         const pageKeys = config.pages
-          ? config.pages.map(page => page.path)
+          ? config.pages.map((page) => page.path)
           : [];
 
         Logger.debug(
           repoId,
-          `Relative link on page ${page}: ${href} --> ${repoRelative}`
+          `Relative link on page ${page}: ${href} --> ${repoRelative}`,
         );
         el.attribs["href"] = repoRelative;
 
@@ -141,13 +144,13 @@ export class Content {
           that.sanitizeRelativeLink(el, "href", projectBaseUrl);
           Logger.debug(
             repoId,
-            `Sanitizing relative project link ${repoRelative} --> ${el.attribs["href"]}`
+            `Sanitizing relative project link ${repoRelative} --> ${el.attribs["href"]}`,
           );
         } else {
           that.sanitizeRelativeLink(el, "href", renderedBaseUrl);
           Logger.debug(
             repoId,
-            `Sanitizing relative GitHub link ${repoRelative} --> ${el.attribs["href"]}`
+            `Sanitizing relative GitHub link ${repoRelative} --> ${el.attribs["href"]}`,
           );
         }
       }
@@ -173,10 +176,10 @@ export class Content {
         "codecov.io",
         "release-notes.com",
         /github\.com\/.*\/workflows\/.*\.svg/,
-        "awesome.re"
+        "awesome.re",
       ];
 
-      const isBadge = badgePatterns.some(pattern => {
+      const isBadge = badgePatterns.some((pattern) => {
         return !!src.match(pattern);
       });
 
@@ -185,9 +188,7 @@ export class Content {
         $(el).addClass("img-badge");
       } else {
         // Add the image-parent class to the parent
-        $(el)
-          .parent()
-          .addClass("img-parent");
+        $(el).parent().addClass("img-parent");
       }
 
       that.sanitizeRelativeLink(el, "src", rawBaseUrl);
@@ -212,7 +213,7 @@ export class Content {
 
     const header: PageSection = {
       name: $h1.text(),
-      content: $headerChildren.html()
+      content: $headerChildren.html(),
     };
 
     $("h2").each((_: number, el: CheerioElement) => {
@@ -226,13 +227,13 @@ export class Content {
 
       sections.push({
         name: $(el).text(),
-        content: $sibchils.html()
+        content: $sibchils.html(),
       });
     });
 
     return {
       header,
-      sections
+      sections,
     };
   }
 
@@ -265,7 +266,7 @@ export class Content {
   private sanitizeRelativeLink(
     el: CheerioElement,
     attrName: string,
-    base: string
+    base: string,
   ) {
     const val = el.attribs[attrName];
 

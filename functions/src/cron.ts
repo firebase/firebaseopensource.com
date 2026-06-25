@@ -7,54 +7,54 @@ const buildConfig = {
     {
       name: "node:22",
       entrypoint: "npm",
-      args: ["install"]
+      args: ["install"],
     },
     {
       name: "node:22",
       entrypoint: "npm",
-      args: ["--prefix=frontend", "install"]
+      args: ["--prefix=frontend", "install"],
     },
     {
       name: "node:22",
       entrypoint: "npm",
-      args: ["--prefix=frontend", "run", "generate"]
+      args: ["--prefix=frontend", "run", "generate"],
     },
     {
       name: "node:22",
       entrypoint: "npm",
-      args: ["--prefix=frontend", "run", "shadcn:copy"]
+      args: ["--prefix=frontend", "run", "shadcn:copy"],
     },
     {
       name: "node:22",
       entrypoint: "npm",
-      args: ["--prefix=frontend", "run", "deploy:hosting"]
-    }
+      args: ["--prefix=frontend", "run", "deploy:hosting"],
+    },
   ],
   source: {
     repoSource: {
       projectId: "fir-oss",
       repoName: "firebaseopensource",
-      branchName: "master"
-    }
-  }
+      branchName: "master",
+    },
+  },
 };
 
 export class Cron {
   public static async build() {
     const auth = await google.auth.getClient({
-      scopes: ["https://www.googleapis.com/auth/cloud-platform"]
+      scopes: ["https://www.googleapis.com/auth/cloud-platform"],
     });
 
     const client = google.cloudbuild({
       version: "v1",
-      auth: auth
+      auth: auth,
     });
 
     const project = await google.auth.getProjectId();
 
     const params = {
       projectId: project,
-      requestBody: buildConfig
+      requestBody: buildConfig,
     };
 
     const res = await client.projects.builds.create(params);

@@ -32,7 +32,6 @@
     "nuxt-community::firebase-module",
     "dantothefuture::svarog",
     "flamelink::flamelink-js-sdk",
-    "FirebaseExtended::flutterfire",
     "MichaelRCruz::ioa",
     "FirebaseExtended::reactfire",
     "IjzerenHein::firestorter",

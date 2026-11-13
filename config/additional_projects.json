@@ -78,6 +78,8 @@
     "horaciocome1::fireflow",
     "tylim88::FireCall",
     "tylim88::FireCaller",
-    "tylim88::FireSageJS"
+    "tylim88::FireSageJS",
+    "DRMSITE::parishmap",
+    "DRMSITE::MealMuster"
   ]
 }

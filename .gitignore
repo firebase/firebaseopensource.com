@@ -24,6 +24,7 @@ appengine/lib
 
 # Functions
 .runtimeconfig.json
+.secret.local
 
 # Nuxt
 frontend/static/sitemap.xml

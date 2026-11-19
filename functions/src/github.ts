@@ -18,7 +18,8 @@ import { Timestamp } from "@google-cloud/firestore";
 import { ProjectConfig, RepoMetadata, RepoRelease } from "../../shared/types";
 
 const parselh = require("parse-link-header");
-const urljoin = require("url-join");
+const _urljoin = require("url-join");
+const urljoin = _urljoin.default || _urljoin;
 
 const _GH_OPTIONS_ANONYMOUS = {
   headers: {

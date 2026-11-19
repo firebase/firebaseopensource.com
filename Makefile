@@ -16,10 +16,9 @@ deploy-functions: build-functions
 	npx -y firebase-tools --project=$(PROD_PROJECT) deploy --only functions
 
 build-hosting: build-shared
-	cd frontend \
-		&& npm install \
-		&& npm run generate \
-		&& cd -
+	npm --prefix=frontend install
+	npm --prefix=frontend run generate
+	npm --prefix=frontend run shadcn:copy
 
 deploy-hosting: build-hosting
 	npx -y firebase-tools --project=$(PROD_PROJECT) deploy --only hosting

@@ -427,7 +427,7 @@ export class Project {
    * For a given object, change all of the keys (recursively) to be lower case.
    */
   lowercaseMapKeys(obj: any) {
-    if (obj && obj.constructor === Array) {
+    if (Array.isArray(obj)) {
       // Array, convert each member
       const newArr: any[] = [];
       obj.forEach((item: any) => {
@@ -465,12 +465,7 @@ export class Project {
 
       // Only sanitize if it's a non-empty
       // array of strings.
-      if (
-        arr &&
-        arr.constructor === Array &&
-        arr.length > 0 &&
-        arr[0].constructor === String
-      ) {
+      if (Array.isArray(arr) && arr.length > 0 && typeof arr[0] === "string") {
         const map: any = {};
         arr.forEach((item: any) => {
           // If requested, lowercase the item

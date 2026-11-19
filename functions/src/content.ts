@@ -11,16 +11,12 @@ type CheerioStatic = cheerio.CheerioAPI;
 import * as path from "path";
 import * as url from "url";
 
-const urljoin = require("url-join");
+const _urljoin = require("url-join");
+const urljoin = _urljoin.default || _urljoin;
 
 // Initialize marked with options
-const marked = require("marked");
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-});
+const { marked } = require("marked");
+marked.setOptions({ gfm: true, breaks: false });
 
 const log = new Logger();
 
@@ -38,7 +34,7 @@ export class Content {
     config: ProjectConfig,
     branch: string,
   ): PageContent {
-    const html: string = marked(data);
+    const html: string = marked.parse(data, { async: false });
     const sanitizedHtml = this.sanitizeHtml(repoId, page, config, html, branch);
     const sections = this.htmlToSections(sanitizedHtml);
 

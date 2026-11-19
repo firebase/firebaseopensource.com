@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 import { Github } from "./github";
-import * as functions from "firebase-functions";
+import { defineSecret } from "firebase-functions/params";
+
+export const githubToken = defineSecret("GITHUB_TOKEN");
 
 export class Config {
+  private static _github?: Github;
+
   // TODO: Dynamic branch
-  static github = new Github(Config.get("github.token"), "master");
+  static get github(): Github {
+    if (!this._github) {
+      this._github = new Github(Config.get("github.token"), "master");
+    }
+    return this._github;
+  }
 
   static readonly FEATURED_BLACKLIST_PROJECTS_URL = Github.getRawContentUrl(
     "firebase",
@@ -60,21 +69,9 @@ export class Config {
    * Get a config key, either from the env or from local.
    */
   static get(key: string): string {
-    try {
-      return this._getNestedProperty(functions.config(), key);
-    } catch (e) {
-      const newKey = key.replace(".", "_");
-      return process.env[newKey];
+    if (key === "github.token") {
+      return process.env.github_token || githubToken.value();
     }
-  }
-
-  static _getNestedProperty(obj: any, name: string): string {
-    const pieces = name.split(".");
-    let val = obj;
-    pieces.forEach((piece) => {
-      val = val[piece];
-    });
-
-    return val;
+    return process.env[key.replace(".", "_")] || "";
   }
 }

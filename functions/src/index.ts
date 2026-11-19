@@ -16,6 +16,7 @@
 import { Project } from "./project";
 import * as functions from "firebase-functions/v1";
 import { Cron } from "./cron";
+import { githubToken } from "./config";
 import { Env, GetParams } from "../../shared/types";
 import { PubSub } from "@google-cloud/pubsub";
 
@@ -39,7 +40,7 @@ const DEFAULT_PARAMS: GetParams = {
  * @param message.id the project ID to store.
  */
 exports.getProject = functions
-  .runWith(RUNTIME_OPTS)
+  .runWith({ ...RUNTIME_OPTS, secrets: [githubToken] })
   .pubsub.topic("get-project")
   .onPublish(async (message) => {
     const id = message.json.id;
@@ -52,7 +53,11 @@ exports.getProject = functions
  * Get the config and content for all projects.
  */
 exports.getAllProjects = functions
-  .runWith(RUNTIME_OPTS)
+  .runWith({
+    ...RUNTIME_OPTS,
+    secrets: [githubToken],
+    invoker: ["fir-oss@appspot.gserviceaccount.com"],
+  })
   .https.onRequest(async (request, response) => {
     const project = new Project(DEFAULT_PARAMS);
     let allIds = await project.listAllProjectIds();
@@ -76,7 +81,10 @@ exports.getAllProjects = functions
   });
 
 exports.cloudBuild = functions
-  .runWith(RUNTIME_OPTS)
+  .runWith({
+    ...RUNTIME_OPTS,
+    invoker: ["fir-oss@appspot.gserviceaccount.com"],
+  })
   .https.onRequest(async (request, response) => {
     try {
       await Cron.build();

@@ -8,7 +8,7 @@ steps:
   args: ['--prefix=frontend', 'install']
 - name: 'node:22'
   entrypoint: 'npm'
-  args: ['--prefix=frontend', 'run', 'build']
+  args: ['--prefix=frontend', 'run', 'generate']
 - name: 'node:22'
   entrypoint: 'npm'
   args: ['--prefix=frontend', 'run', 'shadcn:copy']

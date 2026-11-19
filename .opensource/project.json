@@ -3,8 +3,7 @@
     "platforms": [],
     "content": "README.md",
     "pages" : {
-        "docs/configure-repo.md": "Configure your repo",
-        "docs/stage-project.md": "Stage content"
+        "docs/configure-repo.md": "Configure your repo"
     },
     "related": [
         "firebase/oss-bot"
